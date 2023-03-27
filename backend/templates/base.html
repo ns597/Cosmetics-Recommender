@@ -64,17 +64,6 @@
         function getRoutine() {
             document.getElementById("answer-box").innerHTML = "";
 
-<<<<<<< HEAD
-            console.log(document.getElementById("product-type-val").value);
-            console.log(document.getElementById("skin-type-val").value);
-            fetch(
-                "/product?" +
-                new URLSearchParams({
-                    product: document.getElementById("product-name-val").value,
-                    skin: document.getElementById("skin-type-val").value
-                }).toString()
-            )
-=======
             console.log(document.getElementById("product-type-val").value)
             console.log(document.getElementById("skin-type-val").value)
             fetch("/product?" + new URLSearchParams({
@@ -82,7 +71,6 @@
                 skin: document.getElementById("skin-type-val").value
             }
             ).toString())
->>>>>>> 6c9cbfacef03df3ee209e19d94581734d3d7d5c3
                 .then((response) => response.json())
                 .then((data) =>
                     data.forEach((row) => {
