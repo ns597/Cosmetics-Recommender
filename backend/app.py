@@ -31,18 +31,18 @@ CORS(app)
 # there's a much better and cleaner way to do this
 
 
-def sql_search(prod):
+def sql_search(name, skin):
     # query_sql = f"""SELECT * FROM cosmetics WHERE LOWER( title ) LIKE '%%{prod.lower()}%%' limit 10"""
-    query_sql = f"""SELECT Ingredients FROM cosmetics WHERE LOWER( title ) LIKE '%%{prod.lower()}%%' limit 1"""
+    query_sql = f"""SELECT Ingredients FROM products WHERE LOWER( Name ) = '%%{name.lower()}%%' limit 1"""
     query_ingreds = mysql_engine.query_selector(query_sql)[0]
 
-    m_query = f"""SELECT Name, Ingredients FROM cosmetics WHERE Label = 'Moisturizer'"""
+    m_query = f"""SELECT Name, Ingredients FROM products WHERE Label = 'Moisturizer'"""
     moisturizers = mysql_engine.query_selector(m_query)
-    c_query = f"""SELECT Name, Ingredients FROM cosmetics WHERE Label = 'Cleanser'"""
+    c_query = f"""SELECT Name, Ingredients FROM products WHERE Label = 'Cleanser'"""
     cleansers = mysql_engine.query_selector(c_query)
-    s_query = f"""SELECT Name, Ingredients FROM cosmetics WHERE Label = 'Sunscreen'"""
+    s_query = f"""SELECT Name, Ingredients FROM products WHERE Label = 'Sunscreen'"""
     sunscreens = mysql_engine.query_selector(s_query)
-    t_query = f"""SELECT Name, Ingredients FROM cosmetics WHERE Label = 'Treatment'"""
+    t_query = f"""SELECT Name, Ingredients FROM products WHERE Label = 'Treatment'"""
     treatments = mysql_engine.query_selector(t_query)
 
     routine = {}
@@ -58,11 +58,11 @@ def home():
     return render_template('base.html', title="sample html")
 
 
-@app.route("/products")
+@app.route("/product")
 def episodes_search():
-    product_name = request.args.get("product")
+    product_name = request.args.get("name")
     skin_type = request.args.get("skin")
     return sql_search(product_name, skin_type)
 
 
-# app.run(debug=True)
+app.run(debug=True)
