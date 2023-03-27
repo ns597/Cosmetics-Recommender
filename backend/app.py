@@ -58,7 +58,7 @@ def home():
     return render_template('base.html', title="sample html")
 
 
-@app.route("/products")
+@app.route("/product")
 def episodes_search():
     product_name = request.args.get("product")
     skin_type = request.args.get("skin")
