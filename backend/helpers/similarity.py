@@ -20,9 +20,10 @@ def top5category(category,ingredients):
     return top5
 
 
-def jaccard_similarity(ingred, products):
+def jaccard_similarity(ingred, product):
     a = set(ingred.split(","))
-    b = set(products)
+    # print(list(a)[0])
+    b = set(product[0].split(","))
     intersection = a.intersection(b)
     union = a.union(b)
     return (len(intersection) / len(union))
