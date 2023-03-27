@@ -8,7 +8,7 @@ def top5category(category,product):
     #sort by score and return top 5
     category = category[['Name', 'Ingredients']]
     category = category.to_numpy()
-    ingredients = product['Ingredients']
+    ingredients = product['Ingredients'].to_numpy()
     scores = []
     for val in category:
         name = val[0]
@@ -20,9 +20,10 @@ def top5category(category,product):
     print(top5)
 
 
-def jaccard_similarity(ingred, products):
+def jaccard_similarity(ingred, product):
     a = set(ingred.split(","))
-    b = set(products)
+    # print(list(a)[0])
+    b = set(product[0].split(","))
     intersection = a.intersection(b)
     union = a.union(b)
     return (len(intersection) / len(union))
