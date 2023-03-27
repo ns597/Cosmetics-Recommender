@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <title>{% block title %}{% endblock %} - Flaskr</title>
-<link rel="stylesheet" href="src/styles.css" />
+<link rel="stylesheet" href="./style.css" />
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Kanit&family=Montserrat&family=Open+Sans:wght@500&display=swap"
@@ -39,7 +39,7 @@
                     <label for="sensitive" id="sensitive">Sensitive</label>
                 </label>
                 <br />
-                <input type="text" id="product-name-val" placeholder="Liked Product" />
+                <input type="text" id="product-name-val" name="product_name" placeholder="Liked Product" />
                 <br />
                 <button type="submit">Submit for Your Skincare Routine</button>
             </form>
@@ -64,11 +64,11 @@
         function getRoutine() {
             document.getElementById("answer-box").innerHTML = "";
 
-            console.log(document.getElementById("product-type-val").value)
-            console.log(document.getElementById("skin-type-val").value)
+            console.log(document.getElementsByName("product-type-val").value)
+            console.log(document.getElementsByName("skin-type-val").value)
             fetch("/product?" + new URLSearchParams({
-                name: document.getElementById("product-name-val").value,
-                skin: document.getElementById("skin-type-val").value
+                name: document.getElementsByName("product_name").value,
+                skin: document.getElementsByName("skin_type").value
             }
             ).toString())
                 .then((response) => response.json())
