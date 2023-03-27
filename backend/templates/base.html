@@ -63,8 +63,12 @@
         function getRoutine() {
             document.getElementById("answer-box").innerHTML = "";
 
-            console.log(document.getElementsByName("product-type-val").value)
-            console.log(document.getElementsByName("skin-type-val").value)
+            console.log(document.getElementsById("product-type-val").value)
+            console.log(document.getElementsById("skin-type-val").value)
+
+            console.log(document.getElementsByName("product_name").value)
+            console.log(document.getElementsByName("skin_type").value)
+
             fetch("/product?" + new URLSearchParams({
                 name: document.getElementsByName("product_name").value,
                 skin: document.getElementsByName("skin_type").value

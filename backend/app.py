@@ -61,12 +61,16 @@ def sql_search(name, skin):
     # sensitive = mysql_engine.query_selector(sensitive_query)
 
     m_query = f"""SELECT Name, Ingredients FROM products WHERE '%%{skin}%%' = 1 AND Label = 'Moisturizer'"""
+    mysql_engine.validate_connection()
     moisturizers = mysql_engine.query_selector(m_query)
     c_query = f"""SELECT Name, Ingredients FROM products WHERE '%%{skin}%%' = 1 AND Label = 'Cleanser'"""
+    mysql_engine.validate_connection()
     cleansers = mysql_engine.query_selector(c_query)
     s_query = f"""SELECT Name, Ingredients FROM products WHERE '%%{skin}%%' = 1 AND Label = 'Sunscreen'"""
+    mysql_engine.validate_connection()
     sunscreens = mysql_engine.query_selector(s_query)
     t_query = f"""SELECT Name, Ingredients FROM products WHERE '%%{skin}%%' = 1 AND Label = 'Treatment'"""
+    mysql_engine.validate_connection()
     treatments = mysql_engine.query_selector(t_query)
 
     routine = {}
@@ -91,6 +95,8 @@ def home():
 def episodes_search():
     skin_type = request.args.get("skin")
     product_name = request.args.get("name")
+    print(request.args.get("name"))
+    print(request.args.get("product_name"))
     return sql_search(product_name, skin_type)
 
 
