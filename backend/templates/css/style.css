@@ -38,7 +38,7 @@ form {
     position: relative;
 }
 
-radio_button {
+form input {
     border: 1px solid rgba(252, 252, 252, 0.4);
     background-color: rgba(252, 252, 252, 0.2);
     width: 50px;

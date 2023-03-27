@@ -76,8 +76,8 @@ def home():
 
 @app.route("/product")
 def episodes_search():
-    product_name = request.args.get("product_name")
-    skin_type = request.args.get("skin_type")
+    skin_type = request.args.get("skin")
+    product_name = request.args.get("name")
     return sql_search(product_name, skin_type)
 
 
