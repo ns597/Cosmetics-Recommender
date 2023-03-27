@@ -9,14 +9,16 @@
 <body>
     <div class="full-body-container">
         <div class="top-text">
-            <div class="">
-                Enter a product you like
-            </div>
-            <div class="input-box" onclick="sendFocus()">
-                <img src="{{ url_for('static', filename='images/mag.png') }}" />
-                <input placeholder="Search for a cosmetics product" id="filter-text-val" onkeyup="filterText()">
-                <ul id="results"></ul>
-            </div>
+            <header>
+                <h1>Cosmetics Recommender</h1>
+            </header>
+
+            <form className="form" onsubmit=getRoutine()>
+                <input type="text" id="skin-type-val" placeholder="Skin Type" />
+                <input type="text" id="product-type-val" placeholder="Liked Product" />
+
+                <button type="submit">{"Submit for Your Skincare Routine"}</button>
+            </form>
         </div>
         <div id="answer-box">
 
@@ -37,21 +39,13 @@
             document.getElementById('filter-text-val').focus()
         }
 
-        function filterText() {
+        function getRoutine() {
             document.getElementById("answer-box").innerHTML = ""
             const resultsList = document.getElementById("results");
 
-            // results.forEach(product => {
-            // 	const listItem = document.createElement("li");
-            // 	const link = document.createElement("a");
-            // 	link.href = `/product?id=${product.id}`;
-            // 	link.textContent = product.name;
-            // 	listItem.appendChild(link);
-            // 	resultsList.appendChild(listItem);
-            // });
-
-            console.log(document.getElementById("filter-text-val").value)
-            fetch("/product?" + new URLSearchParams({ title: document.getElementById("filter-text-val").value }).toString())
+            console.log(document.getElementById("product-type-val").value)
+            console.log(document.getElementById("skin-type-val").value)
+            fetch("/product?" + new URLSearchParams({ title: document.getElementById("product-type-val").value }).toString())
                 .then((response) => response.json())
                 .then((data) => data.forEach(row => {
 
