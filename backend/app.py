@@ -42,35 +42,24 @@ def sql_search(name, skin):
     :return: A dictionary of lists of dictionaries.
     """
     # query_sql = f"""SELECT * FROM cosmetics WHERE LOWER( title ) LIKE '%%{prod.lower()}%%' limit 10"""
-    mysql_engine.validate_connection()
+    # mysql_engine.validate_connection()
     query_sql = f"""SELECT Ingredients FROM products WHERE LOWER( Name ) = '%%{name.lower()}%%' limit 1"""
     query_ingreds = mysql_engine.query_selector(query_sql)
     print(query_ingreds)
 
     query_ingreds = query_ingreds.fetchone()
 
-    # skin_query = f"""SELECT * FROM products WHERE '%%{skin}%%' = 1"""
-    # skin_prods = mysql_engine.query_selector(skin_query)
-    # dry_query = f"""SELECT * FROM products WHERE Dry = 1"""
-    # dry = mysql_engine.query_selector(dry_query)
-    # normal_query = f"""SELECT * FROM products WHERE Normal = 1"""
-    # normal = mysql_engine.query_selector(normal_query)
-    # oily_query = f"""SELECT * FROM products WHERE Oily = 1"""
-    # oily = mysql_engine.query_selector(oily_query)
-    # sensitive_query = f"""SELECT * FROM products WHERE Sensitive = 1"""
-    # sensitive = mysql_engine.query_selector(sensitive_query)
-
     m_query = f"""SELECT Name, Ingredients FROM products WHERE '%%{skin}%%' = 1 AND Label = 'Moisturizer'"""
-    mysql_engine.validate_connection()
+    # mysql_engine.validate_connection()
     moisturizers = mysql_engine.query_selector(m_query)
     c_query = f"""SELECT Name, Ingredients FROM products WHERE '%%{skin}%%' = 1 AND Label = 'Cleanser'"""
-    mysql_engine.validate_connection()
+    # mysql_engine.validate_connection()
     cleansers = mysql_engine.query_selector(c_query)
     s_query = f"""SELECT Name, Ingredients FROM products WHERE '%%{skin}%%' = 1 AND Label = 'Sunscreen'"""
-    mysql_engine.validate_connection()
+    # mysql_engine.validate_connection()
     sunscreens = mysql_engine.query_selector(s_query)
     t_query = f"""SELECT Name, Ingredients FROM products WHERE '%%{skin}%%' = 1 AND Label = 'Treatment'"""
-    mysql_engine.validate_connection()
+    # mysql_engine.validate_connection()
     treatments = mysql_engine.query_selector(t_query)
 
     routine = {}
@@ -78,11 +67,7 @@ def sql_search(name, skin):
     routine["Cleanser"] = top5category(cleansers, query_ingreds)
     routine["Sunscreen"] = top5category(sunscreens, query_ingreds)
     routine["Treatment"] = top5category(treatments, query_ingreds)
-    # routine["Combination"] = top5category(comb, query_ingreds)
-    # routine["Dry"] = top5category(dry, query_ingreds)
-    # routine["Normal"] = top5category(normal, query_ingreds)
-    # routine["Oily"] = top5category(oily, query_ingreds)
-    # routine["Sensitive"] = top5category(sensitive, query_ingreds)
+
     return json.dumps(routine)
 
 

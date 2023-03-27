@@ -70,7 +70,7 @@
             console.log(document.getElementsByName("skin_type").value)
 
             fetch("/product?" + new URLSearchParams({
-                name: document.getElementsByName("product_name").value,
+                name: document.getElementsById("product-type-val").value,
                 skin: document.getElementsByName("skin_type").value
             }
             ).toString())
