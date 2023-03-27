@@ -25,18 +25,26 @@ body {
     font-weight: 200;
 }
 
+/* .container_skin {
+    margin: 0 0 20px 0;
+  } */
+
+/* #sensitive {
+    margin-bottom: 100px;
+  } */
+
 form {
     padding: 20px 0;
     position: relative;
 }
 
-form input {
+radio_button {
     border: 1px solid rgba(252, 252, 252, 0.4);
     background-color: rgba(252, 252, 252, 0.2);
-    width: 250px;
+    width: 50px;
     border-radius: 3px;
     font-family: "Source Sans Pro", sans-serif;
-    padding: 10px 15px;
+    /* padding: 10px 15px; */
     margin: 0 auto 10px auto;
     display: block;
     text-align: center;
@@ -72,34 +80,34 @@ form button {
 }
 
 #google-c {
-    color: #4285F4;
+    color: #4285f4;
 }
 
 #google-s {
-    color: #DB4437;
+    color: #db4437;
 }
 
 #google-4 {
-    color: #F4B400;
+    color: #f4b400;
 }
 
 #google-3 {
-    color: #4285F4;
+    color: #4285f4;
 }
 
 #google-0-1 {
-    color: #0F9D58;
+    color: #0f9d58;
 }
 
 #google-0-2 {
-    color: #DB4437;
+    color: #db4437;
 }
 
 .google-colors {
     display: flex;
     align-items: center;
     font-size: 48px;
-    font-family: 'Open Sans', sans-serif;
+    font-family: "Open Sans", sans-serif;
 }
 
 .google-colors h1 {
@@ -142,9 +150,9 @@ form button {
 }
 
 .episode-title {
-    font-family: 'Kanit', sans-serif;
+    font-family: "Kanit", sans-serif;
 }
 
 .episode-desc {
-    font-family: 'Montserrat', sans-serif;
+    font-family: "Montserrat", sans-serif;
 }

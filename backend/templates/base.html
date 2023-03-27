@@ -1,10 +1,10 @@
-<!doctype html>
+<!DOCTYPE html>
 <title>{% block title %}{% endblock %} - Flaskr</title>
-<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="src/styles.css" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Kanit&family=Montserrat&family=Open+Sans:wght@500&display=swap"
-    rel="stylesheet">
+    rel="stylesheet" />
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:200,300" />
 
 <body>
@@ -14,52 +14,78 @@
                 <h1>Cosmetics Recommender</h1>
             </header>
 
-            <form className="form" onsubmit=getRoutine()>
-                <input type="text" id="skin-type-val" placeholder="Skin Type" />
+            <form className="form" onsubmit="getRoutine()">
+                <!-- <input type="text" id="skin-type-val" placeholder="Skin Type" /> -->
+                <!-- <form action="/action_page.php"> -->
+                <p>Please select your Skin Type:</p>
+                <label class="container_skin">
+                    <input type="radio" class="radio_button" id="oily" name="skin_type" value="Oily">Oily</input><br />
+                    <!-- <label for="oily" id="oily">Oily</label>-->
+                </label>
+                <label class="container_skin">
+                    <input type="radio" class="radio_button" id="dry" name="skin_type" value="Dry" />
+                    <label for="dry" id="dry">Dry</label><br />
+                </label>
+                <label class="container_skin">
+                    <input type="radio" id="combination" name="skin_type" value="Combination" class="radio_button" />
+                    <label for="combination" id="combination">Combination</label>
+                </label>
+                <label class="container_skin">
+                    <input type="radio" class="radio_button" id="normal" name="skin_type" value="Normal" />
+                    <label for="normal" id="normal">Normal</label>
+                </label>
+                <label class="container_skin">
+                    <input type="radio" id="sensitive" name="skin_type" value="Sensitive" class="radio_button" />
+                    <label for="sensitive" id="sensitive">Sensitive</label>
+                </label>
+                <br />
                 <input type="text" id="product-name-val" placeholder="Liked Product" />
-
+                <br />
                 <button type="submit">Submit for Your Skincare Routine</button>
             </form>
         </div>
-        <div id="answer-box">
-
-        </div>
-
+        <div id="answer-box"></div>
     </div>
 
     <script>
-
         function answerBoxTemplate(moist, clean, sun, treat) {
             return `<div class=''>
                 <h3 class='episode-title'>${moist}</h3>
                 <p class='episode-desc'>${clean}</p>
                 <p class='episode-desc'>${sun}</p>
                 <p class='episode-desc'>${treat}</p>
-            </div>`
+            </div>`;
         }
 
         function sendFocus() {
-            document.getElementById('filter-text-val').focus()
+            document.getElementById("filter-text-val").focus();
         }
 
         function getRoutine() {
-            document.getElementById("answer-box").innerHTML = ""
+            document.getElementById("answer-box").innerHTML = "";
 
-            console.log(document.getElementById("product-type-val").value)
-            console.log(document.getElementById("skin-type-val").value)
-            fetch("/product?" + new URLSearchParams({
-                product: document.getElementById("product-name-val").value,
-                skin: document.getElementById("skin-type-val").value
-            }
-            ).toString())
+            console.log(document.getElementById("product-type-val").value);
+            console.log(document.getElementById("skin-type-val").value);
+            fetch(
+                "/product?" +
+                new URLSearchParams({
+                    product: document.getElementById("product-name-val").value,
+                    skin: document.getElementById("skin-type-val").value
+                }).toString()
+            )
                 .then((response) => response.json())
-                .then((data) => data.forEach(row => {
-
-                    let tempDiv = document.createElement("div")
-                    tempDiv.innerHTML = answerBoxTemplate(row.Moisturizer, row.Cleanser, row.Sunscreen, row.Treatment)
-                    document.getElementById("answer-box").appendChild(tempDiv)
-                }));
+                .then((data) =>
+                    data.forEach((row) => {
+                        let tempDiv = document.createElement("div");
+                        tempDiv.innerHTML = answerBoxTemplate(
+                            row.Moisturizer,
+                            row.Cleanser,
+                            row.Sunscreen,
+                            row.Treatment
+                        );
+                        document.getElementById("answer-box").appendChild(tempDiv);
+                    })
+                );
         }
-
     </script>
 </body>
