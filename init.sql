@@ -18,7 +18,7 @@
 --
 -- Table structure for table `products`
 --
-
+CREATE DATABASE IF NOT EXISTS cosmetics;
 USE cosmetics;
 
 DROP TABLE IF EXISTS `products`;
