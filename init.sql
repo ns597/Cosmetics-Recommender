@@ -19,7 +19,7 @@
 -- Table structure for table `products`
 --
 
-USE kardashaindb;
+USE cosmetics;
 
 DROP TABLE IF EXISTS `products`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
