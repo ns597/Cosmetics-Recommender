@@ -9,7 +9,7 @@ services:
                 context: ./backend
                 dockerfile: Dockerfile
                 args:
-                        DB_NAME: cosmeticsRecs_db
+                        DB_NAME: TEAM_1
         depends_on:
                 - db
         environment:
@@ -28,7 +28,7 @@ services:
         environment:
                 - MYSQL_USER=admin
                 - MYSQL_PASSWORD=admin
-                - MYSQL_DATABASE=cosmetics
+                - MYSQL_DATABASE=kardashiandb
                 - MYSQL_ROOT_PASSWORD=admin
         volumes:
                 - flask_volume:/var/lib/mysql
