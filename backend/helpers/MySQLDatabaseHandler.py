@@ -34,8 +34,8 @@ class MySQLDatabaseHandler(object):
             conn.execute(query)
 
     def query_selector(self, query):
-        conn.execute(f"USE {self.MYSQL_DATABASE}")
         conn = self.lease_connection()
+        conn.execute(f"USE {self.MYSQL_DATABASE}")
         data = conn.execute(query)
         return data
 
