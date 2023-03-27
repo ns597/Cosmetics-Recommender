@@ -57,5 +57,3 @@ print("Treatment")
 top5category(treatment, product)
 
 
-
-
