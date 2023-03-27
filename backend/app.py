@@ -33,6 +33,7 @@ CORS(app)
 
 def sql_search(name, skin):
     # query_sql = f"""SELECT * FROM cosmetics WHERE LOWER( title ) LIKE '%%{prod.lower()}%%' limit 10"""
+    mysql_engine.validate_connection()
     query_sql = f"""SELECT Ingredients FROM products WHERE LOWER( Name ) = '%%{name.lower()}%%' limit 1"""
     query_ingreds = mysql_engine.query_selector(query_sql)
     print(query_ingreds)
