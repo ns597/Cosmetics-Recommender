@@ -45,11 +45,27 @@ def sql_search(name, skin):
     t_query = f"""SELECT Name, Ingredients FROM products WHERE Label = 'Treatment'"""
     treatments = mysql_engine.query_selector(t_query)
 
+    comb_query = f"""SELECT * FROM products WHERE Combination = 1"""
+    comb = mysql_engine.query_selector(comb_query)
+    dry_query = f"""SELECT * FROM products WHERE Dry = 1"""
+    dry = mysql_engine.query_selector(dry_query)
+    normal_query = f"""SELECT * FROM products WHERE Normal = 1"""
+    normal = mysql_engine.query_selector(normal_query)
+    oily_query = f"""SELECT * FROM products WHERE Oily = 1"""
+    oily = mysql_engine.query_selector(oily_query)
+    sensitive_query = f"""SELECT * FROM products WHERE Sensitive = 1"""
+    sensitive = mysql_engine.query_selector(sensitive_query)
+
     routine = {}
     routine["Moisturizer"] = top5category(moisturizers, query_ingreds)
     routine["Cleanser"] = top5category(cleansers, query_ingreds)
     routine["Sunscreen"] = top5category(sunscreens, query_ingreds)
     routine["Treatment"] = top5category(treatments, query_ingreds)
+    routine["Combination"] = top5category(comb, query_ingreds)
+    routine["Dry"] = top5category(dry, query_ingreds)
+    routine["Normal"] = top5category(normal, query_ingreds)
+    routine["Oily"] = top5category(oily, query_ingreds)
+    routine["Sensitive"] = top5category(sensitive, query_ingreds)
     return json.dumps(routine)
 
 
