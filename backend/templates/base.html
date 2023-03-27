@@ -48,7 +48,7 @@
             console.log(document.getElementById("product-type-val").value)
             console.log(document.getElementById("skin-type-val").value)
             fetch("/product?" + new URLSearchParams({
-                product: document.getElementById("product-name-val").value,
+                name: document.getElementById("product-name-val").value,
                 skin: document.getElementById("skin-type-val").value
             }
             ).toString())
