@@ -15,9 +15,9 @@
 
             <form className="form" onsubmit=getRoutine()>
                 <input type="text" id="skin-type-val" placeholder="Skin Type" />
-                <input type="text" id="product-type-val" placeholder="Liked Product" />
+                <input type="text" id="product-name-val" placeholder="Liked Product" />
 
-                <button type="submit">{"Submit for Your Skincare Routine"}</button>
+                <button type="submit">Submit for Your Skincare Routine</button>
             </form>
         </div>
         <div id="answer-box">
@@ -28,10 +28,12 @@
 
     <script>
 
-        function answerBoxTemplate(title, titleDesc) {
+        function answerBoxTemplate(moist, clean, sun, treat) {
             return `<div class=''>
-                <h3 class='episode-title'>${title}</h3>
-                <p class='episode-desc'>${titleDesc}</p>
+                <h3 class='episode-title'>${moist}</h3>
+                <p class='episode-desc'>${clean}</p>
+                <p class='episode-desc'>${sun}</p>
+                <p class='episode-desc'>${treat}</p>
             </div>`
         }
 
@@ -41,19 +43,21 @@
 
         function getRoutine() {
             document.getElementById("answer-box").innerHTML = ""
-            const resultsList = document.getElementById("results");
 
             console.log(document.getElementById("product-type-val").value)
             console.log(document.getElementById("skin-type-val").value)
-            fetch("/product?" + new URLSearchParams({ title: document.getElementById("product-type-val").value }).toString())
+            fetch("/product?" + new URLSearchParams({
+                product: document.getElementById("product-name-val").value,
+                skin: document.getElementById("skin-type-val").value
+            }
+            ).toString())
                 .then((response) => response.json())
                 .then((data) => data.forEach(row => {
 
                     let tempDiv = document.createElement("div")
-                    tempDiv.innerHTML = answerBoxTemplate(row.Name, row.Label, row.Ingredients)
+                    tempDiv.innerHTML = answerBoxTemplate(row.Moisturizer, row.Cleanser, row.Sunscreen, row.Treatment)
                     document.getElementById("answer-box").appendChild(tempDiv)
                 }));
-
         }
 
     </script>
