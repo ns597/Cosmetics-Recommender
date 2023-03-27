@@ -1,26 +1,61 @@
 import pandas as pd
 import numpy as np
+
+def top5category(category,product):
+    #returns top 5 given a list and product to match
+    #go through whole list and get name + ingredient list
+    #perform jaccard similarity and put into list of tuples (Name, Score)
+    #sort by score and return top 5
+    category = category[['Name', 'Ingredients']]
+    category = category.to_numpy()
+    ingredients = product['Ingredients']
+    scores = []
+    for val in category:
+        name = val[0]
+        score = jaccard_similarity(val[1], ingredients)
+        scores = scores + [(name, score)]
+    scores.sort(key=lambda x:x[1])
+    top5 = scores[:5]
+    top5 = list(map(lambda x:x[0],top5))
+    print(top5)
+
+
+def jaccard_similarity(ingred, products):
+    a = set(ingred.split(","))
+    b = set(products)
+    intersection = a.intersection(b)
+    union = a.union(b)
+    return (len(intersection) / len(union))
+
+
+
 cosmetics = pd.read_csv('cosmetics.csv')  
+# print(cosmetics)
 
 #Types of input to initalize
 #limit to skin type first, then perform jaccard similarity on three groups 
 skin_type_input = input("Input your skin type: ")
 prod_name = input("Input the name of product you have used an enjoyed: ")
 
-
 skin_type = cosmetics[cosmetics[skin_type_input.capitalize()]==1]
 product = cosmetics[cosmetics['Name']== prod_name]
-ingredients = product['Ingredients']
 
 moisturizers = skin_type[skin_type['Label']=='Moisturizer']
 cleansers = skin_type[skin_type['Label']=='Cleanser']
-other =skin_type[skin_type['Label']=='Other']
+sunscreen =skin_type[skin_type['Label']=='Sun protect']
+treatment = skin_type[skin_type['Label']=='Treatment']
 
-# for step in steps:
+first = moisturizers['Ingredients'][0]
 
-print(product )
+print("Moisturizers")
+top5category(moisturizers, product)
+print("Cleansers")
+top5category(cleansers, product)
+print("Sunscreen")
+top5category(sunscreen, product)
+print("Treatment")
+top5category(treatment, product)
 
-def jaccard_similarity(ingred, products):
-    intersection = set(ingred).intersection(set(products))
-    union = set(ingred).union(set(products))
-    return len(intersection) / len(union)
+
+
+
