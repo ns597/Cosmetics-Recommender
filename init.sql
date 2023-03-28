@@ -7,7 +7,7 @@
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
 /*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
-/*!50503 SET NAMES utf8 */;
+/*!50503 SET NAMES utf8mb4 */;
 /*!40103 SET @OLD_TIME_ZONE=@@TIME_ZONE */;
 /*!40103 SET TIME_ZONE='+00:00' */;
 /*!40014 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0 */;
@@ -16,10 +16,16 @@
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
+-- Current Database: `cosmetics`
+--
+
+CREATE DATABASE /*!32312 IF NOT EXISTS*/ `cosmetics` /*!40100 DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci */ /*!80016 DEFAULT ENCRYPTION='N' */;
+
+USE `cosmetics`;
+
+--
 -- Table structure for table `products`
 --
-CREATE DATABASE IF NOT EXISTS cosmetics;
-USE cosmetics;
 
 DROP TABLE IF EXISTS `products`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
@@ -37,7 +43,7 @@ CREATE TABLE `products` (
   `Oily` bit(1) NOT NULL,
   `Sensitive` bit(1) NOT NULL,
   PRIMARY KEY (`Name`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -46,12 +52,7 @@ CREATE TABLE `products` (
 
 LOCK TABLES `products` WRITE;
 /*!40000 ALTER TABLE `products` DISABLE KEYS */;
-INSERT INTO `products` VALUES ('Moisturizer', 'GLAMGLOW', 'Glam Purifying Moisturizer', 30, '4.5', 'Water, Alcohol, Citric Acid, Fragrance, Glycerin', 0, 1, 0, 0, 0), ('Moisturizer', 'CLINIQUE', 'Retinol 24 Hour Moisturizer', 65, '3.7', 'Water, Retinol, Hazelnut, Citric Acid, Glycerin', 0, 0, 0, 1, 0), ('Cleanser', 'Cetaphil', 'Hydrating Cleanser', 40, '3.8', 'Water, Alcohol, Sorbic Acid, Glycerin', 0, 1, 0, 0, 0), ('Cleanser', 'Cerave', 'Facial Foaming Cleanser', 17, '4.8', 'Glycerin, Water, Citric Acid, Coumarin, Fragrance', 0, 0, 0, 1, 0);
-INSERT INTO `products` VALUES ('Sun protect', 'DRUNK ELEPHANT', 'Umbra Tinte Physical Daily Defense Broad Spectrum Sunscreen SPF 30', 36, 3.6, 'Water,  Almond, Agua', Glycerin, 1,1,1,1,0 );
-INSERT INTO `products` VALUES ('Sun protect', 'SHISEIDO', 'Ultimate Sun Protection Cream Broad Spectrum SPF 50+', 36, 3.6, 'Water,  Glycerin, Retinol, Sorbic Acid', 0,1,1,1,0 );
-INSERT INTO `products` VALUES ('Treatment', 'FRESH', 'Seaberry Skin Nutrition Booster', 36, 3.6, 'Water,  Niacinamide, Glycerin, Sorbic Acid ', 1,0,1,0,0 );
-INSERT INTO `products` VALUES ('Treatment', 'CLARINS', 'Lotus face Treatment', 36, 3.6, 'Water,  Niacinamide, Retinol, Glycolic Acid ', 1,1,0,0,0 );
-
+INSERT INTO `products` VALUES ('Cleanser','Cerave','Facial Foaming Cleanser',17,'4.8','Glycerin, Water, Citric Acid, Coumarin, Fragrance',_binary '\0',_binary '\0',_binary '\0',_binary '',_binary '\0'),('Moisturizer','GLAMGLOW','Glam Purifying Moisturizer',30,'4.5','Water, Alcohol, Citric Acid, Fragrance, Glycerin',_binary '\0',_binary '',_binary '\0',_binary '\0',_binary '\0'),('Cleanser','Cetaphil','Hydrating Cleanser',40,'3.8','Water, Alcohol, Sorbic Acid, Glycerin',_binary '\0',_binary '',_binary '\0',_binary '\0',_binary '\0'),('Treatment','CLARINS','Lotus face Treatment',36,'3.6','Water,  Niacinamide, Retinol, Glycolic Acid ',_binary '',_binary '',_binary '\0',_binary '\0',_binary '\0'),('Moisturizer','CLINIQUE','Retinol 24 Hour Moisturizer',65,'3.7','Water, Retinol, Hazelnut, Citric Acid, Glycerin',_binary '\0',_binary '\0',_binary '\0',_binary '',_binary '\0'),('Treatment','FRESH','Seaberry Skin Nutrition Booster',36,'3.6','Water,  Niacinamide, Glycerin, Sorbic Acid ',_binary '',_binary '\0',_binary '',_binary '\0',_binary '\0'),('Sun protect','SHISEIDO','Ultimate Sun Protection Cream Broad Spectrum SPF 50+',36,'3.6','Water,  Glycerin, Retinol, Sorbic Acid',_binary '\0',_binary '',_binary '',_binary '',_binary '\0');
 /*!40000 ALTER TABLE `products` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -64,4 +65,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2023-03-27 17:46:37
+-- Dump completed on 2023-03-27 21:17:18
