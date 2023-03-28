@@ -12,7 +12,7 @@ def top5category(category, ingredients):
         score = jaccard_similarity(val[1], ingredients)
         scores = scores + [(name, score)]
     scores.sort(key=lambda x: x[1])
-    top5 = scores[:5]
+    top5 = scores[:1]
     top5 = list(map(lambda x: x[0], top5))
     return top5
 
