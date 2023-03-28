@@ -69,8 +69,8 @@ def sql_search(name, skin):
     routine["Treatment"] = top5category(treatments, query_ingreds)
     print("routine", routine)
 
-    keys = ["Name", "Ingredients"]
-    return json.dumps([dict(zip(keys, i)) for i in moisturizers])
+    # keys = ["Name", "Ingredients"]
+    # return json.dumps([dict(zip(keys, i)) for i in moisturizers])
 
     return json.dumps(routine)
 
@@ -86,7 +86,7 @@ def product_search():
     product_name = request.args.get("name")
     # print(request.args.get("skin_type"))
     # print(request.args.get("product_name"))
-    return sql_search(product_name, skin_type)
+    return sql_search("Glam Purifying Moisturizer", "Dry")
     # return render_template('base.html', title="sample html", context={'json': json_info})
 
 
