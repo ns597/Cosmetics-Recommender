@@ -69,7 +69,8 @@ def sql_search(name, skin):
     routine["Treatment"] = top5category(treatments, query_ingreds)
     print("routine", routine)
 
-    return moisturizers
+    keys = ["Name", "Ingredients"]
+    return json.dumps([dict(zip(keys, i)) for i in moisturizers])
 
     return json.dumps(routine)
 
