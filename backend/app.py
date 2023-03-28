@@ -55,7 +55,7 @@ def sql_search(name, skin):
     c_query = f"""SELECT Name, Ingredients FROM products WHERE '%%{skin}%%' = 1 AND Label = 'Cleanser'"""
     # mysql_engine.validate_connection()
     cleansers = mysql_engine.query_selector(c_query)
-    s_query = f"""SELECT Name, Ingredients FROM products WHERE '%%{skin}%%' = 1 AND Label = 'Sunscreen'"""
+    s_query = f"""SELECT Name, Ingredients FROM products WHERE '%%{skin}%%' = 1 AND Label = 'Sun protect'"""
     # mysql_engine.validate_connection()
     sunscreens = mysql_engine.query_selector(s_query)
     t_query = f"""SELECT Name, Ingredients FROM products WHERE '%%{skin}%%' = 1 AND Label = 'Treatment'"""
