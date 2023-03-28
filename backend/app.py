@@ -90,4 +90,4 @@ def product_search():
     # return render_template('base.html', title="sample html", context={'json': json_info})
 
 
-# app.run(debug=True)
+app.run(debug=True)

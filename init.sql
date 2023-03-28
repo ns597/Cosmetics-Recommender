@@ -19,7 +19,7 @@
 -- Table structure for table `products`
 --
 CREATE DATABASE IF NOT EXISTS cosmetics;
-USE cosmetic;
+USE cosmetics;
 
 DROP TABLE IF EXISTS `products`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
