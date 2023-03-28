@@ -14,15 +14,36 @@ body {
     height: 100%;
 }
 
+.full-body-container {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    /* background: #a3e4d7; */
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: start;
+    align-items: center;
+    flex-direction: column;
+}
+
+.container_skin {
+    text-align: center;
+}
+
 .container {
     margin: 10% auto;
     padding: 80px 0;
     text-align: center;
 }
 
-.container h1 {
-    font-size: 40px;
+h1 {
+    font-size: 50px;
     font-weight: 200;
+    text-align: center;
+    margin-top: 100px;
 }
 
 /* .container_skin {
@@ -38,13 +59,13 @@ form {
     position: relative;
 }
 
-form input {
+.liked_prod {
     border: 1px solid rgba(252, 252, 252, 0.4);
     background-color: rgba(252, 252, 252, 0.2);
-    width: 50px;
+    width: 200px;
     border-radius: 3px;
     font-family: "Source Sans Pro", sans-serif;
-    /* padding: 10px 15px; */
+    padding: 10px 15px;
     margin: 0 auto 10px auto;
     display: block;
     text-align: center;
@@ -53,7 +74,22 @@ form input {
     font-weight: 300;
 }
 
-form button {
+.radio_button {
+    border: 1px solid rgba(252, 252, 252, 0.4);
+    background-color: rgba(252, 252, 252, 0.2);
+    /* width: 50px;
+    border-radius: 3px; */
+    font-family: "Source Sans Pro", sans-serif;
+    /* padding: 10px 15px; */
+    margin: 0 20px 0 0;
+    /* display: block; */
+    text-align: center;
+    font-size: 18px;
+    color: white;
+    font-weight: 300;
+}
+
+#submit_btn {
     appearance: none;
     outline: 0;
     background-color: white;
@@ -63,20 +99,6 @@ form button {
     border-radius: 3px;
     width: 250px;
     font-size: 18px;
-}
-
-.full-body-container {
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    width: 100%;
-    height: 100%;
-    display: flex;
-    justify-content: start;
-    align-items: center;
-    flex-direction: column;
 }
 
 #google-c {
