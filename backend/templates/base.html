@@ -1,11 +1,11 @@
 <!DOCTYPE html>
 <title>{% block title %}{% endblock %} - Flaskr</title>
-<link rel="stylesheet" href="./css/style.css">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<!-- <link href="https://fonts.googleapis.com/css2?family=Kanit&family=Montserrat&family=Open+Sans:wght@500&display=swap"
+<link rel="stylesheet" href="./css/style.css" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Kanit&family=Montserrat&family=Open+Sans:wght@500&display=swap"
     rel="stylesheet" />
-<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:200,300" /> -->
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:200,300" />
 
 <body>
     <div class="full-body-container">
@@ -14,13 +14,10 @@
                 <h1>Cosmetics Recommender</h1>
             </header>
 
-            <form className="form" onsubmit=getRoutine()>
-                <!-- <input type="text" id="skin-type-val" placeholder="Skin Type" /> -->
-                <!-- <form action="/action_page.php"> -->
+            <form onsubmit=getRoutine()>
                 <p>Please select your Skin Type:</p>
                 <label class="container_skin">
                     <input type="radio" class="radio_button" id="oily" name="skin_type" value="Oily">Oily</input><br />
-                    <!-- <label for="oily" id="oily">Oily</label>-->
                 </label>
                 <label class="container_skin">
                     <input type="radio" class="radio_button" id="dry" name="skin_type" value="Dry">Dry</input><br />
@@ -30,19 +27,21 @@
                         class="radio_button">Combination</input><br />
                 </label>
                 <label class="container_skin">
-                    <input type="radio" class="radio_button" id="normal" name="skin_type" value="Normal" />
-                    <label for="normal" id="normal">Normal</label><br />
+                    <input type="radio" class="radio_button" id="normal" name="skin_type"
+                        value="Normal">Normal</input><br />
                 </label>
                 <label class="container_skin">
-                    <input type="radio" id="sensitive" name="skin_type" value="Sensitive" class="radio_button" />
-                    <label for="sensitive" id="sensitive">Sensitive</label><br />
+                    <input type="radio" id="sensitive" name="skin_type" value="Sensitive"
+                        class="radio_button">Sensitive</input><br />
                 </label>
                 <br />
-                <input type="text" id="product-name-val" name="product_name" placeholder="Liked Product" />
+                <input type="text" class="liked_prod" id="product-name-val" name="product_name"
+                    placeholder="Liked Product" />
                 <br />
-                <button type="submit">Submit for Your Skincare Routine</button>
+                <button id="submit_btn" type="submit">Submit for Your Skincare Routine</button>
             </form>
         </div>
+<<<<<<< HEAD
         <div class="answer-box">
             <h3 class='episode-title'>Moisturizer</h3>
             <p class='episode-desc'>Hydrating Moistruizer</p>
@@ -52,8 +51,12 @@
             <p class='episode-desc'>Ultimate Sun Protection Cream Broad Spectrum SPF 50+</p>
             <h3 class='episode-title'>Treatment</h3>
             <p class='episode-desc'>Lotus face Treatment</p>
+=======
+        <!-- <div class="answer-box">
+>>>>>>> d453a0022dbf55ba3e607e07235f19d369af48fb
 
-        </div>
+
+        </div> -->
     </div>
 
     <script>
