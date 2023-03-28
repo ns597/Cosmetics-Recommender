@@ -19,7 +19,7 @@
 -- Table structure for table `products`
 --
 CREATE DATABASE IF NOT EXISTS cosmetics;
-USE cosmetics;
+USE cosmetic;
 
 DROP TABLE IF EXISTS `products`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
@@ -50,7 +50,9 @@ INSERT INTO `products` VALUES ('Moisturizer', 'GLAMGLOW', 'Glam Purifying Moistu
 INSERT INTO `products` VALUES ('Sun protect', 'DRUNK ELEPHANT', 'Umbra Tinte Physical Daily Defense Broad Spectrum Sunscreen SPF 30', 36, 3.6, 'Water,  Almond, Agua', Glycerin, 1,1,1,1,0 );
 INSERT INTO `products` VALUES ('Sun protect', 'SHISEIDO', 'Ultimate Sun Protection Cream Broad Spectrum SPF 50+', 36, 3.6, 'Water,  Glycerin, Retinol, Sorbic Acid', 0,1,1,1,0 );
 INSERT INTO `products` VALUES ('Treatment', 'FRESH', 'Seaberry Skin Nutrition Booster', 36, 3.6, 'Water,  Niacinamide, Glycerin, Sorbic Acid ', 1,0,1,0,0 );
-INSERT INTO `products` VALUES ('Treatment', 'CLARINS', 'Lotus face Treatment', 36, 3.6, 'Water,  Niacinamide, Retinol, Glycolic Acid ', 1,1,0,0,0 );
+INSERT INTO `products` VALUES ('Treatment', 'CLARINS', 'Lotus Face Treatment', 36, 3.6, 'Water,  Niacinamide, Retinol, Glycolic Acid ', 1,1,0,0,0 );
+INSERT INTO `products` VALUES ('Treatment', 'CLINIQUE', 'Pore Retinol 24 Hour Treatment', 45, 4.6, 'Water, Alcohol, Sorbic Acid, Retinol, Glycolic Acid ', 1,1,0,0,0 );
+
 
 /*!40000 ALTER TABLE `products` ENABLE KEYS */;
 UNLOCK TABLES;
