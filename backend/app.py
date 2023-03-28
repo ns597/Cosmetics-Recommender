@@ -43,7 +43,7 @@ def sql_search(name, skin):
     """
     # query_sql = f"""SELECT * FROM cosmetics WHERE LOWER( title ) LIKE '%%{prod.lower()}%%' limit 10"""
     # mysql_engine.validate_connection()
-    query_sql = f"""SELECT Ingredients FROM products WHERE LOWER( Name ) = '%%{name.lower()}%%' limit 1"""
+    query_sql = f"""SELECT Ingredients FROM products WHERE LOWER( Name ) = '%%{name.lower()}%%'"""
     query_ingreds = mysql_engine.query_selector(query_sql)
     print(query_ingreds)
 
@@ -67,6 +67,9 @@ def sql_search(name, skin):
     routine["Cleanser"] = top5category(cleansers, query_ingreds)
     routine["Sunscreen"] = top5category(sunscreens, query_ingreds)
     routine["Treatment"] = top5category(treatments, query_ingreds)
+    print("routine", routine)
+
+    return moisturizers
 
     return json.dumps(routine)
 
@@ -77,12 +80,13 @@ def home():
 
 
 @app.route("/product")
-def episodes_search():
+def product_search():
     skin_type = request.args.get("skin")
     product_name = request.args.get("name")
-    print(request.args.get("name"))
-    print(request.args.get("product_name"))
+    # print(request.args.get("skin_type"))
+    # print(request.args.get("product_name"))
     return sql_search(product_name, skin_type)
+    # return render_template('base.html', title="sample html", context={'json': json_info})
 
 
 # app.run(debug=True)
