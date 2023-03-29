@@ -6,14 +6,19 @@ def top5category(category, ingredients):
 
     # category = category[['Name', 'Ingredients']]
     # category = category.to_numpy()
+
+    print(category)
+    print(ingredients)
+
     scores = []
     for val in category:
-        name = val[0]
-        score = jaccard_similarity(val[1], ingredients)
-        scores = scores + [(name, score)]
+        name = val['name']
+        score = jaccard_similarity(val['ingreds'], ingredients)
+        scores.append((name, score))
+    scores[0]
     scores.sort(key=lambda x: x[1])
-    top5 = scores[:1]
-    top5 = list(map(lambda x: x[0], top5))
+    top5 = scores[0]
+    # top5 = list(map(lambda x: x[0], top5))
     return top5
 
 

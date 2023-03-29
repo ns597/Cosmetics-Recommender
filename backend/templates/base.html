@@ -1,7 +1,70 @@
+
+
 <!DOCTYPE html>
-<meta charset="utf-8">
 <title>{% block title %}{% endblock %} - Flaskr</title>
-<link rel="stylesheet" href="./style.css" />
+<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Kanit&family=Montserrat&family=Open+Sans:wght@500&display=swap" rel="stylesheet">
+<body>
+    <div class="full-body-container">
+        <div class="top-text">
+            <header>
+                <h1>Cosmetics Recommender</h1>
+            </header>
+            <div onclick="sendFocus()">
+                <input class="liked_prod" placeholder="Liked Product" id="filter-text-val">
+            </div>
+            <div  onclick="sendFocus2()">
+                <input class="liked_prod" placeholder="Skin Type" id="skin-type-val">
+            </div>
+            <button id="submit_btn" onclick="filterText()">Submit for Your Skincare Routine</button>
+        </div>
+        <div id="answer-box">
+
+        </div>
+    </div>
+
+    <script>
+
+        function answerBoxTemplate(name, score, label){
+            return `<div class=''>
+                <h3 class='episode-title'>${label}</h3>
+                <p class='episode-desc'>Score: ${score}</p>
+                <p class='episode-desc'>${name}</p>
+            </div>`
+        }
+
+        function sendFocus(){
+            document.getElementById('filter-text-val').focus()
+        }
+
+        function sendFocus2(){
+            document.getElementById('skin-type-val').focus()
+        }
+
+        function filterText(){
+            document.getElementById("answer-box").innerHTML = ""
+            console.log(document.getElementById("filter-text-val").value)
+            fetch("/episodes?" + new URLSearchParams(
+                { title: document.getElementById("filter-text-val").value, 
+                skin: document.getElementById("skin-type-val").value }).toString())
+            .then((response) => response.json())
+            .then((data) => data.forEach(row => {
+                
+                let tempDiv = document.createElement("div")
+                tempDiv.innerHTML = answerBoxTemplate(row.name,row.score,row.label)
+                document.getElementById("answer-box").appendChild(tempDiv)
+            }));
+
+        }
+            
+    </script>
+</body>
+
+<!-- <!DOCTYPE html>
+<meta charset="utf-8">
+<link rel="stylesheet" href="./style.css" type="text/css"/>
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Kanit&family=Montserrat&family=Open+Sans:wght@500&display=swap"
@@ -14,44 +77,32 @@
             <header>
                 <h1>Cosmetics Recommender</h1>
             </header>
-
-            <form onsubmit=getRoutine()>
-                <p>Please select your Skin Type:</p>
-                <label class="container_skin">
-                    <input type="radio" class="radio_button" id="oily" name="skin_type" value="Oily">Oily</input><br />
-                </label>
-                <label class="container_skin">
-                    <input type="radio" class="radio_button" id="dry" name="skin_type" value="Dry">Dry</input><br />
-                </label>
-                <label class="container_skin">
-                    <input type="radio" id="combination" name="skin_type" value="Combination"
-                        class="radio_button">Combination</input><br />
-                </label>
-                <label class="container_skin">
-                    <input type="radio" class="radio_button" id="normal" name="skin_type"
-                        value="Normal">Normal</input><br />
-                </label>
-                <label class="container_skin">
-                    <input type="radio" id="sensitive" name="skin_type" value="Sensitive"
-                        class="radio_button">Sensitive</input><br />
-                </label>
-                <br />
-                <input type="text" class="liked_prod" id="product-name-val" name="product_name"
-                    placeholder="Liked Product" />
-                <br />
-                <button id="submit_btn" type="submit">Submit for Your Skincare Routine</button>
-            </form>
+            <p>Please select your Skin Type:</p>
+            <label class="container_skin">
+                <input type="radio" class="radio_button" id="oily" name="skin_type" value="Oily">Oily</input><br />
+            </label>
+            <label class="container_skin">
+                <input type="radio" class="radio_button" id="dry" name="skin_type" value="Dry">Dry</input><br />
+            </label>
+            <label class="container_skin">
+                <input type="radio" id="combination" name="skin_type" value="Combination"
+                    class="radio_button">Combination</input><br />
+            </label>
+            <label class="container_skin">
+                <input type="radio" class="radio_button" id="normal" name="skin_type"
+                    value="Normal">Normal</input><br />
+            </label>
+            <label class="container_skin">
+                <input type="radio" id="sensitive" name="skin_type" value="Sensitive"
+                    class="radio_button">Sensitive</input><br />
+            </label>
+            <br />
+            <input type="text" class="liked_prod" id="product-name-val"
+                placeholder="Liked Product" />
+            <br />
+            <button id="submit_btn" onclick=getRoutine()>Submit for Your Skincare Routine</button>
         </div>
         <div class="answer-box">
-            <h3 class='episode-title'>Moisturizer</h3>
-            <p class='episode-desc'>Hydrating Moisturizer</p>
-            <h3 class='episode-title'>Cleanser</h3>
-            <p class='episode-desc'>Bubbling Foaming Cleanser</p>
-            <h3 class='episode-title'>Sun Protection</h3>
-            <p class='episode-desc'>Ultimate Sun Protection Cream Broad Spectrum SPF 50+</p>
-            <h3 class='episode-title'>Treatment</h3>
-            <p class='episode-desc'>Lotus face Treatment</p>
-
 
         </div>
     </div>
@@ -59,22 +110,26 @@
     <script>
         function answerBoxTemplate(moist, clean, sun, treat) {
             return `<div class=''>
-                <h3 class='episode-title'>${moist}</h3>
+                <h3 class='episode-title'>Moisturizer</h3>
+                <p class='episode-desc'>${moist}</p>
+                <h3 class='episode-title'>Cleanser</h3>
                 <p class='episode-desc'>${clean}</p>
+                <h3 class='episode-title'>Sun Protection</h3>
                 <p class='episode-desc'>${sun}</p>
+                <h3 class='episode-title'>Treatment</h3>
                 <p class='episode-desc'>${treat}</p>
             </div>`;
         }
 
         function sendFocus() {
-            document.getElementById("filter-text-val").focus();
+            document.getElementById("product-name-val").focus();
         }
 
         function getRoutine() {
-            document.getElementById("answer-box").innerHTML = "";
+            // document.getElementById("answer-box").innerHTML = "";
 
-            console.log(document.getElementsById("product-type-val").value)
-            console.log(document.getElementsById("skin-type-val").value)
+            console.log(document.getElementById("product-type-val").value)
+            console.log(document.getElementById("skin-type-val").value)
 
             console.log(document.getElementsByName("product_name").value)
             console.log(document.getElementsByName("skin_type").value)
@@ -99,4 +154,4 @@
                 );
         }
     </script>
-</body>
+</body> -->
