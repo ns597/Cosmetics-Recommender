@@ -46,13 +46,34 @@ CREATE TABLE `products` (
 
 LOCK TABLES `products` WRITE;
 /*!40000 ALTER TABLE `products` DISABLE KEYS */;
-INSERT INTO `products` VALUES ('Moisturizer', 'GLAMGLOW', 'Glam Purifying Moisturizer', 30, '4.5', 'Water, Alcohol, Citric Acid, Fragrance, Glycerin', 0, 1, 0, 0, 0), ('Moisturizer', 'CLINIQUE', 'Retinol 24 Hour Moisturizer', 65, '3.7', 'Water, Retinol, Hazelnut, Citric Acid, Glycerin', 0, 0, 0, 1, 0), ('Cleanser', 'Cetaphil', 'Hydrating Cleanser', 40, '3.8', 'Water, Alcohol, Sorbic Acid, Glycerin', 0, 1, 0, 0, 0), ('Cleanser', 'Cerave', 'Facial Foaming Cleanser', 17, '4.8', 'Glycerin, Water, Citric Acid, Coumarin, Fragrance', 0, 0, 0, 1, 0);
+INSERT INTO `products` VALUES ('Moisturizer', 'GLAMGLOW', 'Glam Purifying Moisturizer', 30, '4.5', 'Water, Alcohol, Citric Acid, Mineral Oil, Fragrance, Glycerin', 0, 1, 1, 0, 1);
+INSERT INTO `products` VALUES ('Moisturizer', 'CLINIQUE', 'Retinol 24 Hour Moisturizer', 65, '3.7', 'Water, Retinol, Hazelnut, Citric Acid, Glycerin', 1, 0, 0, 1, 0);
+INSERT INTO `products` VALUES ('Moisturizer', 'LA MER', 'Creme de la Mer', 175, 4.1, "Algae (Seaweed) Extract, Mineral Oil, Petrolatum, Glycerin, Sodium Gluconate, Niacin, Water, Octyldodecanol, Citric Acid, Fragrance",1,1,1,1,1);
+INSERT INTO `products` VALUES ('Cleanser', 'Cetaphil', 'Hydrating Cleanser', 40, '3.8', 'Water, Alcohol, Sorbic Acid, Glycerin', 1, 1, 0, 0, 1);
+INSERT INTO `products` VALUES ('Cleanser', 'Cerave', 'Facial Foaming Cleanser', 17, '4.8', 'Glycerin, Water, Citric Acid, Coumarin, Fragrance', 0, 0, 1, 1, 0);
 INSERT INTO `products` VALUES ('Sun protect', 'DRUNK ELEPHANT', 'Umbra Tinte Physical Daily Defense Broad Spectrum Sunscreen SPF 30', 36, 3.6, 'Water,  Almond, Agua, Glycerin', 1,1,1,1,0 );
-INSERT INTO `products` VALUES ('Sun protect', 'SHISEIDO', 'Ultimate Sun Protection Cream Broad Spectrum SPF 50+', 36, 3.6, 'Water,  Glycerin, Retinol, Sorbic Acid', 0,1,1,1,0 );
-INSERT INTO `products` VALUES ('Treatment', 'FRESH', 'Seaberry Skin Nutrition Booster', 36, 3.6, 'Water,  Niacinamide, Glycerin, Sorbic Acid ', 1,0,1,0,0 );
-INSERT INTO `products` VALUES ('Treatment', 'CLARINS', 'Lotus Face Treatment', 36, 3.6, 'Water,  Niacinamide, Retinol, Glycolic Acid ', 1,1,0,0,0 );
-INSERT INTO `products` VALUES ('Treatment', 'CLINIQUE', 'Pore Retinol 24 Hour Treatment', 45, 4.6, 'Water, Alcohol, Sorbic Acid, Retinol, Glycolic Acid ', 1,1,0,0,0 );
+INSERT INTO `products` VALUES ('Sun protect', 'SHISEIDO', 'Ultimate Sun Protection Cream Broad Spectrum SPF 50+', 36, 3.6, 'Water,  Glycerin, Retinol, Sorbic Acid', 0,1,1,0,1 );
+INSERT INTO `products` VALUES ('Treatment', 'FRESH', 'Seaberry Skin Nutrition Booster', 36, 3.6, 'Water, Niacinamide, Glycerin, Sorbic Acid, Mineral Oil, Fragrance', 1,0,0,1,0 );
+INSERT INTO `products` VALUES ('Treatment', 'CLARINS', 'Lotus Face Treatment', 36, 3.6, 'Water,  Niacinamide, Retinol, Glycolic Acid ', 1,0,0,0,1 );
+INSERT INTO `products` VALUES ('Treatment', 'CLINIQUE', 'Pore Retinol 24 Hour Treatment', 45, 4.6, 'Water, Alcohol, Sorbic Acid, Retinol, Glycolic Acid ', 0,1,1,0,0 );
 
+INSERT INTO `products` VALUES ('Moisturizer', 'SK-II', 'Facial Treatment Essence', 179, 4.1, 'Galactomyces Ferment Filtrate (Pitera), Butylene Glycol, Pentylene Glycol, Water, Sodium Benzoate, Methylparaben, Sorbic Acid.', 1, 1, 1, 1, 1), 
+('Moisturizer', 'DRUNK ELEPHANT', 'Protini Polypeptide Cream', 68, 4.4, 'Water, Dicaprylyl Carbonate, Glycerin, Cetearyl Alcohol, Cetearyl Olivate, Sorbitan Olivate, Sclerocarya Birrea Seed Oil, Bacillus/Soybean/ Folic Acid Ferment Extract, Nymphaea Alba Root Extract', 1, 1, 1, 1, 0)
+
+
+
+
+
+
+
+
+
+-- LOAD DATA INFILE './csv/cosmetics_clean.csv' 
+-- INTO TABLE `products` 
+-- FIELDS TERMINATED BY ',' 
+-- ENCLOSED BY '"'
+-- LINES TERMINATED BY '\n'
+-- IGNORE 1 ROWS;
 
 /*!40000 ALTER TABLE `products` ENABLE KEYS */;
 UNLOCK TABLES;

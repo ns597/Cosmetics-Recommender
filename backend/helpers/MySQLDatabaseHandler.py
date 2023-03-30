@@ -26,12 +26,12 @@ class MySQLDatabaseHandler(object):
         return self.engine.connect()
 
     def query_executor(self, query):
-        conn = self.lease_connection()
-        if type(query) == list:
-            for i in query:
-                conn.execute(i)
-        else:
-            conn.execute(query)
+        with self.engine.begin() as conn:
+            if type(query) == list:
+                for i in query:
+                    conn.execute(db.text(i))
+            else:
+                conn.execute(query)
 
     def query_selector(self, query):
         conn = self.lease_connection()
@@ -44,7 +44,7 @@ class MySQLDatabaseHandler(object):
             return
         if file_path is None:
             file_path = os.path.join(os.environ['ROOT_PATH'], 'Cosmetics-Recommender\init.sql')
-        sql_file = open(file_path, "r")
+        sql_file = open(file_path, encoding="utf8", errors="ignore")
         sql_file_data = list(
             filter(lambda x: x != '', sql_file.read().split(";\n")))
         self.query_executor(sql_file_data)
