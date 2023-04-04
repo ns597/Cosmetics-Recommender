@@ -1,11 +1,11 @@
-
-
 <!DOCTYPE html>
 <title>{% block title %}{% endblock %} - Flaskr</title>
 <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Kanit&family=Montserrat&family=Open+Sans:wght@500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Kanit&family=Montserrat&family=Open+Sans:wght@500&display=swap"
+    rel="stylesheet">
+
 <body>
     <div class="full-body-container">
         <div class="top-text">
@@ -13,33 +13,37 @@
                 <h1>GLOW</h1>
                 <h2>Build My Skincare Routine</h2><br />
             </header>
-            <div onclick="sendFocus()">
-                <input class="liked_prod" placeholder="Liked Product" id="filter-text-val" onkeyup="querySearch()">
-            </div>
-            <p>Please select your Skin Type:</p>
-            <label class="container_skin">
-                <input type="radio" class="radio_button" id="oily" name="skin_type" value="Oily">Oily</input><br />
-            </label>
-            <label class="container_skin">
-                <input type="radio" class="radio_button" id="dry" name="skin_type" value="Dry">Dry</input><br />
-            </label>
-            <label class="container_skin">
-                <input type="radio" id="combination" name="skin_type" value="Combination"
-                    class="radio_button">Combination</input><br />
-            </label>
-            <label class="container_skin">
-                <input type="radio" class="radio_button" id="normal" name="skin_type"
-                    value="Normal">Normal</input><br />
-            </label>
-            <label class="container_skin">
-                <input type="radio" id="sensitive" name="skin_type" value="Sensitive"
-                    class="radio_button">Sensitive</input><br />
-            </label>
-            <br />
-            <button id="submit_btn" onclick="filterText()">Submit for Your Skincare Routine</button>
+            <form>
+                <div onclick="sendFocus()">
+                    <input class="liked_prod" placeholder="Liked Product" id="filter-text-val" onkeyup="querySearch()">
+                </div>
+                <div class="search-results"></div>
+                <div class="selected-tags"></div><br />
+                <p>Please select your Skin Type:</p>
+                <label class="container_skin">
+                    <input type="radio" class="radio_button" id="oily" name="skin_type" value="Oily">Oily</input><br />
+                </label>
+                <label class="container_skin">
+                    <input type="radio" class="radio_button" id="dry" name="skin_type" value="Dry">Dry</input><br />
+                </label>
+                <label class="container_skin">
+                    <input type="radio" id="combination" name="skin_type" value="Combination"
+                        class="radio_button">Combination</input><br />
+                </label>
+                <label class="container_skin">
+                    <input type="radio" class="radio_button" id="normal" name="skin_type"
+                        value="Normal">Normal</input><br />
+                </label>
+                <label class="container_skin">
+                    <input type="radio" id="sensitive" name="skin_type" value="Sensitive"
+                        class="radio_button">Sensitive</input><br />
+                </label>
+                <br />
+                <button id="submit_btn" onclick="filterText()">Submit for Your Skincare Routine</button>
+            </form>
         </div>
         <div id="query-box">
-            
+
         </div>
 
         <div id="answer-box">
@@ -49,7 +53,60 @@
 
     <script>
 
-        function answerBoxTemplate(name, score, label){
+        const searchInput = document.querySelector('.liked_prod input');
+        const searchResults = document.querySelector('.search-results');
+        const selectedTags = document.querySelector('.selected-tags');
+
+        // Function to show the search results dropdown
+        function showResults(results) {
+            searchResults.innerHTML = '';
+
+            fetch("/search?" + new URLSearchParams(
+                { name: document.getElementById("filter-text-val").value }).toString())
+                .then((response) => response.json())
+                .then((data) => data.forEach(result => {
+
+                    const item = document.createElement('div');
+                    item.classList.add('search-result-item');
+                    item.textContent = result;
+                    item.addEventListener('click', function () {
+                        addTag(result);
+                    });
+                    searchResults.appendChild(item);
+                }));
+
+            if (searchResults.innerHTML !== '') {
+                searchResults.style.display = 'block';
+            } else {
+                searchResults.style.display = 'none';
+            }
+        }
+
+        // Function to add a selected tag
+        function addTag(tag) {
+            const tagElement = document.createElement('div');
+            tagElement.classList.add('selected-tag');
+            tagElement.textContent = tag;
+            const deleteButton = document.createElement('span');
+            deleteButton.classList.add('delete-tag');
+            deleteButton.textContent = 'X';
+            deleteButton.addEventListener('click', function () {
+                tagElement.remove();
+            });
+            tagElement.appendChild(deleteButton);
+            selectedTags.appendChild(tagElement);
+            searchInput.value = '';
+            hideResults();
+        }
+
+        // Event listener for clicks outside the search bar and results dropdown
+        document.addEventListener('click', function (event) {
+            if (!event.target.closest('.search-bar') && !event.target.closest('.selected-tag')) {
+                hideResults();
+            }
+        });
+
+        function answerBoxTemplate(name, score, label) {
             return `<div class=''>
                 <h3 class='episode-title'>${label}</h3>
                 <p class='episode-desc'>Score: ${score}</p>
@@ -57,28 +114,28 @@
             </div>`
         }
 
-        function sendFocus(){
+        function sendFocus() {
             document.getElementById('filter-text-val').focus()
         }
 
-        function querySearch(){
+        function querySearch() {
             fetch("/query?" + new URLSearchParams(
-                { name: document.getElementById("filter-text-val").value}).toString())
-            .then((response) => response.json())
-            .then((data) => {
-                let tempDiv = `<div class=''>
+                { name: document.getElementById("filter-text-val").value }).toString())
+                .then((response) => response.json())
+                .then((data) => {
+                    let tempDiv = `<div class=''>
                         <h2 class='episode-title'>Your Favorite Product: ${data.prod_name}</h3>
                     </div>`
-                document.getElementById("query-box").innerHTML = tempDiv
-            });
+                    document.getElementById("query-box").innerHTML = tempDiv
+                });
         }
 
-        function filterText(){
+        function filterText() {
             document.getElementById("answer-box").innerHTML = ""
             var skin_types = document.getElementsByName("skin_type")
             var skin_type = ''
-            for(i = 0; i < skin_types.length; i++) {
-                if(skin_types[i].checked) {
+            for (i = 0; i < skin_types.length; i++) {
+                if (skin_types[i].checked) {
                     skin_type = skin_types[i].value
                     break
                 }
@@ -87,112 +144,26 @@
             console.log(document.getElementById("filter-text-val").value)
             console.log(skin_type)
 
-            fetch("/episodes?" + new URLSearchParams(
-                { title: document.getElementById("filter-text-val").value, 
-                skin: skin_type }).toString())
-            .then((response) => response.json())
-            .then((data) => data.forEach(row => {
-                
-                let tempDiv = document.createElement("div")
-                tempDiv.innerHTML = answerBoxTemplate(row.name,row.score,row.label)
-                document.getElementById("answer-box").appendChild(tempDiv)
-            }));
+            const selectedTags = document.getElementById('selected-tags');
+            const tags = [];
+            for (let i = 0; i < selectedTags.children.length; i++) {
+                tags.push(selectedTags.children[i].textContent);
+            }
+
+            fetch("/products?" + new URLSearchParams(
+                {
+                    names: tags,
+                    skin: skin_type
+                }).toString())
+                .then((response) => response.json())
+                .then((data) => data.forEach(row => {
+
+                    let tempDiv = document.createElement("div")
+                    tempDiv.innerHTML = answerBoxTemplate(row.name, row.score, row.label)
+                    document.getElementById("answer-box").appendChild(tempDiv)
+                }));
 
         }
-            
+
     </script>
 </body>
-
-<!-- <!DOCTYPE html>
-<meta charset="utf-8">
-<link rel="stylesheet" href="./style.css" type="text/css"/>
-<link rel="preconnect" href="https://fonts.googleapis.com" />
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-<link href="https://fonts.googleapis.com/css2?family=Kanit&family=Montserrat&family=Open+Sans:wght@500&display=swap"
-    rel="stylesheet" />
-<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:200,300" />
-
-<body>
-    <div class="full-body-container">
-        <div class="top-text">
-            <header>
-                <h1>Cosmetics Recommender</h1>
-            </header>
-            <p>Please select your Skin Type:</p>
-            <label class="container_skin">
-                <input type="radio" class="radio_button" id="oily" name="skin_type" value="Oily">Oily</input><br />
-            </label>
-            <label class="container_skin">
-                <input type="radio" class="radio_button" id="dry" name="skin_type" value="Dry">Dry</input><br />
-            </label>
-            <label class="container_skin">
-                <input type="radio" id="combination" name="skin_type" value="Combination"
-                    class="radio_button">Combination</input><br />
-            </label>
-            <label class="container_skin">
-                <input type="radio" class="radio_button" id="normal" name="skin_type"
-                    value="Normal">Normal</input><br />
-            </label>
-            <label class="container_skin">
-                <input type="radio" id="sensitive" name="skin_type" value="Sensitive"
-                    class="radio_button">Sensitive</input><br />
-            </label>
-            <br />
-            <input type="text" class="liked_prod" id="product-name-val"
-                placeholder="Liked Product" />
-            <br />
-            <button id="submit_btn" onclick=getRoutine()>Submit for Your Skincare Routine</button>
-        </div>
-        <div class="answer-box">
-
-        </div>
-    </div>
-
-    <script>
-        function answerBoxTemplate(moist, clean, sun, treat) {
-            return `<div class=''>
-                <h3 class='episode-title'>Moisturizer</h3>
-                <p class='episode-desc'>${moist}</p>
-                <h3 class='episode-title'>Cleanser</h3>
-                <p class='episode-desc'>${clean}</p>
-                <h3 class='episode-title'>Sun Protection</h3>
-                <p class='episode-desc'>${sun}</p>
-                <h3 class='episode-title'>Treatment</h3>
-                <p class='episode-desc'>${treat}</p>
-            </div>`;
-        }
-
-        function sendFocus() {
-            document.getElementById("product-name-val").focus();
-        }
-
-        function getRoutine() {
-            // document.getElementById("answer-box").innerHTML = "";
-
-            console.log(document.getElementById("product-type-val").value)
-            console.log(document.getElementById("skin-type-val").value)
-
-            console.log(document.getElementsByName("product_name").value)
-            console.log(document.getElementsByName("skin_type").value)
-
-            fetch("/product?" + new URLSearchParams({
-                name: document.getElementsById("product-type-val").value,
-                skin: document.getElementsByName("skin_type").value
-            }
-            ).toString())
-                .then((response) => response.json())
-                .then((data) =>
-                    data.forEach((row) => {
-                        let tempDiv = document.createElement("div");
-                        tempDiv.innerHTML = answerBoxTemplate(
-                            row.Moisturizer,
-                            row.Cleanser,
-                            row.Sunscreen,
-                            row.Treatment
-                        );
-                        document.getElementById("answer-box").appendChild(tempDiv);
-                    })
-                );
-        }
-    </script>
-</body> -->

@@ -26,48 +26,55 @@ mysql_engine.load_file_into_db()
 app = Flask(__name__)
 CORS(app)
 
+
 def sql_product_name_query(name):
-    if(len(name) == 0): return json.dumps({"prod_name": ""})
-    query_sql = f"""SELECT Name FROM products WHERE LOWER( `Name` ) LIKE '%%{name.lower()}%%' limit 10"""
-    query = mysql_engine.query_selector(query_sql).fetchone()
-    query_name = query["Name"]
-    return json.dumps({"prod_name": query_name})
+    if (len(name) == 0):
+        return json.dumps({"prod_name": ""})
+    query_sql = f"""SELECT Name FROM products WHERE LOWER( `Name` ) LIKE '%%{name.lower()}%%' limit 5"""
+    query = mysql_engine.query_selector(query_sql)
+    return json.dumps([prod["Name"] for prod in query])
 
 # Sample search, the LIKE operator in this case is hard-coded,
 # but if you decide to use SQLAlchemy ORM framework,
 # there's a much better and cleaner way to do this
-def sql_search(name, skin):
+
+
+def sql_search(names, skin):
     # query_sql = f"""SELECT Name, Label, Ingredients FROM products WHERE LOWER( Name ) LIKE '%%{episode.lower()}%%' limit 10"""
-    
-    query_sql = f"""SELECT Ingredients FROM products WHERE LOWER( `Name` ) LIKE '%%{name.lower()}%%' limit 10"""
-    query = mysql_engine.query_selector(query_sql).fetchone()
-    query_ingreds = query["Ingredients"]
+
+    query_ingreds = set()
+    # To do: consider adding weights to ingredients that appear many times?
+
+    for name in names:
+        query_sql = f"""SELECT Ingredients FROM products WHERE LOWER( `Name` ) = '%%{name.lower()}%%'"""
+        query = mysql_engine.query_selector(query_sql).fetchone()
+        query_ingreds.union(set(query["Ingredients"].split(",")))
 
     print(query_ingreds)
 
     keys = ["name", "ingreds"]
 
-    if(skin == 'Oily'):
+    if (skin == 'Oily'):
         m_query = f"""SELECT Name, Ingredients FROM products WHERE Oily = 1 AND Label = 'Moisturizer'"""
         c_query = f"""SELECT Name, Ingredients FROM products WHERE Oily = 1 AND Label = 'Cleanser'"""
         s_query = f"""SELECT Name, Ingredients FROM products WHERE Oily = 1 AND Label = 'Sun protect'"""
         t_query = f"""SELECT Name, Ingredients FROM products WHERE Oily = 1 AND Label = 'Treatment'"""
-    elif(skin == 'Dry'):
+    elif (skin == 'Dry'):
         m_query = f"""SELECT Name, Ingredients FROM products WHERE Dry = 1 AND Label = 'Moisturizer'"""
         c_query = f"""SELECT Name, Ingredients FROM products WHERE Dry = 1 AND Label = 'Cleanser'"""
         s_query = f"""SELECT Name, Ingredients FROM products WHERE Dry = 1 AND Label = 'Sun protect'"""
         t_query = f"""SELECT Name, Ingredients FROM products WHERE Dry = 1 AND Label = 'Treatment'"""
-    elif(skin == 'Combination'):
+    elif (skin == 'Combination'):
         m_query = f"""SELECT Name, Ingredients FROM products WHERE Combination = 1 AND Label = 'Moisturizer'"""
         c_query = f"""SELECT Name, Ingredients FROM products WHERE Combination = 1 AND Label = 'Cleanser'"""
         s_query = f"""SELECT Name, Ingredients FROM products WHERE Combination = 1 AND Label = 'Sun protect'"""
         t_query = f"""SELECT Name, Ingredients FROM products WHERE Combination = 1 AND Label = 'Treatment'"""
-    elif(skin == 'Normal'):
+    elif (skin == 'Normal'):
         m_query = f"""SELECT Name, Ingredients FROM products WHERE Normal = 1 AND Label = 'Moisturizer'"""
         c_query = f"""SELECT Name, Ingredients FROM products WHERE Normal = 1 AND Label = 'Cleanser'"""
         s_query = f"""SELECT Name, Ingredients FROM products WHERE Normal = 1 AND Label = 'Sun protect'"""
         t_query = f"""SELECT Name, Ingredients FROM products WHERE Normal = 1 AND Label = 'Treatment'"""
-    elif(skin == 'Sensitive'):
+    elif (skin == 'Sensitive'):
         m_query = f"""SELECT Name, Ingredients FROM products WHERE `Sensitive` = 1 AND Label = 'Moisturizer'"""
         c_query = f"""SELECT Name, Ingredients FROM products WHERE `Sensitive` = 1 AND Label = 'Cleanser'"""
         s_query = f"""SELECT Name, Ingredients FROM products WHERE `Sensitive` = 1 AND Label = 'Sun protect'"""
@@ -78,10 +85,14 @@ def sql_search(name, skin):
         s_query = f"""SELECT Name, Ingredients FROM products WHERE Label = 'Sun protect'"""
         t_query = f"""SELECT Name, Ingredients FROM products WHERE Label = 'Treatment'"""
 
-    moisturizers = [dict(zip(keys, i)) for i in mysql_engine.query_selector(m_query)]
-    cleansers = [dict(zip(keys, i)) for i in mysql_engine.query_selector(c_query)]
-    sunscreens = [dict(zip(keys, i)) for i in mysql_engine.query_selector(s_query)]
-    treatments = [dict(zip(keys, i)) for i in mysql_engine.query_selector(t_query)]
+    moisturizers = [dict(zip(keys, i))
+                    for i in mysql_engine.query_selector(m_query)]
+    cleansers = [dict(zip(keys, i))
+                 for i in mysql_engine.query_selector(c_query)]
+    sunscreens = [dict(zip(keys, i))
+                  for i in mysql_engine.query_selector(s_query)]
+    treatments = [dict(zip(keys, i))
+                  for i in mysql_engine.query_selector(t_query)]
 
     print(moisturizers)
 
@@ -96,25 +107,28 @@ def sql_search(name, skin):
 
     # return json.dumps(routine)
 
-    keys = ["name","score","label"]
+    keys = ["name", "score", "label"]
     data = [[routine[key][0], routine[key][1], key] for key in routine]
     # data = [routine["Moisturizer"], routine["Cleanser"], routine["Sunscreen"], routine["Treatment"]]
-    
-    return json.dumps([dict(zip(keys,i)) for i in data])
+
+    return json.dumps([dict(zip(keys, i)) for i in data])
+
 
 @app.route("/")
 def home():
-    return render_template('base.html',title="sample html")
+    return render_template('base.html', title="sample html")
 
-@app.route("/query")
+
+@app.route("/search")
 def query_search():
     name = request.args.get("name")
     return sql_product_name_query(name)
 
-@app.route("/episodes")
-def episodes_search():
-    text = request.args.get("title")
+
+@app.route("/products")
+def products_search():
+    names = request.args.get("names")
     skin = request.args.get("skin")
-    return sql_search(text, skin)
+    return sql_search(names, skin)
 
 # app.run(debug=True)

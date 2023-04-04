@@ -15,8 +15,9 @@ def top5category(category, ingredients):
         name = val['name']
         score = jaccard_similarity(val['ingreds'], ingredients)
         scores.append((name, score))
-    if(len(scores) == 0): return [('None found', 0)]
-    scores.sort(key=lambda x: x[1], reverse = True)
+    if (len(scores) == 0):
+        return [('None found', 0)]
+    scores.sort(key=lambda x: x[1], reverse=True)
     top5 = scores[0]
     # top5 = list(map(lambda x: x[0], top5))
     return top5
@@ -25,7 +26,7 @@ def top5category(category, ingredients):
 def jaccard_similarity(ingred, product):
     a = set(ingred.split(","))
     # print(list(a)[0])
-    b = set(product.split(","))
+    b = product
     intersection = a.intersection(b)
     union = a.union(b)
     return (len(intersection) / len(union))
