@@ -29,7 +29,7 @@ CORS(app)
 
 def sql_product_name_query(name):
     if (len(name) == 0):
-        return json.dumps({"prod_name": ""})
+        return json.dumps([])
     query_sql = f"""SELECT Name FROM products WHERE LOWER( `Name` ) LIKE '%%{name.lower()}%%' limit 5"""
     query = mysql_engine.query_selector(query_sql)
     return json.dumps([prod["Name"] for prod in query])
@@ -46,13 +46,14 @@ def sql_search(names, skin):
     # To do: consider adding weights to ingredients that appear many times?
 
     for name in names:
-        query_sql = f"""SELECT Ingredients FROM products WHERE LOWER( `Name` ) = '%%{name.lower()}%%'"""
+        query_sql = f"""SELECT Ingredients FROM products WHERE LOWER( `Name` ) LIKE '%%{name.lower()}%%'"""
         query = mysql_engine.query_selector(query_sql).fetchone()
-        query_ingreds.union(set(query["Ingredients"].split(",")))
+        print("ingreds:", query["Ingredients"].split(","))
+        query_ingreds.update(set(query["Ingredients"].split(","))) 
 
-    print(query_ingreds)
+    print("query_ingreds:", query_ingreds) 
 
-    keys = ["name", "ingreds"]
+    keys = ["name", "ingreds"] 
 
     if (skin == 'Oily'):
         m_query = f"""SELECT Name, Ingredients FROM products WHERE Oily = 1 AND Label = 'Moisturizer'"""
@@ -94,12 +95,12 @@ def sql_search(names, skin):
     treatments = [dict(zip(keys, i))
                   for i in mysql_engine.query_selector(t_query)]
 
-    print(moisturizers)
+    # print(moisturizers)
 
     routine = {}
     routine["Moisturizer"] = top5category(moisturizers, query_ingreds)
     routine["Cleanser"] = top5category(cleansers, query_ingreds)
-    routine["Sunscreen"] = top5category(sunscreens, query_ingreds)
+    routine["Sunscreen"] = top5category(sunscreens, query_ingreds) 
     routine["Treatment"] = top5category(treatments, query_ingreds)
     # print("routine", routine)
 
@@ -127,8 +128,8 @@ def query_search():
 
 @app.route("/products")
 def products_search():
-    names = request.args.get("names")
-    skin = request.args.get("skin")
+    names = request.args.get("names").split(",")
+    skin = request.args.get("skin") 
     return sql_search(names, skin)
 
-# app.run(debug=True)
+app.run(debug=True)
