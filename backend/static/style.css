@@ -7,7 +7,7 @@
 
 body {
     font-family: "Source Sans Pro", sans-serif;
-    background-image: url('macadamia-body-lotion-skin-cream.jpg');
+    background-image: url('images/macadamia-body-lotion-skin-cream.jpg');
     background-repeat: no-repeat;
     color: gray;
     font-weight: 300;
@@ -53,7 +53,8 @@ body {
     height: 10px;
     border-radius: 50%;
     background-color: #ccc;
-    color: #fff;
+    /* color: #fff; */
+    color: gray;
     font-size: 10px;
     text-align: center;
     line-height: 10px;
@@ -120,7 +121,8 @@ form {
     display: block;
     text-align: center;
     font-size: 18px;
-    color: white;
+    /* color: white; */
+    color: gray;
     font-weight: 300;
 }
 
