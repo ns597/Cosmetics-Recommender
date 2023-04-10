@@ -7,11 +7,6 @@
 
 body {
     font-family: "Source Sans Pro", sans-serif;
-    background-image: url('images/macadamia-body-lotion-skin-cream.jpg');
-    background-position: center;
-    background-repeat: no-repeat;
-    background-size: 100%;
-    background-size: 100%;
     color: gray;
     font-weight: 300;
     /* background: #a3e4d7; */
@@ -21,12 +16,20 @@ body {
 
 /* Style for the search results dropdown */
 .search-results {
-    /* z-index: 999; */
+    z-index: 999;
     border: 1px solid black;
     border-radius: 5px;
     width: 100%;
     padding: 5px;
     display: none;
+}
+
+body.search-results {
+    background-image: url('images/macadamia-body-lotion-skin-cream.jpg');
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: 100%;
+    background-size: 100%;
 }
 
 /* Style for each search result item */
