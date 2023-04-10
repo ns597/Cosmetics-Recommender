@@ -10,7 +10,7 @@ body {
     background-image: url('images/macadamia-body-lotion-skin-cream.jpg');
     background-position: center;
     background-repeat: no-repeat;
-    background-size: cover;
+    background-size: auto;
     color: gray;
     font-weight: 300;
     /* background: #a3e4d7; */
@@ -113,8 +113,8 @@ form {
 }
 
 .liked_prod {
-    /* border: 1px solid rgba(252, 252, 252, 0.4); */
-    /* background-color: rgba(252, 252, 252, 0.2); */
+    border: 1px solid rgba(252, 252, 252, 0.4);
+    background-color: rgba(252, 252, 252, 0.2);
     width: 200px;
     border-radius: 3px;
     font-family: "Source Sans Pro", sans-serif;
