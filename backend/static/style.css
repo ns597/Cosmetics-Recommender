@@ -8,7 +8,9 @@
 body {
     font-family: "Source Sans Pro", sans-serif;
     background-image: url('images/macadamia-body-lotion-skin-cream.jpg');
+    background-position: center;
     background-repeat: no-repeat;
+    background-size: cover;
     color: gray;
     font-weight: 300;
     /* background: #a3e4d7; */
