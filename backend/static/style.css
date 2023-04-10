@@ -125,14 +125,14 @@ form {
     text-align: center;
     font-size: 18px;
     /* color: white; */
-    color: #7b7e7a;
+    color: #a28253;
     font-weight: 300;
 }
 
 .radio_button {
     /* border: 1px solid rgba(252, 252, 252, 0.4); */
     /* background-color: rgba(252, 252, 252, 0.2); */
-    border: 1px solid #7b7e7a;
+    border: 1px solid #bbc3c4;
     /* width: 50px;
     border-radius: 3px; */
     font-family: "Source Sans Pro", sans-serif;
@@ -142,14 +142,14 @@ form {
     text-align: center;
     font-size: 18px;
     /* color: white; */
-    color: #7b7e7a;
+    color: #bbc3c4;
     font-weight: 300;
 }
 
 #submit_btn {
     appearance: none;
     outline: 0;
-    background-color: #7b7e7a;
+    background-color: #a28253;
     border: 0;
     padding: 10px 15px;
     /* color: #a3e4d7; */
