@@ -6,177 +6,175 @@
 <link href="https://fonts.googleapis.com/css2?family=Kanit&family=Montserrat&family=Open+Sans:wght@500&display=swap"
     rel="stylesheet">
 
-<div class="bg">
+<div class="bg"></div>
 
-    <body>
-        <div class="full-body-container">
-            <div class="top-text">
-                <header>
-                    <h1>GLOW</h1>
-                    <h2>Build My Skincare Routine</h2><br />
-                </header>
+<body>
+    <div class="full-body-container">
+        <div class="top-text">
+            <header>
+                <h1>GLOW</h1>
+                <h2>Build My Skincare Routine</h2><br />
+            </header>
 
-                <div onclick="sendFocus()">
-                    <input class="liked_prod" placeholder="Liked Product" id="filter-text-val" onkeyup="showResults()">
-                </div>
-                <div class="search-results"></div>
-                <div class="selected-tags"></div><br />
-
-                <div class="skin_type_container">
-                    <p>Please select your Skin Type:</p>
-                    <label class="container_skin">
-                        <input type="radio" class="radio_button" id="oily" name="skin_type"
-                            value="Oily">Oily</input><br />
-                    </label>
-                    <label class="container_skin">
-                        <input type="radio" class="radio_button" id="dry" name="skin_type" value="Dry">Dry</input><br />
-                    </label>
-                    <label class="container_skin">
-                        <input type="radio" id="combination" name="skin_type" value="Combination"
-                            class="radio_button">Combination</input><br />
-                    </label>
-                    <label class="container_skin">
-                        <input type="radio" class="radio_button" id="normal" name="skin_type"
-                            value="Normal">Normal</input><br />
-                    </label>
-                    <label class="container_skin">
-                        <input type="radio" id="sensitive" name="skin_type" value="Sensitive"
-                            class="radio_button">Sensitive</input><br />
-                    </label>
-                </div>
-
-                <br />
-                <button id="submit_btn" onclick="filterText()">Submit for Your Skincare Routine</button>
-
+            <div onclick="sendFocus()">
+                <input class="liked_prod" placeholder="Liked Product" id="filter-text-val" onkeyup="showResults()">
             </div>
-            <div id="query-box">
+            <div class="search-results"></div>
+            <div class="selected-tags"></div><br />
 
+            <div class="skin_type_container">
+                <p>Please select your Skin Type:</p>
+                <label class="container_skin">
+                    <input type="radio" class="radio_button" id="oily" name="skin_type" value="Oily">Oily</input><br />
+                </label>
+                <label class="container_skin">
+                    <input type="radio" class="radio_button" id="dry" name="skin_type" value="Dry">Dry</input><br />
+                </label>
+                <label class="container_skin">
+                    <input type="radio" id="combination" name="skin_type" value="Combination"
+                        class="radio_button">Combination</input><br />
+                </label>
+                <label class="container_skin">
+                    <input type="radio" class="radio_button" id="normal" name="skin_type"
+                        value="Normal">Normal</input><br />
+                </label>
+                <label class="container_skin">
+                    <input type="radio" id="sensitive" name="skin_type" value="Sensitive"
+                        class="radio_button">Sensitive</input><br />
+                </label>
             </div>
 
-            <div id="answer-box">
+            <br />
+            <button id="submit_btn" onclick="filterText()">Submit for Your Skincare Routine</button>
 
-            </div>
+        </div>
+        <div id="query-box">
+
         </div>
 
-        <script>
+        <div id="answer-box">
 
-            searchResults = document.querySelector('.search-results');
-            selectedTags = document.querySelector('.selected-tags');
+        </div>
+    </div>
 
-            // Function to show the search results dropdown
-            async function showResults(results) {
-                searchResults.innerHTML = '';
+    <script>
+
+        searchResults = document.querySelector('.search-results');
+        selectedTags = document.querySelector('.selected-tags');
+
+        // Function to show the search results dropdown
+        async function showResults(results) {
+            searchResults.innerHTML = '';
+            searchResults.style.display = 'block';
+
+            await fetch("/search?" + new URLSearchParams(
+                { name: document.getElementById("filter-text-val").value }).toString())
+                .then((response) => response.json())
+                .then((data) => data.forEach(result => {
+
+                    const item = document.createElement('div');
+                    item.classList.add('search-result-item');
+                    item.textContent = result;
+                    item.addEventListener('click', function () {
+                        addTag(result);
+                    });
+
+                    searchResults.appendChild(item);
+                }));
+            if (searchResults.innerHTML !== '') {
                 searchResults.style.display = 'block';
-
-                await fetch("/search?" + new URLSearchParams(
-                    { name: document.getElementById("filter-text-val").value }).toString())
-                    .then((response) => response.json())
-                    .then((data) => data.forEach(result => {
-
-                        const item = document.createElement('div');
-                        item.classList.add('search-result-item');
-                        item.textContent = result;
-                        item.addEventListener('click', function () {
-                            addTag(result);
-                        });
-
-                        searchResults.appendChild(item);
-                    }));
-                if (searchResults.innerHTML !== '') {
-                    searchResults.style.display = 'block';
-                } else {
-                    searchResults.style.display = 'none';
-                }
-            }
-
-            // Function to add a selected tag
-            function addTag(tag) {
-                const tagElement = document.createElement('div');
-                tagElement.classList.add('selected-tag');
-                tagElement.textContent = tag;
-                const deleteButton = document.createElement('span');
-                deleteButton.classList.add('delete-tag');
-                deleteButton.textContent = 'X';
-                deleteButton.addEventListener('click', function () {
-                    tagElement.remove();
-                });
-                tagElement.appendChild(deleteButton);
-                selectedTags.appendChild(tagElement);
-
-                console.log(selectedTags.innerHTML);
-
-                document.getElementById("filter-text-val").value = '';
+            } else {
                 searchResults.style.display = 'none';
             }
+        }
 
-            // Event listener for clicks outside the search bar and results dropdown
-            document.addEventListener('click', function (event) {
-                if (!event.target.closest('.search-bar') && !event.target.closest('.selected-tag')) {
-                    searchResults.style.display = 'none';
-                }
+        // Function to add a selected tag
+        function addTag(tag) {
+            const tagElement = document.createElement('div');
+            tagElement.classList.add('selected-tag');
+            tagElement.textContent = tag;
+            const deleteButton = document.createElement('span');
+            deleteButton.classList.add('delete-tag');
+            deleteButton.textContent = 'X';
+            deleteButton.addEventListener('click', function () {
+                tagElement.remove();
             });
+            tagElement.appendChild(deleteButton);
+            selectedTags.appendChild(tagElement);
 
-            function answerBoxTemplate(name, score, label) {
-                return `<div class=''>
+            console.log(selectedTags.innerHTML);
+
+            document.getElementById("filter-text-val").value = '';
+            searchResults.style.display = 'none';
+        }
+
+        // Event listener for clicks outside the search bar and results dropdown
+        document.addEventListener('click', function (event) {
+            if (!event.target.closest('.search-bar') && !event.target.closest('.selected-tag')) {
+                searchResults.style.display = 'none';
+            }
+        });
+
+        function answerBoxTemplate(name, score, label) {
+            return `<div class=''>
                 <h3 class='episode-title'>${label}</h3>
                 <p class='episode-desc'>Score: ${score}</p>
                 <p class='episode-desc'>${name}</p>
             </div>`
-            }
+        }
 
-            function sendFocus() {
-                document.getElementById('filter-text-val').focus()
-            }
+        function sendFocus() {
+            document.getElementById('filter-text-val').focus()
+        }
 
-            function querySearch() {
-                fetch("/query?" + new URLSearchParams(
-                    { name: document.getElementById("filter-text-val").value }).toString())
-                    .then((response) => response.json())
-                    .then((data) => {
-                        let tempDiv = `<div class=''>
+        function querySearch() {
+            fetch("/query?" + new URLSearchParams(
+                { name: document.getElementById("filter-text-val").value }).toString())
+                .then((response) => response.json())
+                .then((data) => {
+                    let tempDiv = `<div class=''>
                         <h2 class='episode-title'>Your Favorite Product: ${data.prod_name}</h3>
                     </div>`
-                        document.getElementById("query-box").innerHTML = tempDiv
-                    });
+                    document.getElementById("query-box").innerHTML = tempDiv
+                });
+        }
+
+        function filterText() {
+            document.getElementById("answer-box").innerHTML = ""
+            var skin_types = document.getElementsByName("skin_type")
+            var skin_type = ''
+            for (i = 0; i < skin_types.length; i++) {
+                if (skin_types[i].checked) {
+                    skin_type = skin_types[i].value
+                    break
+                }
             }
 
-            function filterText() {
-                document.getElementById("answer-box").innerHTML = ""
-                var skin_types = document.getElementsByName("skin_type")
-                var skin_type = ''
-                for (i = 0; i < skin_types.length; i++) {
-                    if (skin_types[i].checked) {
-                        skin_type = skin_types[i].value
-                        break
-                    }
-                }
+            console.log(document.getElementById("filter-text-val").value)
+            console.log(skin_type)
 
-                console.log(document.getElementById("filter-text-val").value)
-                console.log(skin_type)
-
-                // const selectedTags = document.getElementById('selected-tags');
-                tags = [];
-                console.log(selectedTags.innerHTML);
-                for (let i = 0; i < selectedTags.children.length; i++) {
-                    t = selectedTags.children[i].textContent;
-                    tags.push(t.substring(0, t.length - 1));
-                }
-
-                fetch("/products?" + new URLSearchParams(
-                    {
-                        names: tags,
-                        skin: skin_type
-                    }).toString())
-                    .then((response) => response.json())
-                    .then((data) => data.forEach(row => {
-
-                        let tempDiv = document.createElement("div")
-                        tempDiv.innerHTML = answerBoxTemplate(row.name, row.score, row.label)
-                        document.getElementById("answer-box").appendChild(tempDiv)
-                    }));
-
+            // const selectedTags = document.getElementById('selected-tags');
+            tags = [];
+            console.log(selectedTags.innerHTML);
+            for (let i = 0; i < selectedTags.children.length; i++) {
+                t = selectedTags.children[i].textContent;
+                tags.push(t.substring(0, t.length - 1));
             }
 
-        </script>
-    </body>
-</div>
+            fetch("/products?" + new URLSearchParams(
+                {
+                    names: tags,
+                    skin: skin_type
+                }).toString())
+                .then((response) => response.json())
+                .then((data) => data.forEach(row => {
+
+                    let tempDiv = document.createElement("div")
+                    tempDiv.innerHTML = answerBoxTemplate(row.name, row.score, row.label)
+                    document.getElementById("answer-box").appendChild(tempDiv)
+                }));
+
+        }
+
+    </script>
+</body>
