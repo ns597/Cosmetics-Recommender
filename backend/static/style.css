@@ -21,7 +21,7 @@ body {
 
 /* Style for the search results dropdown */
 .search-results {
-    z-index: 999;
+    /* z-index: 999; */
     border: 1px solid black;
     border-radius: 5px;
     width: 100%;
