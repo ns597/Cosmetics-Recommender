@@ -7,13 +7,14 @@
     rel="stylesheet">
 
 <body>
+    <div class="bg"></div>
     <div class="full-body-container">
         <div class="top-text">
             <header>
                 <h1>GLOW</h1>
                 <h2>Build My Skincare Routine</h2><br />
             </header>
-            
+
             <div onclick="sendFocus()">
                 <input class="liked_prod" placeholder="Liked Product" id="filter-text-val" onkeyup="showResults()">
             </div>
@@ -44,7 +45,7 @@
 
             <br />
             <button id="submit_btn" onclick="filterText()">Submit for Your Skincare Routine</button>
-            
+
         </div>
         <div id="query-box">
 
@@ -76,10 +77,10 @@
                     item.addEventListener('click', function () {
                         addTag(result);
                     });
-                    
+
                     searchResults.appendChild(item);
                 }));
-            if(searchResults.innerHTML !== '') {
+            if (searchResults.innerHTML !== '') {
                 searchResults.style.display = 'block';
             } else {
                 searchResults.style.display = 'none';
