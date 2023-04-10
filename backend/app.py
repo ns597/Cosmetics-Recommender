@@ -132,4 +132,4 @@ def products_search():
     skin = request.args.get("skin") 
     return sql_search(names, skin)
 
-app.run(debug=True)
+# app.run(debug=True)
