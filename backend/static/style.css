@@ -10,7 +10,7 @@ body {
     background-image: url('images/macadamia-body-lotion-skin-cream.jpg');
     background-position: center;
     background-repeat: no-repeat;
-    background-size: auto;
+    background-size: contain;
     color: gray;
     font-weight: 300;
     /* background: #a3e4d7; */
