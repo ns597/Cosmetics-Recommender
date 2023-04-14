@@ -43,8 +43,9 @@ class MySQLDatabaseHandler(object):
         if self.IS_DOCKER:
             return
         if file_path is None:
-            file_path = os.path.join(os.environ['ROOT_PATH'], 'Cosmetics-Recommender\init.sql')
-        sql_file = open(file_path, encoding="utf8", errors="ignore")
+            file_path = os.path.join(
+                os.environ['ROOT_PATH'], 'Cosmetics-Recommender\init.sql')
+        sql_file = open(file_path, encoding="utf-8", errors="ignore")
         sql_file_data = list(
             filter(lambda x: x != '', sql_file.read().split(";\n")))
         self.query_executor(sql_file_data)
