@@ -13,12 +13,14 @@
                 <h1>GLOW</h1>
                 <h2>Build My Skincare Routine</h2><br />
             </header>
-            <form>
-                <div onclick="sendFocus()">
-                    <input class="liked_prod" placeholder="Liked Product" id="filter-text-val" onkeyup="showResults()">
-                </div>
-                <div class="search-results"></div>
-                <div class="selected-tags"></div><br />
+
+            <div onclick="sendFocus()">
+                <input class="liked_prod" placeholder="Liked Product" id="filter-text-val" onkeyup="showResults()">
+            </div>
+            <div class="search-results"></div>
+            <div class="selected-tags"></div><br />
+
+            <div class="skin_type_container">
                 <p>Please select your Skin Type:</p>
                 <label class="container_skin">
                     <input type="radio" class="radio_button" id="oily" name="skin_type" value="Oily">Oily</input><br />
@@ -38,9 +40,11 @@
                     <input type="radio" id="sensitive" name="skin_type" value="Sensitive"
                         class="radio_button">Sensitive</input><br />
                 </label>
-                <br />
-                <button id="submit_btn" onclick="filterText()">Submit for Your Skincare Routine</button>
-            </form>
+            </div>
+
+            <br />
+            <button id="submit_btn" onclick="filterText()">Submit for Your Skincare Routine</button>
+
         </div>
         <div id="query-box">
 
@@ -53,15 +57,15 @@
 
     <script>
 
-        const searchInput = document.querySelector('.liked_prod input');
-        const searchResults = document.querySelector('.search-results');
-        const selectedTags = document.querySelector('.selected-tags');
+        searchResults = document.querySelector('.search-results');
+        selectedTags = document.querySelector('.selected-tags');
 
         // Function to show the search results dropdown
-        function showResults(results) {
+        async function showResults(results) {
             searchResults.innerHTML = '';
+            searchResults.style.display = 'block';
 
-            fetch("/search?" + new URLSearchParams(
+            await fetch("/search?" + new URLSearchParams(
                 { name: document.getElementById("filter-text-val").value }).toString())
                 .then((response) => response.json())
                 .then((data) => data.forEach(result => {
@@ -72,9 +76,9 @@
                     item.addEventListener('click', function () {
                         addTag(result);
                     });
+
                     searchResults.appendChild(item);
                 }));
-
             if (searchResults.innerHTML !== '') {
                 searchResults.style.display = 'block';
             } else {
@@ -95,14 +99,17 @@
             });
             tagElement.appendChild(deleteButton);
             selectedTags.appendChild(tagElement);
-            searchInput.value = '';
-            hideResults();
+
+            console.log(selectedTags.innerHTML);
+
+            document.getElementById("filter-text-val").value = '';
+            searchResults.style.display = 'none';
         }
 
         // Event listener for clicks outside the search bar and results dropdown
         document.addEventListener('click', function (event) {
             if (!event.target.closest('.search-bar') && !event.target.closest('.selected-tag')) {
-                hideResults();
+                searchResults.style.display = 'none';
             }
         });
 
@@ -144,10 +151,12 @@
             console.log(document.getElementById("filter-text-val").value)
             console.log(skin_type)
 
-            const selectedTags = document.getElementById('selected-tags');
-            const tags = [];
+            // const selectedTags = document.getElementById('selected-tags');
+            tags = [];
+            console.log(selectedTags.innerHTML);
             for (let i = 0; i < selectedTags.children.length; i++) {
-                tags.push(selectedTags.children[i].textContent);
+                t = selectedTags.children[i].textContent;
+                tags.push(t.substring(0, t.length - 1));
             }
 
             fetch("/products?" + new URLSearchParams(
