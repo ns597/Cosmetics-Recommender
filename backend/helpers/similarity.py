@@ -1,19 +1,11 @@
 def top5category(category, ingredients):
-    # returns top 5 given a list and ingredients to match
-    # go through whole list and get name + ingredient list
-    # perform jaccard similarity and put into list of tuples (Name, Score)
-    # sort by score and return top 5
-
-    # category = category[['Name', 'Ingredients']]
-    # category = category.to_numpy()
-
-    # print(category)
-    # print(ingredients)
-
     scores = []
     for val in category:
         name = val['name']
+        rank = val['rank']
+        # print(rank)
         score = jaccard_similarity(val['ingreds'], ingredients)
+        score = (0.8 * score) + (0.2 * rank)
         scores.append((name, score))
     if (len(scores) == 0):
         return [('None found', 0)]
