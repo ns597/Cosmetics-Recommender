@@ -78,7 +78,7 @@ def sql_search(names, skin):
     elif (skin == 'Sensitive'):
         m_query = f"""SELECT Name, Ingredients, Rank FROM products WHERE `Sensitive` = 1 AND Label = 'Moisturizer'"""
         c_query = f"""SELECT Name, Ingredients, Rank FROM products WHERE `Sensitive` = 1 AND Label = 'Cleanser'"""
-        s_query = f"""SELECT Name, Ingredients, Rank products WHERE `Sensitive` = 1 AND Label = 'Sun protect'"""
+        s_query = f"""SELECT Name, Ingredients, Rank FROM products WHERE `Sensitive` = 1 AND Label = 'Sun protect'"""
         t_query = f"""SELECT Name, Ingredients, Rank FROM products WHERE `Sensitive` = 1 AND Label = 'Treatment'"""
     else:
         m_query = f"""SELECT Name, Ingredients, Rank FROM products WHERE Label = 'Moisturizer'"""
