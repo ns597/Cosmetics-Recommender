@@ -133,4 +133,4 @@ def products_search():
     return sql_search(names, skin)
 
 
-app.run(debug=True)
+# app.run(debug=True)
