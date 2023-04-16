@@ -2,10 +2,13 @@ def top5category(category, ingredients):
     scores = []
     for val in category:
         name = val['name']
-        rank = val['rank']
-        # print(rank)
         score = jaccard_similarity(val['ingreds'], ingredients)
-        score = (0.8 * score) + (0.2 * rank)
+        try:
+            rank = float(val['rank'])
+            # print(rank)
+            score = (0.8 * score) + (0.2 * rank)
+        except:
+            print("invalid ranking for product", name)
         scores.append((name, score))
     if (len(scores) == 0):
         return [('None found', 0)]
