@@ -14,11 +14,17 @@
                 <h2>Build My Skincare Routine</h2><br />
             </header>
 
-            <div onclick="sendFocus()">
-                <input class="liked_prod" placeholder="Liked Product" id="filter-text-val" onkeyup="showResults()">
+            <div >
+                <input class="filter-text" placeholder="Liked Product" id="filter-text-val" onkeyup="showResults()">
             </div>
             <div class="search-results"></div>
             <div class="selected-tags"></div><br />
+
+            <div >
+                <input class="filter-text" placeholder="Disliked Product" id="disliked-val" onkeyup="showDisResults()">
+            </div>
+            <div class="dis-search-results"></div>
+            <div class="dis-selected-tags"></div><br />
 
             <div class="skin_type_container">
                 <p>Please select your Skin Type:</p>
@@ -112,18 +118,60 @@
             searchResults.style.display = 'none';
         }
 
+        searchResultsDis = document.querySelector('.dis-search-results');
+        selectedTagsDis = document.querySelector('.dis-selected-tags');
+
+        async function showDisResults(results) {
+            searchResultsDis.innerHTML = '';
+            searchResultsDis.style.display = 'block';
+
+            await fetch("/search?" + new URLSearchParams(
+                { name: document.getElementById("disliked-val").value }).toString())
+                .then((response) => response.json())
+                .then((data) => data.forEach(result => {
+
+                    const item = document.createElement('div');
+                    item.classList.add('search-result-item');
+                    item.textContent = result;
+                    item.addEventListener('click', function () {
+                        addDisTag(result);
+                    });
+
+                    searchResultsDis.appendChild(item);
+                }));
+            if (searchResultsDis.innerHTML !== '') {
+                searchResultsDis.style.display = 'block';
+            } else {
+                searchResultsDis.style.display = 'none';
+            }
+        }
+
+        // Function to add a selected tag
+        function addDisTag(tag) {
+            const tagElement = document.createElement('div');
+            tagElement.classList.add('selected-tag');
+            tagElement.textContent = tag;
+            const deleteButton = document.createElement('span');
+            deleteButton.classList.add('delete-tag');
+            deleteButton.textContent = 'X';
+            deleteButton.addEventListener('click', function () {
+                tagElement.remove();
+            });
+            tagElement.appendChild(deleteButton);
+            selectedTagsDis.appendChild(tagElement);
+
+            console.log(selectedTagsDis.innerHTML);
+
+            document.getElementById("disliked-val").value = '';
+            searchResultsDis.style.display = 'none';
+        }
+
         // Event listener for clicks outside the search bar and results dropdown
         document.addEventListener('click', function (event) {
             if (!event.target.closest('.search-bar') && !event.target.closest('.selected-tag')) {
                 searchResults.style.display = 'none';
             }
         });
-
-        
-
-        function sendFocus() {
-            document.getElementById('filter-text-val').focus()
-        }
 
         function querySearch() {
             fetch("/query?" + new URLSearchParams(

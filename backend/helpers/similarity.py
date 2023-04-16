@@ -1,5 +1,6 @@
 def top5category(category, ingredients):
     scores = []
+    # print("items in", val['name'], ":", len(category))
     for val in category:
         name = val['name']
         score = jaccard_similarity(val['ingreds'], ingredients)

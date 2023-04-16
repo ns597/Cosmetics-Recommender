@@ -113,7 +113,7 @@ form {
     position: relative;
 }
 
-.liked_prod {
+.filter-text {
     border: 1px solid rgba(252, 252, 252, 0.4);
     background-color: rgba(252, 252, 252, 0.2);
     width: 200px;
