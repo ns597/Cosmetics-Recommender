@@ -7,13 +7,14 @@ def top5category(category, ingredients):
             rank = float(val['rank'])
             # print(rank)
             score = (0.8 * score) + (0.2 * rank)
+            scores.append((name, score, rank, val['price'], val['brand']))
         except:
             print("invalid ranking for product", name)
-        scores.append((name, score))
+            scores.append((name, score, 0, val['price'], val['brand']))
     if (len(scores) == 0):
         return [('None found', 0)]
     scores.sort(key=lambda x: x[1], reverse=True)
-    top5 = scores[0]
+    top5 = scores[:5]
     # top5 = list(map(lambda x: x[0], top5))
     return top5
 

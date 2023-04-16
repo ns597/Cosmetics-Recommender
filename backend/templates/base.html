@@ -49,9 +49,15 @@
         <div id="query-box">
 
         </div>
+        <div class = "answer-container">
+            <div class = "answer-box" id="moist-box"><p class='episode-title'>Moisturizer</p></div>
+            <div class = "answer-box" id="cleans-box"><p class='episode-title'>Cleanser</p></div>
+            <div class = "answer-box" id="sun-box"><p class='episode-title'>Sun Protection</p></div>
+            <div class = "answer-box" id="treat-box"><p class='episode-title'>Treatment</p></div>
+        </div>
 
-        <div id="answer-box">
-
+        <div id="test-box"></div>
+        
         </div>
     </div>
 
@@ -113,13 +119,7 @@
             }
         });
 
-        function answerBoxTemplate(name, score, label) {
-            return `<div class=''>
-                <h3 class='episode-title'>${label}</h3>
-                <p class='episode-desc'>Score: ${score}</p>
-                <p class='episode-desc'>${name}</p>
-            </div>`
-        }
+        
 
         function sendFocus() {
             document.getElementById('filter-text-val').focus()
@@ -137,8 +137,21 @@
                 });
         }
 
+        function answerBoxTemplate(name, score, rank, price, brand) {
+            return `<div class="product-box">
+                <p class='episode-desc'>${name}</p>
+                <p class='episode-desc'>Brand: ${brand}</p>
+                <p class='episode-desc'>Rating: ${rank}</p>
+                <p class='episode-desc'>Price: $${price}</p>
+            </div>`
+        }
+
         function filterText() {
-            document.getElementById("answer-box").innerHTML = ""
+            document.getElementById("moist-box").innerHTML = "<p class='episode-title'>Moisturizer</p>"
+            document.getElementById("cleans-box").innerHTML = "<p class='episode-title'>Cleanser</p>"
+            document.getElementById("sun-box").innerHTML = "<p class='episode-title'>Sun Protection</p>"
+            document.getElementById("treat-box").innerHTML = "<p class='episode-title'>Treatment</p>"
+
             var skin_types = document.getElementsByName("skin_type")
             var skin_type = ''
             for (i = 0; i < skin_types.length; i++) {
@@ -168,8 +181,15 @@
                 .then((data) => data.forEach(row => {
 
                     let tempDiv = document.createElement("div")
-                    tempDiv.innerHTML = answerBoxTemplate(row.name, row.score, row.label)
-                    document.getElementById("answer-box").appendChild(tempDiv)
+                    tempDiv.innerHTML = answerBoxTemplate(row.name, row.score, row.rank, row.price, row.brand)
+                    if(row.label === "Moisturizer")
+                        document.getElementById("moist-box").appendChild(tempDiv)
+                    else if(row.label === "Cleanser")
+                        document.getElementById("cleans-box").appendChild(tempDiv)
+                    else if(row.label === "Sunscreen")
+                        document.getElementById("sun-box").appendChild(tempDiv)
+                    else if(row.label === "Treatment")
+                        document.getElementById("treat-box").appendChild(tempDiv)
                 }));
 
         }
