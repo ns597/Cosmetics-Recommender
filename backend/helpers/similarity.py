@@ -1,13 +1,17 @@
-def top5category(category, ingredients, bad_ingreds):
+def top5category(category, ingredients, min_price, max_price, bad_ingreds):
     scores = []
     # print("items in", val['name'], ":", len(category))
     for val in category:
         name = val['name']
+        price = val['price']
         score = jaccard_similarity(val['ingreds'], ingredients)
         try:
             rank = float(val['rank'])
             # print(rank)
-            score = (0.8 * score) + (0.2 * rank)
+            price_weight = 0
+            if price >= min_price and price <= max_price:
+                price_weight = 1
+            score = (0.8 * score) + (0.2 * rank) + price_weight
             scores.append((name, score, rank, val['price'], val['brand']))
         except:
             print("invalid ranking for product", name)

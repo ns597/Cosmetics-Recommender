@@ -14,13 +14,13 @@
                 <h2>Build My Skincare Routine</h2><br />
             </header>
 
-            <div >
+            <div>
                 <input class="filter-text" placeholder="Liked Product" id="filter-text-val" onkeyup="showResults()">
             </div>
             <div class="search-results"></div>
             <div class="selected-tags"></div><br />
 
-            <div >
+            <div>
                 <input class="filter-text" placeholder="Disliked Product" id="disliked-val" onkeyup="showDisResults()">
             </div>
             <div class="dis-search-results"></div>
@@ -55,16 +55,24 @@
         <div id="query-box">
 
         </div>
-        <div class = "answer-container">
-            <div class = "answer-box" id="moist-box"><p class='episode-title'>Moisturizer</p></div>
-            <div class = "answer-box" id="cleans-box"><p class='episode-title'>Cleanser</p></div>
-            <div class = "answer-box" id="sun-box"><p class='episode-title'>Sun Protection</p></div>
-            <div class = "answer-box" id="treat-box"><p class='episode-title'>Treatment</p></div>
+        <div class="answer-container">
+            <div class="answer-box" id="moist-box">
+                <p class='episode-title'>Moisturizer</p>
+            </div>
+            <div class="answer-box" id="cleans-box">
+                <p class='episode-title'>Cleanser</p>
+            </div>
+            <div class="answer-box" id="sun-box">
+                <p class='episode-title'>Sun Protection</p>
+            </div>
+            <div class="answer-box" id="treat-box">
+                <p class='episode-title'>Treatment</p>
+            </div>
         </div>
 
         <div id="test-box"></div>
-        
-        </div>
+
+    </div>
     </div>
 
     <script>
@@ -238,13 +246,13 @@
 
                     let tempDiv = document.createElement("div")
                     tempDiv.innerHTML = answerBoxTemplate(row.name, row.score, row.rank, row.price, row.brand)
-                    if(row.label === "Moisturizer")
+                    if (row.label === "Moisturizer")
                         document.getElementById("moist-box").appendChild(tempDiv)
-                    else if(row.label === "Cleanser")
+                    else if (row.label === "Cleanser")
                         document.getElementById("cleans-box").appendChild(tempDiv)
-                    else if(row.label === "Sunscreen")
+                    else if (row.label === "Sunscreen")
                         document.getElementById("sun-box").appendChild(tempDiv)
-                    else if(row.label === "Treatment")
+                    else if (row.label === "Treatment")
                         document.getElementById("treat-box").appendChild(tempDiv)
                 }));
 

@@ -38,8 +38,7 @@ def sql_product_name_query(name):
 # but if you decide to use SQLAlchemy ORM framework,
 # there's a much better and cleaner way to do this
 
-
-def sql_search(names, disliked, skin):
+def sql_search(names, disliked, skin, min_price, max_price):
     # query_sql = f"""SELECT Name, Label, Ingredients FROM products WHERE LOWER( Name ) LIKE '%%{episode.lower()}%%' limit 10"""
 
     query_ingreds = set()
@@ -49,11 +48,11 @@ def sql_search(names, disliked, skin):
         query_sql = f"""SELECT Ingredients FROM products WHERE LOWER( `Name` ) LIKE '%%{name.lower()}%%'"""
         query = mysql_engine.query_selector(query_sql).fetchone()
         print("ingreds:", query["Ingredients"].split(","))
-        query_ingreds.update(set(query["Ingredients"].split(","))) 
+        query_ingreds.update(set(query["Ingredients"].split(",")))
 
-    print("query_ingreds:", query_ingreds) 
+    print("query_ingreds:", query_ingreds)
 
-    keys = ["name", "ingreds", "rank", "price", "brand"] 
+    keys = ["name", "ingreds", "rank", "price", "brand"]
 
     if (skin == 'Oily'):
         m_query = f"""SELECT Name, Ingredients, Rank, Price, Brand FROM products WHERE Oily = 1 AND Label = 'Moisturizer'"""
@@ -100,10 +99,14 @@ def sql_search(names, disliked, skin):
     bad_ingreds = bool_and(query_ingreds)
 
     routine = {}
-    routine["Moisturizer"] = top5category(moisturizers, query_ingreds, bad_ingreds)
-    routine["Cleanser"] = top5category(cleansers, query_ingreds, bad_ingreds)
-    routine["Sunscreen"] = top5category(sunscreens, query_ingreds, bad_ingreds) 
-    routine["Treatment"] = top5category(treatments, query_ingreds, bad_ingreds)
+    routine["Moisturizer"] = top5category(
+        moisturizers, query_ingreds, min_price, max_price, bad_ingreds)
+    routine["Cleanser"] = top5category(
+        cleansers, query_ingreds, min_price, max_price, bad_ingreds)
+    routine["Sunscreen"] = top5category(
+        sunscreens, query_ingreds, min_price, max_price, bad_ingreds)
+    routine["Treatment"] = top5category(
+        treatments, query_ingreds, min_price, max_price, bad_ingreds)
     # print("routine", routine)
 
     # return json.dumps([dict(zip(keys, i)) for i in moisturizers])
@@ -111,7 +114,8 @@ def sql_search(names, disliked, skin):
     # return json.dumps(routine)
 
     keys = ["name", "score", "rank", "price", "brand", "label"]
-    data = [[result[0], result[1], result[2], result[3], result[4], key] for key in routine for result in routine[key]  ]
+    data = [[result[0], result[1], result[2], result[3], result[4], key]
+            for key in routine for result in routine[key]]
     # data = [routine["Moisturizer"], routine["Cleanser"], routine["Sunscreen"], routine["Treatment"]]
 
     return json.dumps([dict(zip(keys, i)) for i in data])
@@ -133,7 +137,7 @@ def products_search():
     names = request.args.get("names").split(",")
     disliked = request.args.get("disliked").split(",")
     skin = request.args.get("skin") 
-    return sql_search(names, disliked, skin)
+    return sql_search(names, disliked, skin, min_price, max_price)
 
 
 app.run(debug=True)
