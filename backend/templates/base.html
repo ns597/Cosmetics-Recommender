@@ -170,6 +170,7 @@
         document.addEventListener('click', function (event) {
             if (!event.target.closest('.search-bar') && !event.target.closest('.selected-tag')) {
                 searchResults.style.display = 'none';
+                searchResultsDis.style.display = 'none';
             }
         });
 
@@ -220,9 +221,16 @@
                 tags.push(t.substring(0, t.length - 1));
             }
 
+            dis_tags = [];
+            for (let i = 0; i < selectedTagsDis.children.length; i++) {
+                t = selectedTagsDis.children[i].textContent;
+                dis_tags.push(t.substring(0, t.length - 1));
+            }
+
             fetch("/products?" + new URLSearchParams(
                 {
                     names: tags,
+                    disliked: dis_tags,
                     skin: skin_type
                 }).toString())
                 .then((response) => response.json())

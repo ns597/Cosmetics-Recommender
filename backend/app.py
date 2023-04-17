@@ -39,7 +39,7 @@ def sql_product_name_query(name):
 # there's a much better and cleaner way to do this
 
 
-def sql_search(names, skin):
+def sql_search(names, disliked, skin):
     # query_sql = f"""SELECT Name, Label, Ingredients FROM products WHERE LOWER( Name ) LIKE '%%{episode.lower()}%%' limit 10"""
 
     query_ingreds = set()
@@ -97,11 +97,13 @@ def sql_search(names, skin):
 
     # print(moisturizers)
 
+    bad_ingreds = bool_and(query_ingreds)
+
     routine = {}
-    routine["Moisturizer"] = top5category(moisturizers, query_ingreds)
-    routine["Cleanser"] = top5category(cleansers, query_ingreds)
-    routine["Sunscreen"] = top5category(sunscreens, query_ingreds) 
-    routine["Treatment"] = top5category(treatments, query_ingreds)
+    routine["Moisturizer"] = top5category(moisturizers, query_ingreds, bad_ingreds)
+    routine["Cleanser"] = top5category(cleansers, query_ingreds, bad_ingreds)
+    routine["Sunscreen"] = top5category(sunscreens, query_ingreds, bad_ingreds) 
+    routine["Treatment"] = top5category(treatments, query_ingreds, bad_ingreds)
     # print("routine", routine)
 
     # return json.dumps([dict(zip(keys, i)) for i in moisturizers])
@@ -129,8 +131,9 @@ def query_search():
 @app.route("/products")
 def products_search():
     names = request.args.get("names").split(",")
+    disliked = request.args.get("disliked").split(",")
     skin = request.args.get("skin") 
-    return sql_search(names, skin)
+    return sql_search(names, disliked, skin)
 
 
-# app.run(debug=True)
+app.run(debug=True)

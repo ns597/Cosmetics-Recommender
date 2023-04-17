@@ -1,4 +1,4 @@
-def top5category(category, ingredients):
+def top5category(category, ingredients, bad_ingreds):
     scores = []
     # print("items in", val['name'], ":", len(category))
     for val in category:
@@ -27,6 +27,66 @@ def jaccard_similarity(ingred, product):
     intersection = a.intersection(b)
     union = a.union(b)
     return (len(intersection) / len(union))
+
+# sourced from the FDA https://www.fda.gov/cosmetics/cosmetic-ingredients/allergens-cosmetics 
+allergens = ["Latex", 
+"Amyl cinnamal",
+"Amylcinnamyl alcohol",
+"Anisyl alcohol",
+"Benzyl alcohol",
+"Benzyl benzoate",
+"Benzyl cinnamate",
+"Benzyl salicylate",
+"Cinnamyl alcohol",
+"Cinnamaldehyde",
+"Citral",
+"Citronellol",
+"Coumarin",
+"Eugenol",
+"Farnesol",
+"Geraniol",
+"Hexyl cinnamaladehyde",
+"Hydroxycitronellal",
+"Hydroxyisohexyl 3-cyclohexene carboxaldehyde",
+"Lyral",
+"Isoeugenol",
+"Lilial",
+"d-Limonene",
+"Linalool",
+"Methyl 2-octynoate",
+"g-Methylionone",
+"Oak moss extract",
+"Tree moss extract",
+"Methylisothiazolinone",
+"Methylchloroisothiazolinone",
+"Formaldehyde",
+"Bronopol",
+"5-bromo-5-nitro-1,3-dioxane",
+"Diazolidinyl urea",
+"DMDM hydantoin",
+"Imidazolidinyl urea",
+"Sodium hydroxymethylglycinate",
+"Quaternium-15",
+"p-phenylenediamine",
+"Coal-tar",
+"Nickel", 
+"Gold"]
+
+# takes in list of ingredients, ands with common allergens 
+# to remove allergic products from recommendations
+def bool_and(ingreds):
+    result = []
+    i = j = 0
+    while i < len(ingreds) and j < len(allergens):
+        if ingreds[i] === allergens[j]
+            result.append(ingreds[i])
+            i += 1
+            j += 1
+        elif i <= j:
+            i += 1
+        else:
+            j += 1
+    return result
 
 
 # cosmetics = pd.read_csv('cosmetics.csv')
