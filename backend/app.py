@@ -3,8 +3,12 @@ import os
 from flask import Flask, render_template, request
 from flask_cors import CORS
 from helpers.MySQLDatabaseHandler import MySQLDatabaseHandler
+<<<<<<< HEAD
 from helpers.similarity import top5category
 from helpers.similarity import bool_and
+=======
+from helpers.similarity import top5category, bool_and
+>>>>>>> fb3d547fcf5fbb372228c631230a8f32280aad1b
 
 # ROOT_PATH for linking with all your files.
 # Feel free to use a config.py or settings.py with a global export variable
