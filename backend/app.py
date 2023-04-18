@@ -55,35 +55,35 @@ def sql_search(names, disliked, skin, min_price, max_price):
     keys = ["name", "ingreds", "rank", "price", "brand"]
 
     if (skin == 'Oily'):
-        m_query = f"""SELECT Name, Ingredients, Rank, Price, Brand FROM products WHERE Oily = 1 AND Label = 'Moisturizer'"""
-        c_query = f"""SELECT Name, Ingredients, Rank, Price, Brand FROM products WHERE Oily = 1 AND Label = 'Cleanser'"""
-        s_query = f"""SELECT Name, Ingredients, Rank, Price, Brand FROM products WHERE Oily = 1 AND Label = 'Sun protect'"""
-        t_query = f"""SELECT Name, Ingredients, Rank, Price, Brand FROM products WHERE Oily = 1 AND Label = 'Treatment'"""
+        m_query = f"""SELECT `Name`, `Ingredients`, `Rank`, `Price`, `Brand` FROM `products` WHERE `Oily` = 1 AND `Label` = 'Moisturizer'"""
+        c_query = f"""SELECT `Name`, `Ingredients`, `Rank`, `Price`, `Brand` FROM `products` WHERE `Oily` = 1 AND `Label` = 'Cleanser'"""
+        s_query = f"""SELECT `Name`, `Ingredients`, `Rank`, `Price`, `Brand` FROM `products` WHERE `Oily` = 1 AND `Label` = 'Sun protect'"""
+        t_query = f"""SELECT `Name`, `Ingredients`, `Rank`, `Price`, `Brand` FROM `products` WHERE `Oily` = 1 AND `Label` = 'Treatment'"""
     elif (skin == 'Dry'):
-        m_query = f"""SELECT Name, Ingredients, Rank, Price, Brand FROM products WHERE Dry = 1 AND Label = 'Moisturizer'"""
-        c_query = f"""SELECT Name, Ingredients, Rank, Price, Brand FROM products WHERE Dry = 1 AND Label = 'Cleanser'"""
-        s_query = f"""SELECT Name, Ingredients, Rank, Price, Brand FROM products WHERE Dry = 1 AND Label = 'Sun protect'"""
-        t_query = f"""SELECT Name, Ingredients, Rank, Price, Brand FROM products WHERE Dry = 1 AND Label = 'Treatment'"""
+        m_query = f"""SELECT `Name`, `Ingredients`, `Rank`, `Price`, `Brand` FROM `products` WHERE `Dry` = 1 AND `Label` = 'Moisturizer'"""
+        c_query = f"""SELECT `Name`, `Ingredients`, `Rank`, `Price`, `Brand` FROM `products` WHERE `Dry` = 1 AND `Label` = 'Cleanser'"""
+        s_query = f"""SELECT `Name`, `Ingredients`, `Rank`, `Price`, `Brand` FROM `products` WHERE `Dry` = 1 AND `Label` = 'Sun protect'"""
+        t_query = f"""SELECT `Name`, `Ingredients`, `Rank`, `Price`, `Brand` FROM `products` WHERE `Dry` = 1 AND `Label` = 'Treatment'"""
     elif (skin == 'Combination'):
-        m_query = f"""SELECT Name, Ingredients, Rank, Price, Brand FROM products WHERE Combination = 1 AND Label = 'Moisturizer'"""
-        c_query = f"""SELECT Name, Ingredients, Rank, Price, Brand FROM products WHERE Combination = 1 AND Label = 'Cleanser'"""
-        s_query = f"""SELECT Name, Ingredients, Rank, Price, Brand FROM products WHERE Combination = 1 AND Label = 'Sun protect'"""
-        t_query = f"""SELECT Name, Ingredients, Rank, Price, Brand FROM products WHERE Combination = 1 AND Label = 'Treatment'"""
+        m_query = f"""SELECT `Name`, `Ingredients`, `Rank`, `Price`, `Brand` FROM `products` WHERE `Combination` = 1 AND `Label` = 'Moisturizer'"""
+        c_query = f"""SELECT `Name`, `Ingredients`, `Rank`, `Price`, `Brand` FROM `products` WHERE `Combination` = 1 AND `Label` = 'Cleanser'"""
+        s_query = f"""SELECT `Name`, `Ingredients`, `Rank`, `Price`, `Brand` FROM `products` WHERE `Combination` = 1 AND `Label` = 'Sun protect'"""
+        t_query = f"""SELECT `Name`, `Ingredients`, `Rank`, `Price`, `Brand` FROM `products` WHERE `Combination` = 1 AND `Label` = 'Treatment'"""
     elif (skin == 'Normal'):
-        m_query = f"""SELECT Name, Ingredients, Rank, Price, Brand FROM products WHERE Normal = 1 AND Label = 'Moisturizer'"""
-        c_query = f"""SELECT Name, Ingredients, Rank, Price, Brand FROM products WHERE Normal = 1 AND Label = 'Cleanser'"""
-        s_query = f"""SELECT Name, Ingredients, Rank, Price, Brand FROM products WHERE Normal = 1 AND Label = 'Sun protect'"""
-        t_query = f"""SELECT Name, Ingredients, Rank, Price, Brand FROM products WHERE Normal = 1 AND Label = 'Treatment'"""
+        m_query = f"""SELECT `Name`, `Ingredients`, `Rank`, `Price`, `Brand` FROM `products` WHERE `Normal` = 1 AND `Label` = 'Moisturizer'"""
+        c_query = f"""SELECT `Name`, `Ingredients`, `Rank`, `Price`, `Brand` FROM `products` WHERE `Normal` = 1 AND `Label` = 'Cleanser'"""
+        s_query = f"""SELECT `Name`, `Ingredients`, `Rank`, `Price`, `Brand` FROM `products` WHERE `Normal` = 1 AND `Label` = 'Sun protect'"""
+        t_query = f"""SELECT `Name`, `Ingredients`, `Rank`, `Price`, `Brand` FROM `products` WHERE `Normal` = 1 AND `Label` = 'Treatment'"""
     elif (skin == 'Sensitive'):
-        m_query = f"""SELECT Name, Ingredients, Rank, Price, Brand FROM products WHERE `Sensitive` = 1 AND Label = 'Moisturizer'"""
-        c_query = f"""SELECT Name, Ingredients, Rank, Price, Brand FROM products WHERE `Sensitive` = 1 AND Label = 'Cleanser'"""
-        s_query = f"""SELECT Name, Ingredients, Rank, Price, Brand FROM products WHERE `Sensitive` = 1 AND Label = 'Sun protect'"""
-        t_query = f"""SELECT Name, Ingredients, Rank, Price, Brand FROM products WHERE `Sensitive` = 1 AND Label = 'Treatment'"""
+        m_query = f"""SELECT `Name`, `Ingredients`, `Rank`, `Price`, `Brand` FROM `products` WHERE `Sensitive` = 1 AND `Label` = 'Moisturizer'"""
+        c_query = f"""SELECT `Name`, `Ingredients`, `Rank`, `Price`, `Brand` FROM `products` WHERE `Sensitive` = 1 AND `Label` = 'Cleanser'"""
+        s_query = f"""SELECT `Name`, `Ingredients`, `Rank`, `Price`, `Brand` FROM `products` WHERE `Sensitive` = 1 AND `Label` = 'Sun protect'"""
+        t_query = f"""SELECT `Name`, `Ingredients`, `Rank`, `Price`, `Brand` FROM `products` WHERE `Sensitive` = 1 AND `Label` = 'Treatment'"""
     else:
-        m_query = f"""SELECT Name, Ingredients, Rank, Price, Brand FROM products WHERE Label = 'Moisturizer'"""
-        c_query = f"""SELECT Name, Ingredients, Rank, Price, Brand FROM products WHERE Label = 'Cleanser'"""
-        s_query = f"""SELECT Name, Ingredients, Rank, Price, Brand FROM products WHERE Label = 'Sun protect'"""
-        t_query = f"""SELECT Name, Ingredients, Rank, Price, Brand FROM products WHERE Label = 'Treatment'"""
+        m_query = f"""SELECT `Name`, `Ingredients`, `Rank`, `Price`, `Brand` FROM `products` WHERE `Label` = 'Moisturizer'"""
+        c_query = f"""SELECT `Name`, `Ingredients`, `Rank`, `Price`, `Brand` FROM `products` WHERE `Label` = 'Cleanser'"""
+        s_query = f"""SELECT `Name`, `Ingredients`, `Rank`, `Price`, `Brand` FROM `products` WHERE `Label` = 'Sun protect'"""
+        t_query = f"""SELECT `Name`, `Ingredients`, `Rank`, `Price`, `Brand` FROM `products` WHERE `Label` = 'Treatment'"""
 
     moisturizers = [dict(zip(keys, i))
                     for i in mysql_engine.query_selector(m_query)]
