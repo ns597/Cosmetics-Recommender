@@ -82,7 +82,7 @@ def bool_and(ingreds):
     result = []
     i = j = 0
     while i < len(ingreds) and j < len(allergens):
-        if ingreds[i] === allergens[j]
+        if ingreds[i] == allergens[j]:
             result.append(ingreds[i])
             i += 1
             j += 1
