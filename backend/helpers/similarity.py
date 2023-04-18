@@ -4,6 +4,8 @@ def top5category(category, ingredients, min_price, max_price, bad_ingreds):
     for val in category:
         name = val['name']
         price = val['price']
+        if len(set(bad_ingreds).intersection(set(val['ingreds'].split(",")))) > 0:
+            continue
         score = jaccard_similarity(val['ingreds'], ingredients)
         try:
             rank = float(val['rank'])
@@ -14,7 +16,7 @@ def top5category(category, ingredients, min_price, max_price, bad_ingreds):
             score = (0.8 * score) + (0.2 * rank) + price_weight
             scores.append((name, score, rank, val['price'], val['brand']))
         except:
-            print("invalid ranking for product", name)
+            print("invalid rank/rating for product", name)
             scores.append((name, score, 0, val['price'], val['brand']))
     if (len(scores) == 0):
         return [('None found', 0)]
@@ -80,9 +82,10 @@ allergens = ["Latex",
 # to remove allergic products from recommendations
 def bool_and(ingreds):
     result = []
+    ingreds_list =  list(ingreds)
     i = j = 0
     while i < len(ingreds) and j < len(allergens):
-        if ingreds[i] === allergens[j]
+        if ingreds_list[i] == allergens[j]:
             result.append(ingreds[i])
             i += 1
             j += 1

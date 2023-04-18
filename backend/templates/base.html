@@ -48,6 +48,10 @@
                 </label>
             </div>
 
+            <div>
+                <p>Price:</p><input class="filter-text" placeholder="Min Price" id="min-price"> to <input class="filter-text" placeholder="Max Price" id="max-price">
+            </div>
+
             <br />
             <button id="submit_btn" onclick="filterText()">Submit for Your Skincare Routine</button>
 
@@ -218,9 +222,6 @@
                 }
             }
 
-            console.log(document.getElementById("filter-text-val").value)
-            console.log(skin_type)
-
             // const selectedTags = document.getElementById('selected-tags');
             tags = [];
             console.log(selectedTags.innerHTML);
@@ -239,7 +240,9 @@
                 {
                     names: tags,
                     disliked: dis_tags,
-                    skin: skin_type
+                    skin: skin_type,
+                    min_price: document.getElementById("min-price").value,
+                    max_price: document.getElementById("max-price").value,
                 }).toString())
                 .then((response) => response.json())
                 .then((data) => data.forEach(row => {

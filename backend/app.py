@@ -4,6 +4,7 @@ from flask import Flask, render_template, request
 from flask_cors import CORS
 from helpers.MySQLDatabaseHandler import MySQLDatabaseHandler
 from helpers.similarity import top5category
+from helpers.similarity import bool_and
 
 # ROOT_PATH for linking with all your files.
 # Feel free to use a config.py or settings.py with a global export variable
@@ -137,7 +138,9 @@ def products_search():
     names = request.args.get("names").split(",")
     disliked = request.args.get("disliked").split(",")
     skin = request.args.get("skin") 
+    min_price = int(request.args.get("min_price"))
+    max_price = int(request.args.get("max_price"))
     return sql_search(names, disliked, skin, min_price, max_price)
 
 
-app.run(debug=True)
+# app.run(debug=True)
