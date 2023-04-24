@@ -9,7 +9,7 @@ body {
     font-family: "Source Sans Pro", sans-serif;
     background-image: url('images/macadamia-body-lotion-skin-cream.jpg');
     /* background-position: center; */
-    background-repeat: no-repeat;
+    /* background-repeat: no-repeat; */
     background-size: 100%;
     background-size: 100%;
     color: #a28253;
@@ -158,6 +158,8 @@ form {
     width: 250px;
     font-size: 18px;
 }
+
+.product-box {}
 
 
 .google-colors h1 {
