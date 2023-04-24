@@ -2,6 +2,11 @@ def top5category(category, ingredients, min_price, max_price, bad_ingreds):
     scores = []
     # print("items in", val['name'], ":", len(category))
     for val in category:
+        # name = val['name']
+        # price = val['price']
+        # if len(set(bad_ingreds).intersection(set(val['ingreds'].split(",")))) > 0:
+        #     continue
+        
         name = val['name']
         price = val['price']
         if len(set(bad_ingreds).intersection(set(val['ingreds'].split(",")))) > 0:
@@ -24,6 +29,35 @@ def top5category(category, ingredients, min_price, max_price, bad_ingreds):
     top5 = scores[:5]
     # top5 = list(map(lambda x: x[0], top5))
     return top5
+
+def ingredient_product_matrix(category):
+    #Input: category of products
+    #Output: ing_prod_matrix: Ingredient to product matrix, 
+    # products : array of products in order of the indexes in the matrix, 
+    # ingredients: array of ingredients in order of the indexes of the matrix
+    # Say product name is "x" and ingredient name is "y", ing_prod_matrix[products.index(x)][ingredients.index(y)] =1 
+    # if the ingredient is in that product, 0 if not
+    ingredients = set([])
+    products = []
+    for v in category:
+        products = products+[v["name"]]
+        ingred = set(v["ingreds"].split(","))
+        ingred = list(map(lambda x: x.strip(), ingred))
+        ingredients = ingredients.union(ingred)
+    ingredients = list(ingredients)
+    ing_prod_matrix = []
+    # print(ing_prod_matrix)
+    for v in category:
+        ing_prod_matrix.append([0]*len(ingredients))
+        i = products.index(v["name"])
+        # print(i)
+        for ing in set(v["ingreds"].split(",")):
+            j = ingredients.index(ing.strip())
+            ing_prod_matrix[i][j] = 1
+            # print(j)
+            # print(ing_prod_matrix)
+    return ing_prod_matrix, products, ingredients
+    
 
 
 def jaccard_similarity(ingred, product):
