@@ -98,7 +98,32 @@ def product_ingredient_mat(df, inverted_index, ingreds):
   
   return product_ingred_mat
 
-def cosine_similarity():
+def liked_ingreds(df, liked):
+  ingreds = set()
+  
+  for product in liked:
+    row = df[df['Name'] == product]
+    ingreds.update(row['Ingredients'].split(','))
+
+  return ingreds
+
+def prune_ingreds(inv_idx, num_prods, max_ratio = 0.90):
+  """
+    Removes ingredients that occur in more than 90% of products and returns a 
+    new inverted index without these ingredients
+  """
+  
+  pruned_inv_idx = defaultdict(list)
+
+  for ingred, prods in inv_idx.items():
+    ratio = len(inv_idx[ingred]) / num_prods
+    if ratio < max_ratio:
+      pruned_inv_idx[ingred] = prods
+  
+  return pruned_inv_idx
+
+
+def cosine_similarity(query, inverted_index, prod_ingred_mat):
   # run cosine similarity with query with given ingredients
   return 
 
