@@ -1,76 +1,110 @@
 <!DOCTYPE html>
 <title>{% block title %}{% endblock %} - Flaskr</title>
-<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+<link rel="stylesheet" href="styles.css" />
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Kanit&family=Montserrat&family=Open+Sans:wght@500&display=swap"
     rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Forum&family=IBM+Plex+Mono&family=Instrument+Serif&display=swap"
+    rel="stylesheet">
+<script src="https://kit.fontawesome.com/5b699043bd.js" crossorigin="anonymous"></script>
 
 <body>
     <div class="full-body-container">
-        <div class="top-text">
+        <div class="input-text">
             <header>
                 <h1>GLOW</h1>
                 <h2>Build My Skincare Routine</h2><br />
             </header>
 
-            <div>
-                <input class="filter-text" placeholder="Liked Product" id="filter-text-val" onkeyup="showResults()">
-            </div>
-            <div class="search-results"></div>
-            <div class="selected-tags"></div><br />
+            <div class="body-text">
+                <h3>Please input your Liked and Disliked Products:</h3><br />
+                <!-- <div class = "flex-container"> -->
+                <div class="resulting-search">
+                    <!-- <div class = "flex-child liked"> -->
+                    <div class="liked">
+                        <input class="filter-text" placeholder="Liked Products" id="filter-text-val"
+                            onkeyup="showResults()">
+                    </div>
+                    <div class="selected-tags"></div>
+                    <div class="search-results"></div>
+                    <!-- <br /> -->
 
-            <div>
-                <input class="filter-text" placeholder="Disliked Product" id="disliked-val" onkeyup="showDisResults()">
-            </div>
-            <div class="dis-search-results"></div>
-            <div class="dis-selected-tags"></div><br />
+                    <!-- <div class = "flex-child disliked"> -->
+                    <div class="disliked">
+                        <input class="filter-text" placeholder="Disliked Products" id="disliked-val"
+                            onkeyup="showDisResults()">
+                    </div>
+                    <div class="dis-selected-tags"></div>
+                    <div class="dis-search-results"></div>
+                </div>
+                <!-- </div>
+                    <br/>
+                    <div class="search-results"></div>
+                    <div class="selected-tags"></div>
+                    <br/>
+                    <div class="dis-search-results"></div>
+                    <div class="dis-selected-tags"></div><br />
+                <div/> -->
 
-            <div class="skin_type_container">
-                <p>Please select your Skin Type:</p>
-                <label class="container_skin">
-                    <input type="radio" class="radio_button" id="oily" name="skin_type" value="Oily">Oily</input><br />
-                </label>
-                <label class="container_skin">
-                    <input type="radio" class="radio_button" id="dry" name="skin_type" value="Dry">Dry</input><br />
-                </label>
-                <label class="container_skin">
-                    <input type="radio" id="combination" name="skin_type" value="Combination"
-                        class="radio_button">Combination</input><br />
-                </label>
-                <label class="container_skin">
-                    <input type="radio" class="radio_button" id="normal" name="skin_type"
-                        value="Normal">Normal</input><br />
-                </label>
-                <label class="container_skin">
-                    <input type="radio" id="sensitive" name="skin_type" value="Sensitive"
-                        class="radio_button">Sensitive</input><br />
-                </label>
-            </div>
+                <h3>Please select your Skin Type:</h3>
+                <div class="skin_type_container">
+                    <label class="container_skin">
+                        <input type="radio" class="radio_button" id="oily" name="skin_type"
+                            value="Oily">Oily</input><br />
+                    </label>
+                    <label class="container_skin">
+                        <input type="radio" class="radio_button" id="dry" name="skin_type" value="Dry">Dry</input><br />
+                    </label>
+                    <label class="container_skin">
+                        <input type="radio" id="combination" name="skin_type" value="Combination"
+                            class="radio_button">Combination</input><br />
+                    </label>
+                    <label class="container_skin">
+                        <input type="radio" class="radio_button" id="normal" name="skin_type"
+                            value="Normal">Normal</input><br />
+                    </label>
+                    <label class="container_skin">
+                        <input type="radio" id="sensitive" name="skin_type" value="Sensitive"
+                            class="radio_button">Sensitive</input><br />
+                    </label>
+                </div>
 
-            <div>
-                <p>Price:</p><input class="filter-text" placeholder="Min Price" id="min-price"> to <input class="filter-text" placeholder="Max Price" id="max-price">
-            </div>
+                <h3>Please input your Price Range:</h3><br />
+                <div class="flex-container">
+                    <input class="flex-child filter-text" placeholder="Min Price" id="min-price">
+                    <p>to</p>
+                    <input class="flex-child filter-text" placeholder="Max Price" id="max-price">
+                </div>
 
-            <br />
-            <button id="submit_btn" onclick="filterText()">Submit for Your Skincare Routine</button>
+                <br />
+                <button id="submit_btn" onclick="filterText()">Submit for Your Skincare Routine</button>
+            </div>
 
         </div>
         <div id="query-box">
 
         </div>
-        <div class="answer-container">
-            <div class="answer-box" id="moist-box">
-                <p class='episode-title'>Moisturizer</p>
+        <div class="row answer-container">
+            <div class="column">
+                <div class="card answer-box" id="moist-box">
+                    <p class='episode-title'>Moisturizer</p>
+                </div>
             </div>
-            <div class="answer-box" id="cleans-box">
-                <p class='episode-title'>Cleanser</p>
+            <div class="column">
+                <div class="card answer-box" id="cleans-box">
+                    <p class='episode-title'>Cleanser</p>
+                </div>
             </div>
-            <div class="answer-box" id="sun-box">
-                <p class='episode-title'>Sun Protection</p>
+            <div class="column">
+                <div class="card answer-box" id="sun-box">
+                    <p class='episode-title'>Sun Protection</p>
+                </div>
             </div>
-            <div class="answer-box" id="treat-box">
-                <p class='episode-title'>Treatment</p>
+            <div class="column">
+                <div class="card answer-box" id="treat-box">
+                    <p class='episode-title'>Treatment</p>
+                </div>
             </div>
         </div>
 
@@ -199,10 +233,45 @@
         }
 
         function answerBoxTemplate(name, score, rank, price, brand) {
+            rank = round(rank * 2) / 2
+            let stars = <span></span>
+            if (rank == 0.0) {
+                let stars = '<span class="fa-solid fa-star"></span><span class="fa-solid fa-star"></span><span class="fa-solid fa-star"></span><span class="fa-solid fa-star"></span><span class="fa-solid fa-star"></span>';
+            }
+            if (rank == 0.5) {
+                stars = '<span class="fa-duotone fa-star-half"></span><span class="fa-solid fa-star"></span><span class="fa-solid fa-star"></span><span class="fa-solid fa-star"></span><span class="fa-solid fa-star"></span>'
+            }
+            if (rank == 1.0) {
+                stars = '<span class="fa-solid fa-star filled-star"></span><span class="fa-solid fa-star"></span><span class="fa-solid fa-star"></span><span class="fa-solid fa-star"></span><span class="fa-solid fa-star"></span>'
+            }
+            if (rank == 1.5) {
+                stars = '<span class="fa-solid fa-star filled-star"><span class="fa-duotone fa-star-half"></span><span class="fa-solid fa-star"></span><span class="fa-solid fa-star"></span><span class="fa-solid fa-star"></span>'
+            }
+            if (rank == 2.0) {
+                stars = '<span class="fa-solid fa-star filled-star"></span><span class="fa-solid fa-star filled-star"></span><span class="fa-solid fa-star"></span><span class="fa-solid fa-star"></span><span class="fa-solid fa-star"></span>'
+            }
+            if (rank == 2.5) {
+                stars = '<span class="fa-solid fa-star filled-star"></span><span class="fa-solid fa-star filled-star"><span class="fa-duotone fa-star-half"></span><span class="fa-solid fa-star"></span><span class="fa-solid fa-star"></span>'
+            }
+            if (rank == 3.0) {
+                stars = '<span class="fa-solid fa-star filled-star"></span><span class="fa-solid fa-star filled-star"></span><span class="fa-solid fa-star filled-star"></span><span class="fa-solid fa-star"></span><span class="fa-solid fa-star"></span>'
+            }
+            if (rank == 3.5) {
+                stars = '<span class="fa-solid fa-star filled-star"></span><span class="fa-solid fa-star filled-star"></span><span class="fa-solid fa-star filled-star"></span><span class="fa-duotone fa-star-half"></span><span class="fa-solid fa-star"></span>'
+            }
+            if (rank == 4.0) {
+                stars = '<span class="fa-solid fa-star filled-star"></span><span class="fa-solid fa-star filled-star"></span><span class="fa-solid fa-star filled-star"></span><span class="fa-solid fa-star filled-star"></span><span class="fa-solid fa-star"></span>'
+            }
+            if (rank == 4.5) {
+                stars = '<span class="fa-solid fa-star filled-star"></span><span class="fa-solid fa-star filled-star"></span><span class="fa-solid fa-star filled-star"></span><span class="fa-solid fa-star filled-star"></span><span class="fa-duotone fa-star-half"></span>'
+            }
+            if (rank == 5.0) {
+                stars = '<span class="fa-solid fa-star filled-star"></span><span class="fa-solid fa-star filled-star"></span><span class="fa-solid fa-star filled-star"></span><span class="fa-solid fa-star filled-star"></span><span class="fa-solid fa-star filled-star"></span>'
+            }
             return `<div class="product-box">
                 <p class='episode-desc'>${name}</p>
                 <p class='episode-desc'>Brand: ${brand}</p>
-                <p class='episode-desc'>Rating: ${rank}</p>
+                <p class='episode-desc'>Rating: ${stars}</p>
                 <p class='episode-desc'>Price: $${price}</p>
             </div>`
         }
