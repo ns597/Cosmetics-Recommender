@@ -125,18 +125,6 @@ def rocchio(query , matr, rel, irrel, a = 0.3,b = 0.3,c = 0.8):
     total = (query * a) + (dR * b * (1/n)) - (dNR * c * (1/m))
     return np.clip(total,0, None)[0]
 
-def cosine_sim(query, matr):
-    #Expected Inputs:
-    # query: vector (List) that matches the product's array from the Ingredient-Product Matrix (Ex: [1,0, .... 1])
-    # matr: Ingredient-Product Matrix, matr[i] is the ingredient vector for the ith product in the matrix
-    #Output: index of product in Ingredient-Product Matrix that matches best for cosine similarity
-    product_scores = []
-    cos_sim = lambda a,b: np.dot(a,b) / (np.linalg.norm(a) * np.linalg.norm(b)) 
-    for i in range(len(matr)):
-        score = cos_sim(matr[i], query)
-        product_scores.append(score)
-    choose = max(product_scores)
-    return matr[product_scores.index(choose)]
 
 
 def jaccard_similarity(ingred, product):
