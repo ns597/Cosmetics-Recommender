@@ -1,12 +1,13 @@
+import search
+import numpy as np
 def top5category(category, ingredients, min_price, max_price, bad_ingreds):
     scores = []
     # print("items in", val['name'], ":", len(category))
     for val in category:
-        # name = val['name']
-        # price = val['price']
-        # if len(set(bad_ingreds).intersection(set(val['ingreds'].split(",")))) > 0:
-        #     continue
-        
+        name = val['name']
+        price = val['price']
+        if len(set(bad_ingreds).intersection(set(val['ingreds'].split(",")))) > 0:
+            continue     
         name = val['name']
         price = val['price']
         if len(set(bad_ingreds).intersection(set(val['ingreds'].split(",")))) > 0:
@@ -30,34 +31,112 @@ def top5category(category, ingredients, min_price, max_price, bad_ingreds):
     # top5 = list(map(lambda x: x[0], top5))
     return top5
 
-def ingredient_product_matrix(category):
-    #Input: category of products
-    #Output: ing_prod_matrix: Ingredient to product matrix, 
-    # products : array of products in order of the indexes in the matrix, 
-    # ingredients: array of ingredients in order of the indexes of the matrix
-    # Say product name is "x" and ingredient name is "y", ing_prod_matrix[products.index(x)][ingredients.index(y)] =1 
-    # if the ingredient is in that product, 0 if not
-    ingredients = set([])
-    products = []
-    for v in category:
-        products = products+[v["name"]]
-        ingred = set(v["ingreds"].split(","))
-        ingred = list(map(lambda x: x.strip(), ingred))
-        ingredients = ingredients.union(ingred)
-    ingredients = list(ingredients)
-    ing_prod_matrix = []
-    # print(ing_prod_matrix)
-    for v in category:
-        ing_prod_matrix.append([0]*len(ingredients))
-        i = products.index(v["name"])
-        # print(i)
-        for ing in set(v["ingreds"].split(",")):
-            j = ingredients.index(ing.strip())
-            ing_prod_matrix[i][j] = 1
-            # print(j)
-            # print(ing_prod_matrix)
-    return ing_prod_matrix, products, ingredients
-    
+from search import *
+#CONSTANTS
+data, inv_idx, category_inv_idx, ingreds, prod_ingred_mat = process_csv("/Users/tanishakore/Desktop/Cosmetics-Recommender/cosmetics_clean.csv")
+# print(inv_idx)
+def top5update(category, query, max_price, min_price, relevant=[], irrelevant=[]):
+    #category: string indicating which category of products needed
+    #max_price: double
+    #min_price: double
+    #query is the product ingredient matrix row corresponding to the query
+    #relevant: list of indices within product ingredient matrix of relevant products
+    #irrelevant: list of indices within product ingredient matrix of relevant products
+    category_prods = category_filter(category)
+    price_prods = list(price_filter(category_prods, max_price, min_price))
+    # if relevant != [] or irrelevant!=[]:
+    rel = index_to_query(relevant)
+    irrel = index_to_query(irrelevant)
+    q1 = rocchio(query, prod_ingred_mat, rel, irrel)
+    scores = np.array(cosine_sim(q1, prod_ingred_mat, price_prods))
+    ranks = np.array(data["Rank"].iloc[price_prods])
+    scores = (0.8*scores) * (0.2*ranks)
+    total_products= []
+    print(price_prods)
+    print(type(price_prods))
+    for i,ind in enumerate(price_prods):
+        name = data.at[ind, 'Name']
+        score = scores[i]
+        rank = ranks[i]
+        price = data.at[ind, 'Price']
+        brand = data.at[ind, 'Brand']
+        total_products.append((name,score, rank,price,brand))
+    total_products.sort(key=lambda x: x[1], reverse=True)
+    return total_products[:5]
+
+def cosine_sim(query, matr, products):
+    #Expected Inputs:
+    # query: vector (List) that matches the product's array from the Ingredient-Product Matrix (Ex: [1,0, .... 1])
+    # matr: Ingredient-Product Matrix, matr[i] is the ingredient vector for the ith product in the matrix
+    #Output: list of scores where product_scores[i] is the score of products[i]
+    product_scores = []
+    cos_sim = lambda a,b: np.dot(a,b) / (np.linalg.norm(a) * np.linalg.norm(b)) 
+    for i in range(len(products)):
+        score = cos_sim(matr[i], query) 
+        product_scores.append(score)
+    return product_scores
+
+
+def category_filter(category):
+    #returns set of indices in corresponding category
+    indices = []
+    d = category_inv_idx[category]
+    for i in d:
+        ind = d[i]
+        indices = indices + ind
+    return set(indices)
+
+def price_filter(cat, maxp, minp):
+    #returns set of indices in corresponding price range
+    indices = cat.copy()
+    for i in cat:
+        if data["Price"][i]>maxp or data["Price"][i]<minp:
+            indices.remove(i)
+    return indices
+
+def index_to_query(products):
+    #converts list of indexes to list of vectors fro product ingredient matrix
+    vectors = []
+    for indice in products:
+        vectors = vectors + [prod_ingred_mat[indice]]
+    return vectors
+
+
+def rocchio(query , matr, rel, irrel, a = 0.3,b = 0.3,c = 0.8):
+    #Expected Inputs:
+    # query: vector (List) that matches the product's array from the Ingredient-Product Matrix (Ex: [1,0, .... 1])
+    # matr: Ingredient-Product Matrix, matr[i] is the ingredient vector for the ith product in the matrix
+    # rel : list of vectors, representing ingredients of the products 
+    # irrel : list of vectors, representing ingredients of the products 
+    # Expected Output:
+    # New query vector representing updated weights on products
+    n = len(rel)
+    m = len(irrel)
+    query = np.array(query)
+    dR = np.zeros((1,len(matr[0]) ))
+    dNR= np.zeros((1,len(matr[0]) ))
+    for v in rel:
+        dR = np.add(dR, v)
+    for v in irrel:
+        dNR = np.add(v, dNR)
+    # print(type(query))
+    # print(type(dR))
+    # print(type(dNR))
+    total = (query * a) + (dR * b * (1/n)) - (dNR * c * (1/m))
+    return np.clip(total,0, None)[0]
+
+def cosine_sim(query, matr):
+    #Expected Inputs:
+    # query: vector (List) that matches the product's array from the Ingredient-Product Matrix (Ex: [1,0, .... 1])
+    # matr: Ingredient-Product Matrix, matr[i] is the ingredient vector for the ith product in the matrix
+    #Output: index of product in Ingredient-Product Matrix that matches best for cosine similarity
+    product_scores = []
+    cos_sim = lambda a,b: np.dot(a,b) / (np.linalg.norm(a) * np.linalg.norm(b)) 
+    for i in range(len(matr)):
+        score = cos_sim(matr[i], query)
+        product_scores.append(score)
+    choose = max(product_scores)
+    return matr[product_scores.index(choose)]
 
 
 def jaccard_similarity(ingred, product):
