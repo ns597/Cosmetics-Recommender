@@ -39,7 +39,7 @@ from search import *
 data, ingreds, products, prod_to_idx, prod_to_cat, inv_idx, category_inv_idx, ingred_to_idx, idx_to_ingred, prod_ingred_mat = process_csv("./csv/cosmetics_clean.csv")
 
 # print(inv_idx)
-def top5update(category, query, max_price, min_price, relevant=[], irrelevant=[]):
+def top5update(category, good_ingreds, bad_ingreds, max_price, min_price, relevant=[], irrelevant=[]):
     #category: string indicating which category of products needed
     #max_price: double
     #min_price: double
@@ -47,11 +47,16 @@ def top5update(category, query, max_price, min_price, relevant=[], irrelevant=[]
     #relevant: list of indices within product ingredient matrix of relevant products
     #irrelevant: list of indices within product ingredient matrix of relevant products
     category_prods = category_filter(category)
-    price_prods = list(price_filter(category_prods, max_price, min_price))
+    safe_prods = allergen_filter(category_prods, bad_ingreds)
+    price_prods = list(price_filter(safe_prods, max_price, min_price))
+
+    # rocchios method
     # if relevant != [] or irrelevant!=[]:
     rel = index_to_query(relevant)
     irrel = index_to_query(irrelevant)
     q1 = rocchio(query, prod_ingred_mat, rel, irrel)
+
+    # cosine similarity
     scores = np.array(cosine_sim(q1, prod_ingred_mat, price_prods))
     ranks = np.array(data["Rank"].iloc[price_prods])
     scores = (0.8*scores) * (0.2*ranks)
@@ -59,7 +64,7 @@ def top5update(category, query, max_price, min_price, relevant=[], irrelevant=[]
     print(price_prods)
     print(type(price_prods))
     for i,ind in enumerate(price_prods):
-        name = data.at[ind, 'Name']
+        name = products[i]
         score = scores[i]
         rank = ranks[i]
         price = data.at[ind, 'Price']
@@ -90,10 +95,15 @@ def category_filter(category):
         indices = indices + ind
     return set(indices)
 
-def price_filter(cat, maxp, minp):
+def allergen_filter(prods, bad_ingreds):
+    # TODO: finish next
+    allergens = bool_and(bad_ingreds)
+    return
+
+def price_filter(prods, maxp, minp):
     #returns set of indices in corresponding price range
-    indices = cat.copy()
-    for i in cat:
+    indices = prods.copy()
+    for i in prods:
         if data["Price"][i]>maxp or data["Price"][i]<minp:
             indices.remove(i)
     return indices
@@ -106,7 +116,7 @@ def index_to_query(products):
     return vectors
 
 
-def rocchio(query , matr, rel, irrel, a = 0.3,b = 0.3,c = 0.8):
+def rocchio(query, matr, rel, irrel, a = 0.3,b = 0.3,c = 0.8):
     #Expected Inputs:
     # query: vector (List) that matches the product's array from the Ingredient-Product Matrix (Ex: [1,0, .... 1])
     # matr: Ingredient-Product Matrix, matr[i] is the ingredient vector for the ith product in the matrix

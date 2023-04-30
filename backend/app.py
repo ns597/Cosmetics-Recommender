@@ -31,7 +31,15 @@ app = Flask(__name__)
 CORS(app)
 
 def search_results(liked, disliked, skin_type, min_price, max_price):
-    top_5 = top5update(category, query, max_price, min_price, relevant=[], irrelevant=[])
+    good_ingreds = ingreds_of_prods(ingreds, liked, prod_to_idx)
+    bad_ingreds = ingreds_of_prods(ingreds, disliked, prod_to_idx)
+
+    routine = {}
+    routine["Moisturizer"] = top_5 = top5update("Moisturizer", good_ingreds, max_price, min_price)
+    routine["Cleanser"] = top_5 = top5update("Cleanser", good_ingreds, max_price, min_price)
+    
+
+
     routine = {}
     routine["Moisturizer"] = top5category(
         moisturizers, query_ingreds, min_price, max_price, bad_ingreds)

@@ -150,7 +150,7 @@ def product_ingredient_mat(products, inverted_index, unique_ingreds):
   return product_ingred_mat
 
 # liked must be list of product names
-def liked_ingreds(ingreds, liked, prod_to_idx):
+def ingreds_of_prods(ingreds, liked, prod_to_idx):
   ingreds = set()
   for product in liked:
     idx = prod_to_idx[product]
