@@ -1,5 +1,7 @@
-import search
+# import search
 import numpy as np
+
+# TODO: delete? no longer used
 def top5category(category, ingredients, min_price, max_price, bad_ingreds):
     scores = []
     # print("items in", val['name'], ":", len(category))
@@ -33,7 +35,9 @@ def top5category(category, ingredients, min_price, max_price, bad_ingreds):
 
 from search import *
 #CONSTANTS
-data, inv_idx, category_inv_idx, ingreds, prod_ingred_mat = process_csv("/Users/tanishakore/Desktop/Cosmetics-Recommender/cosmetics_clean.csv")
+# data, inv_idx, category_inv_idx, ingreds, prod_ingred_mat = process_csv("/Users/tanishakore/Desktop/Cosmetics-Recommender/cosmetics_clean.csv")
+data, ingreds, products, prod_to_idx, prod_to_cat, inv_idx, category_inv_idx, ingred_to_idx, idx_to_ingred, prod_ingred_mat = process_csv("./csv/cosmetics_clean.csv")
+
 # print(inv_idx)
 def top5update(category, query, max_price, min_price, relevant=[], irrelevant=[]):
     #category: string indicating which category of products needed
@@ -135,6 +139,31 @@ def jaccard_similarity(ingred, product):
     union = a.union(b)
     return (len(intersection) / len(union))
 
+def levenshtein_distance(s1, s2):
+    # Initialize a 2D matrix to store the edit distances
+    m = [[0] * (len(s2) + 1) for _ in range(len(s1) + 1)]
+    
+    for i in range(len(s1) + 1):
+        m[i][0] = i
+    for j in range(len(s2) + 1):
+        m[0][j] = j
+    
+    # Compute the edit distances
+    for i in range(1, len(s1) + 1):
+        for j in range(1, len(s2) + 1):
+            if s1[i - 1] == s2[j - 1]:
+                m[i][j] = m[i - 1][j - 1]
+            else:
+                m[i][j] = min(m[i - 1][j], m[i][j - 1], m[i - 1][j - 1]) + 1
+    
+    return m[len(s1)][len(s2)]
+
+# returns top 5 most similar product names
+def word_edit_distance(query):
+    distances = [levenshtein_distance(name.lower(), query.lower()) for name in products]
+    sorted_names = [name for _, name in sorted(zip(distances, products))]
+    return sorted_names[:5]
+
 # sourced from the FDA https://www.fda.gov/cosmetics/cosmetic-ingredients/allergens-cosmetics 
 allergens = ["Latex", 
 "Amyl cinnamal",
@@ -186,7 +215,7 @@ def bool_and(ingreds):
     ingreds_list =  list(ingreds)
     i = j = 0
     while i < len(ingreds) and j < len(allergens):
-        if ingreds_list[i] == allergens[j]:
+        if ingreds_list[i].lower() == allergens[j].lower():
             result.append(ingreds[i])
             i += 1
             j += 1

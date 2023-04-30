@@ -3,7 +3,8 @@ import os
 from flask import Flask, render_template, request
 from flask_cors import CORS
 from helpers.MySQLDatabaseHandler import MySQLDatabaseHandler
-from helpers.similarity import top5category, bool_and
+from helpers.similarity import *
+from helpers.search import process_csv, liked_ingreds
 
 # ROOT_PATH for linking with all your files.
 # Feel free to use a config.py or settings.py with a global export variable
@@ -12,19 +13,68 @@ os.environ['ROOT_PATH'] = os.path.abspath(os.path.join("..", os.curdir))
 # These are the DB credentials for your OWN MySQL
 # Don't worry about the deployment credentials, those are fixed
 # You can use a different DB name if you want to
-MYSQL_USER = "root"
-MYSQL_USER_PASSWORD = ""
-MYSQL_PORT = 3306
-MYSQL_DATABASE = "cosmetics"
+# MYSQL_USER = "root"
+# MYSQL_USER_PASSWORD = ""
+# MYSQL_PORT = 3306
+# MYSQL_DATABASE = "cosmetics"
 
-mysql_engine = MySQLDatabaseHandler(
-    MYSQL_USER, MYSQL_USER_PASSWORD, MYSQL_PORT, MYSQL_DATABASE)
+# mysql_engine = MySQLDatabaseHandler(
+#     MYSQL_USER, MYSQL_USER_PASSWORD, MYSQL_PORT, MYSQL_DATABASE)
 
 # Path to init.sql file. This file can be replaced with your own file for testing on localhost, but do NOT move the init.sql file
-mysql_engine.load_file_into_db()
+# mysql_engine.load_file_into_db()
+
+# load csv file
+updated_df, ingreds, products, prod_to_idx, prod_to_cat, inv_idx, category_inv_idx, ingred_to_idx, idx_to_ingred, prod_ingred_mat = process_csv("./csv/cosmetics_clean.csv")
 
 app = Flask(__name__)
 CORS(app)
+
+def search_results(liked, disliked, skin_type, min_price, max_price):
+    top_5 = top5update(category, query, max_price, min_price, relevant=[], irrelevant=[])
+    routine = {}
+    routine["Moisturizer"] = top5category(
+        moisturizers, query_ingreds, min_price, max_price, bad_ingreds)
+    routine["Cleanser"] = top5category(
+        cleansers, query_ingreds, min_price, max_price, bad_ingreds)
+    routine["Sunscreen"] = top5category(
+        sunscreens, query_ingreds, min_price, max_price, bad_ingreds)
+    routine["Treatment"] = top5category(
+        treatments, query_ingreds, min_price, max_price, bad_ingreds)
+    # print("routine", routine)
+
+    # return json.dumps([dict(zip(keys, i)) for i in moisturizers])
+
+    # return json.dumps(routine)
+
+    keys = ["name", "score", "rank", "price", "brand", "label"]
+    data = [[result[0], result[1], result[2], result[3], result[4], key]
+            for key in routine for result in routine[key]]
+    # data = [routine["Moisturizer"], routine["Cleanser"], routine["Sunscreen"], routine["Treatment"]]
+
+    return json.dumps([dict(zip(keys, i)) for i in data])
+
+@app.route("/")
+def home():
+    return render_template('base.html', title="sample html")
+
+@app.route("/search")
+def query_search():
+    query = request.args.get("name")
+    # return sql_product_name_query(name)
+    top_5 = word_edit_distance(products, query)
+    return json.dumps([prod["Name"] for prod in top_5])
+
+@app.route("/products")
+def products_search():
+    liked = request.args.get("names").split(",")
+    disliked = request.args.get("disliked").split(",")
+    skin_type = request.args.get("skin") 
+    min_price = int(request.args.get("min_price"))
+    max_price = int(request.args.get("max_price"))
+    # return sql_search(liked, disliked, skin_type, min_price, max_price)
+    return search_results(liked, disliked, skin_type, min_price, max_price)
+
 
 
 def sql_product_name_query(name):
@@ -120,26 +170,4 @@ def sql_search(names, disliked, skin, min_price, max_price):
 
     return json.dumps([dict(zip(keys, i)) for i in data])
 
-
-@app.route("/")
-def home():
-    return render_template('base.html', title="sample html")
-
-
-@app.route("/search")
-def query_search():
-    name = request.args.get("name")
-    return sql_product_name_query(name)
-
-
-@app.route("/products")
-def products_search():
-    names = request.args.get("names").split(",")
-    disliked = request.args.get("disliked").split(",")
-    skin = request.args.get("skin") 
-    min_price = int(request.args.get("min_price"))
-    max_price = int(request.args.get("max_price"))
-    return sql_search(names, disliked, skin, min_price, max_price)
-
-
-# app.run(debug=True)
+app.run(debug=True)
