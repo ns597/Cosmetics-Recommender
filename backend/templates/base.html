@@ -23,7 +23,8 @@
                 <div class="resulting-search">
                     <!-- <div class = "flex-child liked"> -->
                     <div class="liked">
-                        <input class="filter-text" placeholder="Liked Products" id="filter-text-val" onkeyup="showResults()">
+                        <input class="filter-text" placeholder="Liked Products" id="filter-text-val"
+                            onkeyup="showResults()">
                     </div>
                     <div class="selected-tags"></div>
                     <div class="search-results"></div>
@@ -31,7 +32,8 @@
 
                     <!-- <div class = "flex-child disliked"> -->
                     <div class="disliked">
-                        <input class="filter-text" placeholder="Disliked Products" id="disliked-val" onkeyup="showDisResults()">
+                        <input class="filter-text" placeholder="Disliked Products" id="disliked-val"
+                            onkeyup="showDisResults()">
                     </div>
                     <div class="dis-selected-tags"></div>
                     <div class="dis-search-results"></div>
@@ -230,7 +232,7 @@
         }
 
         function answerBoxTemplate(name, score, rank, price, brand) {
-            rank = round(rank * 2) / 2
+            rank = Math.round(rank * 2) / 2
             let stars = '<span></span>';
             if (rank == 0.0) {
                 let stars = '<span class="fa-solid fa-star"></span><span class="fa-solid fa-star"></span><span class="fa-solid fa-star"></span><span class="fa-solid fa-star"></span><span class="fa-solid fa-star"></span>';
