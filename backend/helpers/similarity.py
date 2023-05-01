@@ -85,7 +85,16 @@ def cosine_sim(query, matr, products):
     # matr: Ingredient-Product Matrix, matr[i] is the ingredient vector for the ith product in the matrix
     # Output: list of scores where product_scores[i] is the score of products[i]
     product_scores = []
-    def cos_sim(a, b): return np.dot(a, b) / (np.linalg.norm(a) * np.linalg.norm(b))
+    # def cos_sim(a, b): return np.dot(a, b) / (np.linalg.norm(a) * np.linalg.norm(b))
+    
+    def cos_sim(a, b):
+        norm_a = np.linalg.norm(a)
+        norm_b = np.linalg.norm(b)
+        if norm_a == 0 or norm_b == 0 or np.isnan(norm_a) or np.isnan(norm_b):
+            return 0.0
+        else:
+            return np.dot(a, b) / (norm_a * norm_b)
+    
     for i in range(len(products)):
         # score = cos_sim(matr[i], query)
         # print(matr[i])
