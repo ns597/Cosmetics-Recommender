@@ -93,9 +93,15 @@ def rocchio(query, matr, rel, irrel, a=0.3, b=0.3, c=0.8):
     # print(type(dR))
     # print(type(dNR))
     # print(type(dNR))
-    total = (np.array(query) * a) + (np.array(dR) *
-                                     b * (1/n)) - (np.array(dNR) * c * (1/m))
-    # total = query
+    if n==0 and m==0:
+        total = a*query
+    elif n==0:
+        total = (np.array(query) * a)  - (np.array(dNR) * c * (1/m))
+    elif m==0:
+        total = (np.array(query) * a) + (np.array(dR) * b * (1/n))  
+    else:
+        total = (np.array(query) * a) + (np.array(dR) * b * (1/n))  - (np.array(dNR) * c * (1/m))
+    # total = query 
     # print(query)
     return np.clip(total, 0, None)[0]
 
@@ -241,29 +247,13 @@ def bool_and(ingreds):
     return result
 
 
-# cosmetics = pd.read_csv('cosmetics.csv')
-# # print(cosmetics)
-
-# #Types of input to initalize
-# #limit to skin type first, then perform jaccard similarity on three groups
-# skin_type_input = input("Input your skin type: ")
-# prod_name = input("Input the name of product you have used an enjoyed: ")
-
-# skin_type = cosmetics[cosmetics[skin_type_input.capitalize()]==1]
-# product = cosmetics[cosmetics['Name']== prod_name]
-
-# moisturizers = skin_type[skin_type['Label']=='Moisturizer']
-# cleansers = skin_type[skin_type['Label']=='Cleanser']
-# sunscreen =skin_type[skin_type['Label']=='Sun protect']
-# treatment = skin_type[skin_type['Label']=='Treatment']
-
-# first = moisturizers['Ingredients'][0]
-
-# print("Moisturizers")
-# top5category(moisturizers, product["Ingredients"])
-# print("Cleansers")
-# top5category(cleansers, product["Ingredients"])
-# print("Sunscreen")
-# top5category(sunscreen, product["Ingredients"])
-# print("Treatment")
-# top5category(treatment, product["Ingredients"])
+#CODE BELOW USED FOR TESTING ONLY
+# CATEGORY = "Moisturizer"
+# QUERY = [prod_ingred_mat[1], prod_ingred_mat[2], prod_ingred_mat[3]]
+# RELEVANT = [prod_ingred_mat[4], prod_ingred_mat[5], prod_ingred_mat[6]]
+# IRRELEVANT = [prod_ingred_mat[7], prod_ingred_mat[8], prod_ingred_mat[9]]
+# # IRRELEVANT = []
+# MAX_PRICE = 250
+# MIN_PRICE = 75
+# RESULTS = top5update(CATEGORY, QUERY, MAX_PRICE, MIN_PRICE, RELEVANT, IRRELEVANT)
+# print(RESULTS)
