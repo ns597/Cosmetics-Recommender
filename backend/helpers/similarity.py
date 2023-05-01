@@ -16,7 +16,7 @@ data, ingreds, products, prod_to_idx, prod_to_cat, inv_idx, category_inv_idx, in
 def get_matrices():
     return data, ingreds, products, prod_to_idx, prod_to_cat, inv_idx, category_inv_idx, ingred_to_idx, prod_ingred_mat
 
-def top5update(category, query, bad_ingreds, max_price, min_price, relevant=[], irrelevant=[]):
+def top5update(category, query, bad_ingreds, max_price=100, min_price=0, relevant=[], irrelevant=[]):
     # category: string indicating which category of products needed
     # max_price: double
     # min_price: double
@@ -69,6 +69,7 @@ def top5update(category, query, bad_ingreds, max_price, min_price, relevant=[], 
             score = float(scores[i])
         rank = float(ranks[i])
         price = data.at[ind, 'Price']
+        price = float(price)
         brand = data.at[ind, 'Brand']
         # print(type(score))
         # print(type(rank))

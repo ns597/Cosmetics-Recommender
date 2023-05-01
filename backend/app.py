@@ -57,7 +57,7 @@ def search_results(liked, disliked, skin_type, min_price, max_price):
     data = [[result[0], result[1], result[2], result[3], result[4], key]
             for key in routine for result in routine[key]]
 
-    print("routine", data)
+    # print("routine", data)
 
     return json.dumps([dict(zip(keys, i)) for i in data])
 
@@ -87,6 +87,9 @@ def products_search():
     # return sql_search(liked, disliked, skin_type, min_price, max_price)
     # print(liked)
     # _,s, r, p, _(search_results(liked, disliked, skin_type, min_price, max_price))
+    # v = search_results(liked, disliked, skin_type, min_price, max_price)
+    # for i in v:
+    #     print(type(i))
     return search_results(liked, disliked, skin_type, min_price, max_price)
 
 # app.run(debug=True)
