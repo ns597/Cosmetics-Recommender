@@ -92,4 +92,4 @@ def products_search():
     #     print(type(i))
     return search_results(liked, disliked, skin_type, min_price, max_price)
 
-app.run(debug=True)
+# app.run(debug=True)
