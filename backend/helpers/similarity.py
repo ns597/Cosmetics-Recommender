@@ -122,7 +122,7 @@ def top5update(category, skin_type, query, bad_ingreds, max_price=100, min_price
 #     # print(price_prods)
 #     # print(type(price_prods))
 #     for i, ind in enumerate(price_prods):
-#         name = products[i]
+#         name = data.at[ind,"Name"]
 #         score = scores[i]
 #         # print(scores)
 #         if np.isnan(scores[i]):
