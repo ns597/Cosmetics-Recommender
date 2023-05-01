@@ -47,15 +47,15 @@ def top5update(category, skin_type, query, bad_ingreds, max_price=100, min_price
     # print(price_prods)
     # print(type(price_prods))
     # q = np.where((data==query).all(axis=1))[0][0]
-    for i, ind in enumerate(price_prods):
-        name = data.at[i, 'Name']
-        score = scores[i]
+    for i in price_prods:
+        name = data.at[i, "Name"]
+        score = scores[price_prods.index(i)]
         # print(scores)
         if np.isnan(scores[i]):
             score = 0.0
         else:
             score = float(scores[i])
-        rank = float(ranks[i])
+        rank = float(ranks[price_prods.index(i)])
         price = data.at[i, 'Price']
         price = float(price)
         brand = data.at[i, 'Brand']
