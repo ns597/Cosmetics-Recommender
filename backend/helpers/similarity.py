@@ -5,8 +5,11 @@ import os
 # CONSTANTS
 # os.chdir('./backend')
 # data, inv_idx, category_inv_idx, ingreds, prod_ingred_mat = process_csv("/Users/tanishakore/Desktop/Cosmetics-Recommender/cosmetics_clean.csv")
+cur_path = os.path.dirname(__file__)
+path = os.path.join(cur_path, '..', 'csv', 'cosmetics_clean.csv')
 data, ingreds, products, prod_to_idx, prod_to_cat, inv_idx, category_inv_idx, ingred_to_idx, prod_ingred_mat = process_csv(
-    "./backend/csv/cosmetics_clean.csv")
+    path)
+
 
 # print(inv_idx)
 
@@ -21,22 +24,36 @@ def top5update(category, query, bad_ingreds, max_price, min_price, relevant=[], 
     # relevant: list of vectors from product ingredient matrix of relevant products
     # irrelevant: list of vectors from product ingredient matrix of relevant products
     category_prods = category_filter(category)
-    safe_prods = allergen_filter(category_prods, bad_ingreds)
+    safe_prods = list(allergen_filter(category_prods, list(bad_ingreds)))
     price_prods = list(price_filter(safe_prods, max_price, min_price))
- 
- 
+    # print(query)
+    # print(len(query))
+    # print(len(query[0]))
+    # print(np.sum(query[0]))
+    # print(category)
+    # print(query)
+    # print(bad_ingreds)
+    # print(max_price)
+    # print(min_price)
     # rocchios method
     # query =
     # if relevant != [] or irrelevant!=[]:
     rel = relevant
     irrel = irrelevant
-    q1 = query
+    # print("query")
+    # print(type(query))
     try:
         q1 = list(map(lambda x: rocchio(x, prod_ingred_mat, rel, irrel), query))
     except:
         q1 = query
+    # print(q1)
+    # print(len(q1))
+    # print(len(q1[0]))
+    # print(np.sum(q1[0]))
     scores = np.array(cosine_sim(q1, prod_ingred_mat, price_prods))
+    # print(scores)
     ranks = np.array(data["Rank"].iloc[price_prods])
+    # print(scores)
     # print(scores)
     scores = (0.8*scores) + (0.2*ranks) 
     total_products = []
@@ -59,15 +76,19 @@ def cosine_sim(query, matr, products):
     # matr: Ingredient-Product Matrix, matr[i] is the ingredient vector for the ith product in the matrix
     # Output: list of scores where product_scores[i] is the score of products[i]
     product_scores = []
-    def cos_sim(a, b): return np.dot(a, b) / \
-        (np.linalg.norm(a) * np.linalg.norm(b))
+    def cos_sim(a, b): return np.dot(a, b) / (np.linalg.norm(a) * np.linalg.norm(b))
     for i in range(len(products)):
-        score = 0
+        # score = cos_sim(matr[i], query)
         # print(matr[i])
+        # print(sum(matr[i]))
+        # print(len(query))
+        score = 0
         for j in query: 
             # print(j)
+            # print(np.sum(j))
             s = cos_sim(matr[i], j)
             score = score+s
+        # print(sum(score))
         product_scores.append(score)
     return product_scores
 
@@ -103,7 +124,7 @@ def rocchio(query, matr, rel, irrel, a=0.3, b=0.3, c=0.8):
         total = (np.array(query) * a) + (np.array(dR) * b * (1/n))  - (np.array(dNR) * c * (1/m))
     # total = query 
     # print(query)
-    return np.clip(total, 0, None)[0]
+    return np.clip(total, 0, None)
 
 
 def category_filter(category):
@@ -129,6 +150,7 @@ def allergen_filter(prods, bad_ingreds):
     for p in prods: 
         if len(allergens.intersection(set(ingreds[p]))) > 0:
             indices.remove(p)
+    # print(indices)
     return indices
 
 
@@ -244,6 +266,7 @@ def bool_and(ingreds):
             i += 1
         else:
             j += 1
+    # print(i)
     return result
 
 

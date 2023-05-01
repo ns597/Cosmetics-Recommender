@@ -27,13 +27,16 @@ os.environ['ROOT_PATH'] = os.path.abspath(os.path.join("..", os.curdir))
 # load csv file
 # os.chdir('./backend')
 df, ingreds, products, prod_to_idx, prod_to_cat, inv_idx, category_inv_idx, ingred_to_idx, prod_ingred_mat = get_matrices()
+# print(sum(prod_ingred_mat[236]))
 
 app = Flask(__name__)
 CORS(app)
 
 
 def search_results(liked, disliked, skin_type, min_price, max_price):
-    query = get_ingred_vectors(ingreds, liked, prod_to_idx, prod_ingred_mat)
+    # print(np.sum(prod_ingred_mat))
+    query = get_ingred_vectors(products, liked, prod_to_idx, prod_ingred_mat)
+    # print(query)
     bad_ingreds = ingreds_of_prods(ingreds, disliked, prod_to_idx)
 
     routine = {}
@@ -82,6 +85,8 @@ def products_search():
     max_price = request.args.get("max_price")
     max_price = int(max_price) if max_price.isdigit() else 9999999
     # return sql_search(liked, disliked, skin_type, min_price, max_price)
+    # print(liked)
+    print(search_results(liked, disliked, skin_type, min_price, max_price))
     return search_results(liked, disliked, skin_type, min_price, max_price)
 
 # app.run(debug=True)

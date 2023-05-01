@@ -10,13 +10,24 @@ def process_csv(filepath):
     # list of ingredient lists, list of products
     # prod_to_idx maps product names to their index
     ingreds, products, prod_to_idx, prod_to_cat = clean_ingreds_prods(df)
+    # print(ingreds)
+    # print("INGREDIENT LIST")
 
     # TODO: fix ingredients list (organize alphabetically)
+    alpha_ingreds = set([])
+    for key in ingreds:
+        # print(key)
+        # print(ingreds[key])
+        # print(prod_list)
+        alpha_ingreds = alpha_ingreds.union(set(ingreds[key]))
+    alpha_ingreds = list(alpha_ingreds)
+    # print(alpha_ingreds)
 
     # create inverted index for all ingredients to products they are in
     inv_idx = inverted_index(ingreds)
+    # print(inv_idx)
     # prune/remove common ingredients
-    inv_idx = prune_ingreds(inv_idx, len(products))
+    # inv_idx = prune_ingreds(inv_idx, len(products))
 
     # create product - ingredient inverted index for each product category
     categories = df['Label'].unique()
@@ -25,10 +36,15 @@ def process_csv(filepath):
 
     # create unique ingredients list
     ingreds_unique = list(set(np.hstack(ingreds)))
+    # print(ingreds_unique)
+    ingreds_unique_names = list(map(lambda x: alpha_ingreds[x], ingreds_unique))
+    # print(ingreds_unique_names)
+    # print(ingreds_unique)
+    # print(ingreds)
     ingred_to_idx, idx_to_ingred = ingredients_reverse_index(ingreds_unique)
 
     # create product - ingredient matrix
-    prod_ingred_mat = product_ingredient_mat(products, inv_idx, ingreds_unique)
+    prod_ingred_mat = product_ingredient_mat(products, inv_idx, ingreds_unique_names)
 
     return df, ingreds, products, prod_to_idx, prod_to_cat, inv_idx, category_inv_idx, ingred_to_idx, prod_ingred_mat
 
@@ -118,22 +134,33 @@ def ingredients_reverse_index(unique_ingreds):
 
 def product_ingredient_mat(products, inverted_index, unique_ingreds):
     product_ingred_mat = np.zeros((len(products), len(unique_ingreds)))
-
+    # print(products)
+    # print(inverted_index)
+    # print(unique_ingreds)
+    # print()
     for i, prod_name in enumerate(products):
         for j, ingred in enumerate(unique_ingreds):
+            # ingred = unique_ingreds[ingred]
+            # print(ingred)
             if i in inverted_index[ingred]:
                 product_ingred_mat[i][j] = 1
-
+    # print(np.sum(product_ingred_mat[265]))
     return product_ingred_mat
 
 
-def get_ingred_vectors(ingreds, liked, prod_to_idx, prod_ingred_mat):
+def get_ingred_vectors(products, liked, prod_to_idx, prod_ingred_mat):
     # returns a list of ingredient vectors for each product
     # liked_ingreds[i][j] is 1 if the i-th liked product contains ingredient j, 0 o/w
     liked_ingreds = []
+    # print(products)
     for product in liked:
+        # print(products.index(product))
         idx = prod_to_idx[product]
-        liked_ingreds.append(prod_ingred_mat[idx])
+        # print(prod_ingred_mat[idx])
+        # print(sum(prod_ingred_mat[idx]))
+        liked_ingreds = liked_ingreds + [prod_ingred_mat[idx]]
+    # print("query is ")
+    # print(len(liked_ingreds))
     return liked_ingreds
 
 
