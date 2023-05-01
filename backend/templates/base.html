@@ -233,9 +233,9 @@
                 });
         }
 
-        function answerBoxTemplate(name, score, rank, price, brand, ingreds, skin_types) {
-            rank = round(rank * 2) / 2;
-            let stars = document.createElement("span");
+        function answerBoxTemplate(name, score, rank, price, brand) {
+            rank = Math.round(rank * 2) / 2
+            let stars = '<span></span>';
             if (rank == 0.0) {
                 stars = '<span class="fa-solid fa-star"></span><span class="fa-solid fa-star"></span><span class="fa-solid fa-star"></span><span class="fa-solid fa-star"></span><span class="fa-solid fa-star"></span>';
             }
@@ -345,5 +345,4 @@
 
         }
     </script>
-
 </body>
