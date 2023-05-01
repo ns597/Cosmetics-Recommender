@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <title>{% block title %}{% endblock %} - Flaskr</title>
-<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+<link rel="stylesheet" href="styles.css" />
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Kanit&family=Montserrat&family=Open+Sans:wght@500&display=swap"
@@ -22,21 +22,18 @@
                 <!-- <div class = "flex-container"> -->
                 <div class="resulting-search">
                     <!-- <div class = "flex-child liked"> -->
-                    <div class="liked">
+                    <div>
                         <input class="filter-text" placeholder="Liked Products" id="filter-text-val"
                             onkeyup="showResults()">
                     </div>
-                    <div class="selected-tags"></div>
                     <div class="search-results"></div>
-                    <!-- <br /> -->
-
-                    <!-- <div class = "flex-child disliked"> -->
-                    <div class="disliked">
+                    <div class="selected-tags"></div><br />
+                    <div>
                         <input class="filter-text" placeholder="Disliked Products" id="disliked-val"
                             onkeyup="showDisResults()">
                     </div>
-                    <div class="dis-selected-tags"></div>
                     <div class="dis-search-results"></div>
+                    <div class="dis-selected-tags"></div><br />
                 </div>
                 <!-- </div>
                     <br/>
@@ -85,32 +82,33 @@
         <div id="query-box">
 
         </div>
-        <div class="row answer-container">
-            <div class="column">
+        <div class="row answer-container scrollmenu">
+            <div class="column" id="moist">
                 <div class="card answer-box" id="moist-box">
                     <p class='episode-title'>Moisturizer</p>
                 </div>
             </div>
-            <div class="column">
+            <div class="column" id="cleans">
                 <div class="card answer-box" id="cleans-box">
                     <p class='episode-title'>Cleanser</p>
                 </div>
             </div>
-            <div class="column">
+            <div class="column" id="sun">
                 <div class="card answer-box" id="sun-box">
                     <p class='episode-title'>Sun Protection</p>
                 </div>
             </div>
-            <div class="column">
+            <div class="column" id="treat">
                 <div class="card answer-box" id="treat-box">
                     <p class='episode-title'>Treatment</p>
                 </div>
             </div>
         </div>
 
+        <button class="regen" id="submit_btn" onclick="regenerate()">Regenerate Results</button>
+
         <div id="test-box"></div>
 
-    </div>
     </div>
 
     <script>
@@ -232,47 +230,56 @@
                 });
         }
 
-        function answerBoxTemplate(name, score, rank, price, brand) {
-            rank = round(rank * 2) / 2
-            let stars = <span></span>
+        function answerBoxTemplate(name, score, rank, price, brand, ingreds, skin_types) {
+            rank = round(rank * 2) / 2;
+            let stars = document.createElement("span");
             if (rank == 0.0) {
-                let stars = '<span class="fa-solid fa-star"></span><span class="fa-solid fa-star"></span><span class="fa-solid fa-star"></span><span class="fa-solid fa-star"></span><span class="fa-solid fa-star"></span>';
+                stars = '<span class="fa-solid fa-star"></span><span class="fa-solid fa-star"></span><span class="fa-solid fa-star"></span><span class="fa-solid fa-star"></span><span class="fa-solid fa-star"></span>';
             }
             if (rank == 0.5) {
-                stars = '<span class="fa-duotone fa-star-half"></span><span class="fa-solid fa-star"></span><span class="fa-solid fa-star"></span><span class="fa-solid fa-star"></span><span class="fa-solid fa-star"></span>'
+                stars = '<span class="fa-duotone fa-star-half"></span><span class="fa-solid fa-star"></span><span class="fa-solid fa-star"></span><span class="fa-solid fa-star"></span><span class="fa-solid fa-star"></span>';
             }
             if (rank == 1.0) {
-                stars = '<span class="fa-solid fa-star filled-star"></span><span class="fa-solid fa-star"></span><span class="fa-solid fa-star"></span><span class="fa-solid fa-star"></span><span class="fa-solid fa-star"></span>'
+                stars = '<span class="fa-solid fa-star filled-star"></span><span class="fa-solid fa-star"></span><span class="fa-solid fa-star"></span><span class="fa-solid fa-star"></span><span class="fa-solid fa-star"></span>';
             }
             if (rank == 1.5) {
-                stars = '<span class="fa-solid fa-star filled-star"><span class="fa-duotone fa-star-half"></span><span class="fa-solid fa-star"></span><span class="fa-solid fa-star"></span><span class="fa-solid fa-star"></span>'
+                stars = '<span class="fa-solid fa-star filled-star"></span><span class="fa-duotone fa-star-half"></span><span class="fa-solid fa-star"></span><span class="fa-solid fa-star"></span><span class="fa-solid fa-star"></span>';
             }
             if (rank == 2.0) {
-                stars = '<span class="fa-solid fa-star filled-star"></span><span class="fa-solid fa-star filled-star"></span><span class="fa-solid fa-star"></span><span class="fa-solid fa-star"></span><span class="fa-solid fa-star"></span>'
+                stars = '<span class="fa-solid fa-star filled-star"></span><span class="fa-solid fa-star filled-star"></span><span class="fa-solid fa-star"></span><span class="fa-solid fa-star"></span><span class="fa-solid fa-star"></span>';
             }
             if (rank == 2.5) {
-                stars = '<span class="fa-solid fa-star filled-star"></span><span class="fa-solid fa-star filled-star"><span class="fa-duotone fa-star-half"></span><span class="fa-solid fa-star"></span><span class="fa-solid fa-star"></span>'
+                stars = '<span class="fa-solid fa-star filled-star"></span><span class="fa-solid fa-star filled-star"></span><span class="fa-duotone fa-star-half"></span><span class="fa-solid fa-star"></span><span class="fa-solid fa-star"></span>';
             }
             if (rank == 3.0) {
-                stars = '<span class="fa-solid fa-star filled-star"></span><span class="fa-solid fa-star filled-star"></span><span class="fa-solid fa-star filled-star"></span><span class="fa-solid fa-star"></span><span class="fa-solid fa-star"></span>'
+                stars = '<span class="fa-solid fa-star filled-star"></span><span class="fa-solid fa-star filled-star"></span><span class="fa-solid fa-star filled-star"></span><span class="fa-solid fa-star"></span><span class="fa-solid fa-star"></span>';
             }
             if (rank == 3.5) {
-                stars = '<span class="fa-solid fa-star filled-star"></span><span class="fa-solid fa-star filled-star"></span><span class="fa-solid fa-star filled-star"></span><span class="fa-duotone fa-star-half"></span><span class="fa-solid fa-star"></span>'
+                stars = '<span class="fa-solid fa-star filled-star"></span><span class="fa-solid fa-star filled-star"></span><span class="fa-solid fa-star filled-star"></span><span class="fa-duotone fa-star-half"></span><span class="fa-solid fa-star"></span>';
             }
             if (rank == 4.0) {
-                stars = '<span class="fa-solid fa-star filled-star"></span><span class="fa-solid fa-star filled-star"></span><span class="fa-solid fa-star filled-star"></span><span class="fa-solid fa-star filled-star"></span><span class="fa-solid fa-star"></span>'
+                stars = '<span class="fa-solid fa-star filled-star"></span><span class="fa-solid fa-star filled-star"></span><span class="fa-solid fa-star filled-star"></span><span class="fa-solid fa-star filled-star"></span><span class="fa-solid fa-star"></span>';
             }
             if (rank == 4.5) {
-                stars = '<span class="fa-solid fa-star filled-star"></span><span class="fa-solid fa-star filled-star"></span><span class="fa-solid fa-star filled-star"></span><span class="fa-solid fa-star filled-star"></span><span class="fa-duotone fa-star-half"></span>'
+                stars = '<span class="fa-solid fa-star filled-star"></span><span class="fa-solid fa-star filled-star"></span><span class="fa-solid fa-star filled-star"></span><span class="fa-solid fa-star filled-star"></span><span class="fa-duotone fa-star-half"></span>';
             }
             if (rank == 5.0) {
-                stars = '<span class="fa-solid fa-star filled-star"></span><span class="fa-solid fa-star filled-star"></span><span class="fa-solid fa-star filled-star"></span><span class="fa-solid fa-star filled-star"></span><span class="fa-solid fa-star filled-star"></span>'
+                stars = '<span class="fa-solid fa-star filled-star"></span><span class="fa-solid fa-star filled-star"></span><span class="fa-solid fa-star filled-star"></span><span class="fa-solid fa-star filled-star"></span><span class="fa-solid fa-star filled-star"></span>';
             }
+
+            let ingredients = document.createElement("span");
+            for (let i = 0; i < ingreds.length; i++) {
+                ingredients.innerHTML += `<span> ${ingreds[i]} </span>`;
+            }
+            // ingredients.innerHTML += '<span>${currentElement}</span>');
+
             return `<div class="product-box">
-                <p class='episode-desc'>${name}</p>
-                <p class='episode-desc'>Brand: ${brand}</p>
-                <p class='episode-desc'>Rating: ${stars}</p>
-                <p class='episode-desc'>Price: $${price}</p>
+                <p class="episode-desc">${name}</p>
+                <p class="episode-desc">Brand: ${brand}</p>
+                <p class="episode-desc">Rating: ${stars}</p>
+                <p class="episode-desc">Price: $${price}</p>
+                <p class="episode-desc ingreds">Top 5 Matched Ingredients: ${ingredients}</p>
+                <p class="episode-desc">Like this product?<a class="fa-solid fa-thumbs-up"></a><a class="fa-solid fa-thumbs-down"></a></p>
             </div>`
         }
 
@@ -305,7 +312,7 @@
                 dis_tags.push(t.substring(0, t.length - 1));
             }
 
-            fetch("/products?" + new URLSearchParams(
+            fetch("/products2?" + new URLSearchParams(
                 {
                     names: tags,
                     disliked: dis_tags,
@@ -317,18 +324,22 @@
                 .then((data) => data.forEach(row => {
 
                     let tempDiv = document.createElement("div")
-                    tempDiv.innerHTML = answerBoxTemplate(row.name, row.score, row.rank, row.price, row.brand)
+                    tempDiv.innerHTML = answerBoxTemplate(row.name, row.score, row.rank, row.price, row.brand, row.ingreds)
                     if (row.label === "Moisturizer")
-                        document.getElementById("moist-box").appendChild(tempDiv)
+                        document.getElementById("moist").appendChild(tempDiv)
                     else if (row.label === "Cleanser")
-                        document.getElementById("cleans-box").appendChild(tempDiv)
+                        document.getElementById("cleans").appendChild(tempDiv)
                     else if (row.label === "Sunscreen")
-                        document.getElementById("sun-box").appendChild(tempDiv)
+                        document.getElementById("sun").appendChild(tempDiv)
                     else if (row.label === "Treatment")
-                        document.getElementById("treat-box").appendChild(tempDiv)
+                        document.getElementById("treat").appendChild(tempDiv)
                 }));
 
         }
 
+        function regenerate() {
+
+        }
     </script>
+
 </body>
