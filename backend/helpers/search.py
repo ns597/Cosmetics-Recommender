@@ -1,6 +1,5 @@
 import pandas as pd
 import numpy as np
-import re
 from collections import defaultdict
 
 
@@ -11,15 +10,6 @@ def process_csv(filepath):
     # list of ingredient lists, list of products
     # prod_to_idx maps product names to their index
     ingreds, products, prod_to_idx, prod_to_cat = clean_ingreds_prods(df)
-
-    # change all 0,0,0,0,0 products to 1,1,1,1,1
-    for i, row in df.iterrows():
-        if row['Combination'] == 0 and row['Dry'] == 0 and row['Normal'] == 0 and row['Oily'] == 0 and row['Sensitive'] == 0:
-            df.loc[i, 'Combination'] = 1
-            df.loc[i, 'Dry'] = 1
-            df.loc[i, 'Normal'] = 1
-            df.loc[i, 'Oily'] = 1
-            df.loc[i, 'Sensitive'] = 1
 
     # TODO: fix ingredients list (organize alphabetically)
 
@@ -40,7 +30,7 @@ def process_csv(filepath):
     # create product - ingredient matrix
     prod_ingred_mat = product_ingredient_mat(products, inv_idx, ingreds_unique)
 
-    return df, ingreds, products, prod_to_idx, prod_to_cat, inv_idx, category_inv_idx, ingred_to_idx, idx_to_ingred, prod_ingred_mat
+    return df, ingreds, products, prod_to_idx, prod_to_cat, inv_idx, category_inv_idx, ingred_to_idx, prod_ingred_mat
 
 
 def clean_ingreds_prods(df):
@@ -49,51 +39,15 @@ def clean_ingreds_prods(df):
     prod_to_cat = {}
     idx_to_prod = []
 
-    # first, drop all rows without ingredient list
-    rows_to_drop = []
     for i, row in df.iterrows():
-        if row['Ingredients'] == "#NAME?" or "visit" in row['Ingredients'].lower():
-            rows_to_drop.append(i)
-    for row in rows_to_drop:
-        df.drop(row, inplace=True)
-
-    for i, row in df.iterrows():
-        idx_to_prod.append(row['Name'])
-        prod_to_idx[row['Name']] = i
-        prod_to_cat[row['Name']] = row['Label']
-
-        for ingred in row['Ingredients'].split(','):
-            ingred = ingred.lower()
-            # remove "... {Active Ingredients, May Contain, etc}:"
-            if ":" in ingred:
-                index = ingred.index(":")
-                ingred = ingred[index+len(":"):]
-
-            # remove "Please be aware that ingredient lists may change... up to date list of ingredients."
-            if "Please be aware" in ingred:
-                ingred = ingred[:ingred.index("please be aware")]
-
-            # remove "x.xx%"
-            ingred = re.sub(r'\d+\.\d+%', '', ingred)
-            # remove "x%"
-            ingred = re.sub(r'\d+%', '', ingred)
-            # remove "(CI 12345)""
-            ingred = re.sub(r'ci\s*\d+', '', ingred)
-            # remove "*" and "." and "()"
-            ingred = ingred.replace('*', '')
-            ingred = ingred.replace('.', '')
-            ingred = ingred.replace('(', '')
-            ingred = ingred.replace(')', '')
-            # remove trailing whitespace
-            ingred = ingred.strip()
-
-            # update ingredients in dataframe
-            new_column = pd.Series([ingred], name='Ingredients', index=[i])
-            df.update(new_column)
-
-            ingreds_per_prod[i].append(ingred)
+      prod_name = row['Brand'] + " " + row['Name']
+      idx_to_prod.append(prod_name)
+      prod_to_idx[prod_name] = i
+      prod_to_cat[prod_name] = row['Label']
+      for ingred in row['Ingredients'].split(','):
+        ingreds_per_prod[i].append(ingred)
     # print(df)
-    print(ingreds_per_prod)
+    # print(ingreds_per_prod)
     return ingreds_per_prod, idx_to_prod, prod_to_idx, prod_to_cat
 
 
@@ -175,12 +129,12 @@ def product_ingredient_mat(products, inverted_index, unique_ingreds):
 
 def get_ingred_vectors(ingreds, liked, prod_to_idx, prod_ingred_mat):
     # returns a list of ingredient vectors for each product
-    # prod_ingred_mat[i][j] is 1 if product i contains ingredient j, 0 o/w
-    prod_ingred_mat = []
+    # liked_ingreds[i][j] is 1 if the i-th liked product contains ingredient j, 0 o/w
+    liked_ingreds = []
     for product in liked:
         idx = prod_to_idx[product]
-        ingreds[idx] = prod_ingred_mat[idx]
-    return prod_ingred_mat
+        liked_ingreds.append(prod_ingred_mat[idx])
+    return liked_ingreds
 
 
 def ingreds_of_prods(ingreds, liked, prod_to_idx):

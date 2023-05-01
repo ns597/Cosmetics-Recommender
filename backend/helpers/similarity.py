@@ -2,49 +2,16 @@ from helpers.search import *
 import numpy as np
 import os
 
-# TODO: delete? no longer used
-
-
-def top5category(category, ingredients, min_price, max_price, bad_ingreds):
-    scores = []
-    # print("items in", val['name'], ":", len(category))
-    for val in category:
-        name = val['name']
-        price = val['price']
-        if len(set(bad_ingreds).intersection(set(val['ingreds'].split(",")))) > 0:
-            continue
-        name = val['name']
-        price = val['price']
-        if len(set(bad_ingreds).intersection(set(val['ingreds'].split(",")))) > 0:
-            continue
-        score = jaccard_similarity(val['ingreds'], ingredients)
-        try:
-            rank = float(val['rank'])
-            # print(rank)
-            price_weight = 0
-            if price >= min_price and price <= max_price:
-                price_weight = 1
-            score = (0.8 * score) + (0.2 * rank) + price_weight
-            scores.append((name, score, rank, val['price'], val['brand']))
-        except:
-            print("invalid rank/rating for product", name)
-            scores.append((name, score, 0, val['price'], val['brand']))
-    if (len(scores) == 0):
-        return [('None found', 0)]
-    scores.sort(key=lambda x: x[1], reverse=True)
-    top5 = scores[:5]
-    # top5 = list(map(lambda x: x[0], top5))
-    return top5
-
-
 # CONSTANTS
-os.chdir('./backend')
+# os.chdir('./backend')
 # data, inv_idx, category_inv_idx, ingreds, prod_ingred_mat = process_csv("/Users/tanishakore/Desktop/Cosmetics-Recommender/cosmetics_clean.csv")
-data, ingreds, products, prod_to_idx, prod_to_cat, inv_idx, category_inv_idx, ingred_to_idx, idx_to_ingred, prod_ingred_mat = process_csv(
-    "./csv/cosmetics_clean.csv")
+data, ingreds, products, prod_to_idx, prod_to_cat, inv_idx, category_inv_idx, ingred_to_idx, prod_ingred_mat = process_csv(
+    "./backend/csv/cosmetics_clean.csv")
 
 # print(inv_idx)
 
+def get_matrices():
+    return data, ingreds, products, prod_to_idx, prod_to_cat, inv_idx, category_inv_idx, ingred_to_idx, prod_ingred_mat
 
 def top5update(category, query, bad_ingreds, max_price, min_price, relevant=[], irrelevant=[]):
     # category: string indicating which category of products needed
@@ -56,7 +23,8 @@ def top5update(category, query, bad_ingreds, max_price, min_price, relevant=[], 
     category_prods = category_filter(category)
     safe_prods = allergen_filter(category_prods, bad_ingreds)
     price_prods = list(price_filter(safe_prods, max_price, min_price))
-
+ 
+ 
     # rocchios method
     # query =
     # if relevant != [] or irrelevant!=[]:
@@ -70,7 +38,7 @@ def top5update(category, query, bad_ingreds, max_price, min_price, relevant=[], 
     scores = np.array(cosine_sim(q1, prod_ingred_mat, price_prods))
     ranks = np.array(data["Rank"].iloc[price_prods])
     # print(scores)
-    scores = (0.8*scores) + (0.2*ranks)
+    scores = (0.8*scores) + (0.2*ranks) 
     total_products = []
     # print(price_prods)
     # print(type(price_prods))
@@ -96,7 +64,7 @@ def cosine_sim(query, matr, products):
     for i in range(len(products)):
         score = 0
         # print(matr[i])
-        for j in query:
+        for j in query: 
             # print(j)
             s = cos_sim(matr[i], j)
             score = score+s
@@ -141,19 +109,19 @@ def category_filter(category):
     return set(indices)
 
 
-def price_filter(cat, maxp, minp):
-    indices = cat.copy()
-    for i in cat:
-        if data["Price"][i] > maxp or data["Price"][i] < minp:
-            indices.remove(i)
-    return indices
+def price_filter(prods, maxp, minp):    
+    indices = prods.copy() 
+    for i in prods:
+        if int(data.at[i, "Price"]) > maxp or int(data.at[i, "Price"]) < minp:
+            indices.remove(i) 
+    return indices 
 
-
+ 
 def allergen_filter(prods, bad_ingreds):
-    allergens = bool_and(bad_ingreds)
-    indices = prods.copy()
-    for p in prods:
-        if data["Price"][i] > maxp or data["Price"][i] < minp:
+    allergens = set(bool_and(bad_ingreds))
+    indices = prods.copy() 
+    for p in prods: 
+        if len(allergens.intersection(set(ingreds[p]))) > 0:
             indices.remove(p)
     return indices
 
@@ -193,10 +161,16 @@ def levenshtein_distance(s1, s2):
 
     return m[len(s1)][len(s2)]
 
+def word_similarity_score(product, query):
+    score = 0
+    q_words = query.split(" ")
+    for word in product.split(" "):
+        if word in q_words:
+            score += 1
+    return score
+
 # returns top 5 most similar product names
-
-
-def word_edit_distance(query):
+def word_distance(query):
     distances = [levenshtein_distance(
         name.lower(), query.lower()) for name in products]
     sorted_names = [name for _, name in sorted(zip(distances, products))]
