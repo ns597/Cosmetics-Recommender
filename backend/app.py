@@ -105,4 +105,4 @@ def rocchio_search():
     return search_results(liked, disliked, skin_type, min_price, max_price, relevant, irrelevant)
 
 
-app.run(debug=True)
+# app.run(debug=True)
