@@ -86,7 +86,7 @@ def products_search():
     max_price = int(max_price) if max_price.isdigit() else 9999999
     # return sql_search(liked, disliked, skin_type, min_price, max_price)
     # print(liked)
-    print(search_results(liked, disliked, skin_type, min_price, max_price))
+    # _,s, r, p, _(search_results(liked, disliked, skin_type, min_price, max_price))
     return search_results(liked, disliked, skin_type, min_price, max_price)
 
 # app.run(debug=True)
