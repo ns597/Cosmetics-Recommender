@@ -38,20 +38,20 @@ def search_results(liked, disliked, skin_type, min_price, max_price):
     query = get_ingred_vectors(products, liked, prod_to_idx, prod_ingred_mat)
     # print(query)
     bad_ingreds = ingreds_of_prods(ingreds, disliked, prod_to_idx)
-
+    print(skin_type)
     routine = {}
     routine["Cleanser"] = top5update(
-        "Cleanser", query, bad_ingreds, max_price, min_price)
+        "Cleanser", skin_type, query, bad_ingreds, max_price, min_price)
     routine["Treatment"] = top5update(
-        "Treatment", query, bad_ingreds, max_price, min_price)
+        "Treatment", skin_type, query, bad_ingreds, max_price, min_price)
     # routine["Face Mask"] = top5update(
     #     "Face Mask", query, bad_ingreds, max_price, min_price)
     # routine["Eye cream"] = top5update(
     #     "Eye cream", query, bad_ingreds, max_price, min_price) 
     routine["Moisturizer"] = top5update(
-        "Moisturizer", query, bad_ingreds, max_price, min_price)
+        "Moisturizer", skin_type, query, bad_ingreds, max_price, min_price)
     routine["Sun protect"] = top5update(
-        "Sun protect", query, bad_ingreds, max_price, min_price)
+        "Sun protect", skin_type, query, bad_ingreds, max_price, min_price)
 
     keys = ["name", "score", "rank", "price", "brand", "label"]
     data = [[result[0], result[1], result[2], result[3], result[4], key]

@@ -16,7 +16,7 @@ data, ingreds, products, prod_to_idx, prod_to_cat, inv_idx, category_inv_idx, in
 def get_matrices():
     return data, ingreds, products, prod_to_idx, prod_to_cat, inv_idx, category_inv_idx, ingred_to_idx, prod_ingred_mat
 
-def top5update(category, query, bad_ingreds, max_price=100, min_price=0, relevant=[], irrelevant=[]):
+def top5update(category, skin_type, query, bad_ingreds, max_price=100, min_price=0, relevant=[], irrelevant=[]):
     # category: string indicating which category of products needed
     # max_price: double
     # min_price: double
@@ -24,24 +24,11 @@ def top5update(category, query, bad_ingreds, max_price=100, min_price=0, relevan
     # relevant: list of vectors from product ingredient matrix of relevant products
     # irrelevant: list of vectors from product ingredient matrix of relevant products
     category_prods = category_filter(category)
-    safe_prods = list(allergen_filter(category_prods, list(bad_ingreds)))
+    skin_prods = skin_type_filter(category_prods, skin_type)
+    safe_prods = list(allergen_filter(skin_prods, list(bad_ingreds)))
     price_prods = list(price_filter(safe_prods, max_price, min_price))
-    # print(query)
-    # print(len(query))
-    # print(len(query[0]))
-    # print(np.sum(query[0]))
-    # print(category)
-    # print(query)
-    # print(bad_ingreds)
-    # print(max_price)
-    # print(min_price)
-    # rocchios method
-    # query =
-    # if relevant != [] or irrelevant!=[]:
     rel = relevant
     irrel = irrelevant
-    # print("query")
-    # print(type(query))
     try:
         q1 = list(map(lambda x: rocchio(x, prod_ingred_mat, rel, irrel), query))
     except:
@@ -68,9 +55,9 @@ def top5update(category, query, bad_ingreds, max_price=100, min_price=0, relevan
         else:
             score = float(scores[i])
         rank = float(ranks[i])
-        price = data.at[ind, 'Price']
+        price = data.at[i, 'Price']
         price = float(price)
-        brand = data.at[ind, 'Brand']
+        brand = data.at[i, 'Brand']
         # print(type(score))
         # print(type(rank))
         # print(type(price))
@@ -158,6 +145,13 @@ def price_filter(prods, maxp, minp):
     indices = prods.copy() 
     for i in prods:
         if int(data.at[i, "Price"]) > maxp or int(data.at[i, "Price"]) < minp:
+            indices.remove(i) 
+    return indices 
+
+def skin_type_filter(prods, skin_type):    
+    indices = prods.copy() 
+    for i in prods:
+        if data.at[i, skin_type]!=1:
             indices.remove(i) 
     return indices 
 
