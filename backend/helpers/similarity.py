@@ -62,9 +62,17 @@ def top5update(category, query, bad_ingreds, max_price, min_price, relevant=[], 
     for i, ind in enumerate(price_prods):
         name = products[i]
         score = scores[i]
-        rank = ranks[i]
+        # print(scores)
+        if np.isnan(scores[i]):
+            score = 0.0
+        else:
+            score = float(scores[i])
+        rank = float(ranks[i])
         price = data.at[ind, 'Price']
         brand = data.at[ind, 'Brand']
+        # print(type(score))
+        # print(type(rank))
+        # print(type(price))
         total_products.append((name, score, rank, price, brand))
     total_products.sort(key=lambda x: x[1], reverse=True)
     return total_products[:5]
