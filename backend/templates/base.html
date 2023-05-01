@@ -22,13 +22,15 @@
                 <!-- <div class = "flex-container"> -->
                 <div class="resulting-search">
                     <!-- <div class = "flex-child liked"> -->
-                    <div>
+                    <div class="liked">
                         <input class="filter-text" placeholder="Liked Products" id="filter-text-val"
                             onkeyup="showResults()">
                     </div>
                     <div class="search-results"></div>
-                    <div class="selected-tags"></div><br />
-                    <div>
+                    <!-- <br /> -->
+
+                    <!-- <div class = "flex-child disliked"> -->
+                    <div class="disliked">
                         <input class="filter-text" placeholder="Disliked Products" id="disliked-val"
                             onkeyup="showDisResults()">
                     </div>
@@ -322,15 +324,15 @@
                 }).toString())
                 .then((response) => response.json())
                 .then((data) => data.forEach(row => {
-
+                    console.log(row);
                     let tempDiv = document.createElement("div")
                     tempDiv.innerHTML = answerBoxTemplate(row.name, row.score, row.rank, row.price, row.brand, row.ingreds)
                     if (row.label === "Moisturizer")
                         document.getElementById("moist").appendChild(tempDiv)
                     else if (row.label === "Cleanser")
-                        document.getElementById("cleans").appendChild(tempDiv)
-                    else if (row.label === "Sunscreen")
-                        document.getElementById("sun").appendChild(tempDiv)
+                        document.getElementById("cleans-box").appendChild(tempDiv)
+                    else if (row.label === "Sun protect")
+                        document.getElementById("sun-box").appendChild(tempDiv)
                     else if (row.label === "Treatment")
                         document.getElementById("treat").appendChild(tempDiv)
                 }));
