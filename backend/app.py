@@ -84,4 +84,4 @@ def products_search():
     # return sql_search(liked, disliked, skin_type, min_price, max_price)
     return search_results(liked, disliked, skin_type, min_price, max_price)
 
-app.run(debug=True)
+# app.run(debug=True)
