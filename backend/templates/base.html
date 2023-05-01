@@ -23,8 +23,7 @@
                 <div class="resulting-search">
                     <!-- <div class = "flex-child liked"> -->
                     <div class="liked">
-                        <input class="filter-text" placeholder="Liked Products" id="filter-text-val"
-                            onkeyup="showResults()">
+                        <input class="filter-text" placeholder="Liked Products" id="filter-text-val" onkeyup="showResults()">
                     </div>
                     <div class="selected-tags"></div>
                     <div class="search-results"></div>
@@ -32,8 +31,7 @@
 
                     <!-- <div class = "flex-child disliked"> -->
                     <div class="disliked">
-                        <input class="filter-text" placeholder="Disliked Products" id="disliked-val"
-                            onkeyup="showDisResults()">
+                        <input class="filter-text" placeholder="Disliked Products" id="disliked-val" onkeyup="showDisResults()">
                     </div>
                     <div class="dis-selected-tags"></div>
                     <div class="dis-search-results"></div>
@@ -110,7 +108,6 @@
 
         <div id="test-box"></div>
 
-    </div>
     </div>
 
     <script>
@@ -234,39 +231,39 @@
 
         function answerBoxTemplate(name, score, rank, price, brand) {
             rank = round(rank * 2) / 2
-            let stars = <span></span>
+            let stars = '<span></span>';
             if (rank == 0.0) {
                 let stars = '<span class="fa-solid fa-star"></span><span class="fa-solid fa-star"></span><span class="fa-solid fa-star"></span><span class="fa-solid fa-star"></span><span class="fa-solid fa-star"></span>';
             }
             if (rank == 0.5) {
-                stars = '<span class="fa-duotone fa-star-half"></span><span class="fa-solid fa-star"></span><span class="fa-solid fa-star"></span><span class="fa-solid fa-star"></span><span class="fa-solid fa-star"></span>'
+                stars = '<span class="fa-duotone fa-star-half"></span><span class="fa-solid fa-star"></span><span class="fa-solid fa-star"></span><span class="fa-solid fa-star"></span><span class="fa-solid fa-star"></span>';
             }
             if (rank == 1.0) {
-                stars = '<span class="fa-solid fa-star filled-star"></span><span class="fa-solid fa-star"></span><span class="fa-solid fa-star"></span><span class="fa-solid fa-star"></span><span class="fa-solid fa-star"></span>'
+                stars = '<span class="fa-solid fa-star filled-star"></span><span class="fa-solid fa-star"></span><span class="fa-solid fa-star"></span><span class="fa-solid fa-star"></span><span class="fa-solid fa-star"></span>';
             }
             if (rank == 1.5) {
-                stars = '<span class="fa-solid fa-star filled-star"><span class="fa-duotone fa-star-half"></span><span class="fa-solid fa-star"></span><span class="fa-solid fa-star"></span><span class="fa-solid fa-star"></span>'
+                stars = '<span class="fa-solid fa-star filled-star"><span class="fa-duotone fa-star-half"></span><span class="fa-solid fa-star"></span><span class="fa-solid fa-star"></span><span class="fa-solid fa-star"></span>';
             }
             if (rank == 2.0) {
-                stars = '<span class="fa-solid fa-star filled-star"></span><span class="fa-solid fa-star filled-star"></span><span class="fa-solid fa-star"></span><span class="fa-solid fa-star"></span><span class="fa-solid fa-star"></span>'
+                stars = '<span class="fa-solid fa-star filled-star"></span><span class="fa-solid fa-star filled-star"></span><span class="fa-solid fa-star"></span><span class="fa-solid fa-star"></span><span class="fa-solid fa-star"></span>';
             }
             if (rank == 2.5) {
-                stars = '<span class="fa-solid fa-star filled-star"></span><span class="fa-solid fa-star filled-star"><span class="fa-duotone fa-star-half"></span><span class="fa-solid fa-star"></span><span class="fa-solid fa-star"></span>'
+                stars = '<span class="fa-solid fa-star filled-star"></span><span class="fa-solid fa-star filled-star"><span class="fa-duotone fa-star-half"></span><span class="fa-solid fa-star"></span><span class="fa-solid fa-star"></span>';
             }
             if (rank == 3.0) {
-                stars = '<span class="fa-solid fa-star filled-star"></span><span class="fa-solid fa-star filled-star"></span><span class="fa-solid fa-star filled-star"></span><span class="fa-solid fa-star"></span><span class="fa-solid fa-star"></span>'
+                stars = '<span class="fa-solid fa-star filled-star"></span><span class="fa-solid fa-star filled-star"></span><span class="fa-solid fa-star filled-star"></span><span class="fa-solid fa-star"></span><span class="fa-solid fa-star"></span>';
             }
             if (rank == 3.5) {
-                stars = '<span class="fa-solid fa-star filled-star"></span><span class="fa-solid fa-star filled-star"></span><span class="fa-solid fa-star filled-star"></span><span class="fa-duotone fa-star-half"></span><span class="fa-solid fa-star"></span>'
+                stars = '<span class="fa-solid fa-star filled-star"></span><span class="fa-solid fa-star filled-star"></span><span class="fa-solid fa-star filled-star"></span><span class="fa-duotone fa-star-half"></span><span class="fa-solid fa-star"></span>';
             }
             if (rank == 4.0) {
-                stars = '<span class="fa-solid fa-star filled-star"></span><span class="fa-solid fa-star filled-star"></span><span class="fa-solid fa-star filled-star"></span><span class="fa-solid fa-star filled-star"></span><span class="fa-solid fa-star"></span>'
+                stars = '<span class="fa-solid fa-star filled-star"></span><span class="fa-solid fa-star filled-star"></span><span class="fa-solid fa-star filled-star"></span><span class="fa-solid fa-star filled-star"></span><span class="fa-solid fa-star"></span>';
             }
             if (rank == 4.5) {
-                stars = '<span class="fa-solid fa-star filled-star"></span><span class="fa-solid fa-star filled-star"></span><span class="fa-solid fa-star filled-star"></span><span class="fa-solid fa-star filled-star"></span><span class="fa-duotone fa-star-half"></span>'
+                stars = '<span class="fa-solid fa-star filled-star"></span><span class="fa-solid fa-star filled-star"></span><span class="fa-solid fa-star filled-star"></span><span class="fa-solid fa-star filled-star"></span><span class="fa-duotone fa-star-half"></span>';
             }
             if (rank == 5.0) {
-                stars = '<span class="fa-solid fa-star filled-star"></span><span class="fa-solid fa-star filled-star"></span><span class="fa-solid fa-star filled-star"></span><span class="fa-solid fa-star filled-star"></span><span class="fa-solid fa-star filled-star"></span>'
+                stars = '<span class="fa-solid fa-star filled-star"></span><span class="fa-solid fa-star filled-star"></span><span class="fa-solid fa-star filled-star"></span><span class="fa-solid fa-star filled-star"></span><span class="fa-solid fa-star filled-star"></span>';
             }
             return `<div class="product-box">
                 <p class='episode-desc'>${name}</p>
@@ -315,14 +312,14 @@
                 }).toString())
                 .then((response) => response.json())
                 .then((data) => data.forEach(row => {
-
+                    console.log(row);
                     let tempDiv = document.createElement("div")
                     tempDiv.innerHTML = answerBoxTemplate(row.name, row.score, row.rank, row.price, row.brand)
                     if (row.label === "Moisturizer")
                         document.getElementById("moist-box").appendChild(tempDiv)
                     else if (row.label === "Cleanser")
                         document.getElementById("cleans-box").appendChild(tempDiv)
-                    else if (row.label === "Sunscreen")
+                    else if (row.label === "Sun protect")
                         document.getElementById("sun-box").appendChild(tempDiv)
                     else if (row.label === "Treatment")
                         document.getElementById("treat-box").appendChild(tempDiv)
