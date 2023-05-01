@@ -1,4 +1,4 @@
-import search
+from search import *
 import numpy as np
 def top5category(category, ingredients, min_price, max_price, bad_ingreds):
     scores = []
@@ -31,29 +31,35 @@ def top5category(category, ingredients, min_price, max_price, bad_ingreds):
     # top5 = list(map(lambda x: x[0], top5))
     return top5
 
-from search import *
 #CONSTANTS
+PATH = "cosmetics_clean.csv"
 data, inv_idx, category_inv_idx, ingreds, prod_ingred_mat = process_csv("/Users/tanishakore/Desktop/Cosmetics-Recommender/cosmetics_clean.csv")
 # print(inv_idx)
 def top5update(category, query, max_price, min_price, relevant=[], irrelevant=[]):
     #category: string indicating which category of products needed
     #max_price: double
     #min_price: double
-    #query is the product ingredient matrix row corresponding to the query
-    #relevant: list of indices within product ingredient matrix of relevant products
-    #irrelevant: list of indices within product ingredient matrix of relevant products
+    #query is a list of vectors from the product ingredient matrix row corresponding to each query
+    #relevant: list of vectors from product ingredient matrix of relevant products
+    #irrelevant: list of vectors from product ingredient matrix of relevant products
     category_prods = category_filter(category)
     price_prods = list(price_filter(category_prods, max_price, min_price))
+    # query = 
     # if relevant != [] or irrelevant!=[]:
-    rel = index_to_query(relevant)
-    irrel = index_to_query(irrelevant)
-    q1 = rocchio(query, prod_ingred_mat, rel, irrel)
+    rel = relevant
+    irrel = irrelevant
+    q1= query
+    try:
+        q1 = list(map(lambda x: rocchio(x, prod_ingred_mat, rel, irrel), query))
+    except: 
+        q1 = query
     scores = np.array(cosine_sim(q1, prod_ingred_mat, price_prods))
     ranks = np.array(data["Rank"].iloc[price_prods])
-    scores = (0.8*scores) * (0.2*ranks)
+    # print(scores)
+    scores = (0.8*scores) + (0.2*ranks)
     total_products= []
-    print(price_prods)
-    print(type(price_prods))
+    # print(price_prods)
+    # print(type(price_prods))
     for i,ind in enumerate(price_prods):
         name = data.at[ind, 'Name']
         score = scores[i]
@@ -72,35 +78,14 @@ def cosine_sim(query, matr, products):
     product_scores = []
     cos_sim = lambda a,b: np.dot(a,b) / (np.linalg.norm(a) * np.linalg.norm(b)) 
     for i in range(len(products)):
-        score = cos_sim(matr[i], query) 
+        score = 0
+        # print(matr[i])
+        for j in query:
+            # print(j)
+            s =cos_sim(matr[i], j)
+            score = score+s
         product_scores.append(score)
     return product_scores
-
-
-def category_filter(category):
-    #returns set of indices in corresponding category
-    indices = []
-    d = category_inv_idx[category]
-    for i in d:
-        ind = d[i]
-        indices = indices + ind
-    return set(indices)
-
-def price_filter(cat, maxp, minp):
-    #returns set of indices in corresponding price range
-    indices = cat.copy()
-    for i in cat:
-        if data["Price"][i]>maxp or data["Price"][i]<minp:
-            indices.remove(i)
-    return indices
-
-def index_to_query(products):
-    #converts list of indexes to list of vectors fro product ingredient matrix
-    vectors = []
-    for indice in products:
-        vectors = vectors + [prod_ingred_mat[indice]]
-    return vectors
-
 
 def rocchio(query , matr, rel, irrel, a = 0.3,b = 0.3,c = 0.8):
     #Expected Inputs:
@@ -122,8 +107,32 @@ def rocchio(query , matr, rel, irrel, a = 0.3,b = 0.3,c = 0.8):
     # print(type(query))
     # print(type(dR))
     # print(type(dNR))
-    total = (query * a) + (dR * b * (1/n)) - (dNR * c * (1/m))
+    # print(type(dNR))
+    total = (np.array(query) * a) + (np.array(dR) * b * (1/n))  - (np.array(dNR) * c * (1/m))
+    # total = query 
+    # print(query)
     return np.clip(total,0, None)[0]
+
+def category_filter(category):
+    indices = []
+    d = category_inv_idx[category]
+    for i in d:
+        ind = d[i]
+        indices = indices + ind
+    return set(indices)
+
+def price_filter(cat, maxp, minp):
+    indices = cat.copy()
+    for i in cat:
+        if data["Price"][i]>maxp or data["Price"][i]<minp:
+            indices.remove(i)
+    return indices
+
+def name_to_query(products):
+    vectors = []
+    for indice in products:
+        vectors = vectors + [prod_ingred_mat[indice]]
+    return vectors
 
 
 
