@@ -1,5 +1,6 @@
-from search import *
+from helpers.search import *
 import numpy as np
+import os
 
 # TODO: delete? no longer used
 
@@ -37,6 +38,7 @@ def top5category(category, ingredients, min_price, max_price, bad_ingreds):
 
 
 # CONSTANTS
+os.chdir('./backend')
 # data, inv_idx, category_inv_idx, ingreds, prod_ingred_mat = process_csv("/Users/tanishakore/Desktop/Cosmetics-Recommender/cosmetics_clean.csv")
 data, ingreds, products, prod_to_idx, prod_to_cat, inv_idx, category_inv_idx, ingred_to_idx, idx_to_ingred, prod_ingred_mat = process_csv(
     "./csv/cosmetics_clean.csv")
@@ -148,10 +150,12 @@ def price_filter(cat, maxp, minp):
 
 
 def allergen_filter(prods, bad_ingreds):
-    # disliked_prods[i][j] is 1 if product i has ingredient j
-    # TODO: finish next
     allergens = bool_and(bad_ingreds)
-    return
+    indices = prods.copy()
+    for p in prods:
+        if data["Price"][i] > maxp or data["Price"][i] < minp:
+            indices.remove(p)
+    return indices
 
 
 def name_to_query(products):

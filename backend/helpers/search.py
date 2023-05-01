@@ -71,32 +71,46 @@ def clean_ingreds_prods(df):
 
             # remove "Please be aware that ingredient lists may change... up to date list of ingredients."
             if "Please be aware" in ingred:
-                ingred = ingred[:ingred.index("Please be aware")]
+                ingred = ingred[:ingred.index("please be aware")]
 
             # remove "x.xx%"
-            ingred = re.sub(r'\b\d{1,3}\.\d{2}%\b', '', ingred)
+            ingred = re.sub(r'\d+\.\d+%', '', ingred)
+            # remove "x%"
+            ingred = re.sub(r'\d+%', '', ingred)
             # remove "(CI 12345)""
-            ingred = re.sub(r'\(CI\s*\d+\)', '', ingred)
-            # remove "*"
+            ingred = re.sub(r'ci\s*\d+', '', ingred)
+            # remove "*" and "." and "()"
             ingred = ingred.replace('*', '')
+            ingred = ingred.replace('.', '')
+            ingred = ingred.replace('(', '')
+            ingred = ingred.replace(')', '')
             # remove trailing whitespace
             ingred = ingred.strip()
 
             # update ingredients in dataframe
-            new_column = pd.Series(ingred, name='Ingredients', index=i)
+            new_column = pd.Series([ingred], name='Ingredients', index=[i])
             df.update(new_column)
 
             ingreds_per_prod[i].append(ingred)
-
+    # print(df)
+    print(ingreds_per_prod)
     return ingreds_per_prod, idx_to_prod, prod_to_idx, prod_to_cat
 
 
 def inverted_index(ingreds):
+    """
+    Returns a dictionary of each ingredient mapped to a list of
+    the products that the ingredient appears in.
+    """
     inverted_index = defaultdict(list)
 
-    for i, product in enumerate(ingreds):
-        for ingred in product:
-            inverted_index[ingred].append(i)
+    for prod_idx in ingreds.keys():
+        ingred_list = ingreds[prod_idx]
+        for ingred in ingred_list:
+            if ingred in inverted_index:
+                inverted_index[ingred].append(prod_idx)
+            else:
+                inverted_index[ingred] = [prod_idx]
 
     return inverted_index
 

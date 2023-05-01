@@ -4,7 +4,7 @@ from flask import Flask, render_template, request
 from flask_cors import CORS
 from helpers.MySQLDatabaseHandler import MySQLDatabaseHandler
 from helpers.similarity import *
-from helpers.search import process_csv, liked_ingreds
+from helpers.search import process_csv, get_ingred_vectors, ingreds_of_prods
 
 # ROOT_PATH for linking with all your files.
 # Feel free to use a config.py or settings.py with a global export variable
@@ -25,6 +25,7 @@ os.environ['ROOT_PATH'] = os.path.abspath(os.path.join("..", os.curdir))
 # mysql_engine.load_file_into_db()
 
 # load csv file
+# os.chdir('./backend')
 df, ingreds, products, prod_to_idx, prod_to_cat, inv_idx, category_inv_idx, ingred_to_idx, idx_to_ingred, prod_ingred_mat = process_csv(
     "./csv/cosmetics_clean.csv")
 
