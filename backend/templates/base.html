@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <title>{% block title %}{% endblock %} - Flaskr</title>
-<link rel="stylesheet" href="styles.css" />
+<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}" />
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Kanit&family=Montserrat&family=Open+Sans:wght@500&display=swap"
@@ -27,6 +27,7 @@
                             onkeyup="showResults()">
                     </div>
                     <div class="search-results"></div>
+                    <div class="selected-tags"></div><br />
                     <!-- <br /> -->
 
                     <!-- <div class = "flex-child disliked"> -->
@@ -278,6 +279,7 @@
             return `<div class="product-box">
                 <p class="episode-desc">${name}</p>
                 <p class="episode-desc">Brand: ${brand}</p>
+                <p class="episode-desc">Score: ${score}</p>
                 <p class="episode-desc">Rating: ${stars}</p>
                 <p class="episode-desc">Price: $${price}</p>
                 <p class="episode-desc ingreds">Top 5 Matched Ingredients: ${ingredients}</p>
