@@ -39,13 +39,13 @@
                     <div class="dis-selected-tags"></div><br />
                 </div>
                 <!-- </div>
-                    <br/>
-                    <div class="search-results"></div>
-                    <div class="selected-tags"></div>
-                    <br/>
-                    <div class="dis-search-results"></div>
-                    <div class="dis-selected-tags"></div><br />
-                <div/> -->
+ <br/>
+ <div class="search-results"></div>
+ <div class="selected-tags"></div>
+ <br/>
+ <div class="dis-search-results"></div>
+ <div class="dis-selected-tags"></div><br />
+ <div/> -->
 
                 <h3>Please select your Skin Type:</h3>
                 <div class="skin_type_container">
@@ -108,7 +108,7 @@
             </div>
         </div>
 
-        <button class="regen" id="submit_btn" onclick="regenerate()">Regenerate Results</button>
+        <button class="regen" id="submit_btn" onClick="regenerate()">Regenerate Results</button>
 
         <div id="test-box"></div>
 
@@ -227,64 +227,64 @@
                 .then((response) => response.json())
                 .then((data) => {
                     let tempDiv = `<div class=''>
-                        <h2 class='episode-title'>Your Favorite Product: ${data.prod_name}</h3>
-                    </div>`
+ <h2 class='episode-title'>Your Favorite Product: ${data.prod_name}</h3>
+ </div>`
                     document.getElementById("query-box").innerHTML = tempDiv
                 });
         }
 
-        function answerBoxTemplate(name, score, rank, price, brand) {
+        function answerBoxTemplate(name, score, rank, price, brand, skin_types) {
             rank = Math.round(rank * 2) / 2
             let stars = '<span></span>';
             if (rank == 0.0) {
                 stars = '<span class="fa-solid fa-star"></span><span class="fa-solid fa-star"></span><span class="fa-solid fa-star"></span><span class="fa-solid fa-star"></span><span class="fa-solid fa-star"></span>';
             }
             if (rank == 0.5) {
-                stars = '<span class="fa-duotone fa-star-half"></span><span class="fa-solid fa-star"></span><span class="fa-solid fa-star"></span><span class="fa-solid fa-star"></span><span class="fa-solid fa-star"></span>';
+                stars = '<span class="fa-solid fa-star-half-stroke"></span><span class="fa-solid fa-star"></span><span class="fa-solid fa-star"></span><span class="fa-solid fa-star"></span><span class="fa-solid fa-star"></span>';
             }
             if (rank == 1.0) {
                 stars = '<span class="fa-solid fa-star filled-star"></span><span class="fa-solid fa-star"></span><span class="fa-solid fa-star"></span><span class="fa-solid fa-star"></span><span class="fa-solid fa-star"></span>';
             }
             if (rank == 1.5) {
-                stars = '<span class="fa-solid fa-star filled-star"></span><span class="fa-duotone fa-star-half"></span><span class="fa-solid fa-star"></span><span class="fa-solid fa-star"></span><span class="fa-solid fa-star"></span>';
+                stars = '<span class="fa-solid fa-star filled-star"></span><span class="fa-solid fa-star-half-stroke"></span><span class="fa-solid fa-star"></span><span class="fa-solid fa-star"></span><span class="fa-solid fa-star"></span>';
             }
             if (rank == 2.0) {
                 stars = '<span class="fa-solid fa-star filled-star"></span><span class="fa-solid fa-star filled-star"></span><span class="fa-solid fa-star"></span><span class="fa-solid fa-star"></span><span class="fa-solid fa-star"></span>';
             }
             if (rank == 2.5) {
-                stars = '<span class="fa-solid fa-star filled-star"></span><span class="fa-solid fa-star filled-star"></span><span class="fa-duotone fa-star-half"></span><span class="fa-solid fa-star"></span><span class="fa-solid fa-star"></span>';
+                stars = '<span class="fa-solid fa-star filled-star"></span><span class="fa-solid fa-star filled-star"></span><span class="fa-solid fa-star-half-stroke"></span><span class="fa-solid fa-star"></span><span class="fa-solid fa-star"></span>';
             }
             if (rank == 3.0) {
                 stars = '<span class="fa-solid fa-star filled-star"></span><span class="fa-solid fa-star filled-star"></span><span class="fa-solid fa-star filled-star"></span><span class="fa-solid fa-star"></span><span class="fa-solid fa-star"></span>';
             }
             if (rank == 3.5) {
-                stars = '<span class="fa-solid fa-star filled-star"></span><span class="fa-solid fa-star filled-star"></span><span class="fa-solid fa-star filled-star"></span><span class="fa-duotone fa-star-half"></span><span class="fa-solid fa-star"></span>';
+                stars = '<span class="fa-solid fa-star filled-star"></span><span class="fa-solid fa-star filled-star"></span><span class="fa-solid fa-star filled-star"></span><span class="fa-solid fa-star-half-stroke"></span><span class="fa-solid fa-star"></span>';
             }
             if (rank == 4.0) {
                 stars = '<span class="fa-solid fa-star filled-star"></span><span class="fa-solid fa-star filled-star"></span><span class="fa-solid fa-star filled-star"></span><span class="fa-solid fa-star filled-star"></span><span class="fa-solid fa-star"></span>';
             }
             if (rank == 4.5) {
-                stars = '<span class="fa-solid fa-star filled-star"></span><span class="fa-solid fa-star filled-star"></span><span class="fa-solid fa-star filled-star"></span><span class="fa-solid fa-star filled-star"></span><span class="fa-duotone fa-star-half"></span>';
+                stars = '<span class="fa-solid fa-star filled-star"></span><span class="fa-solid fa-star filled-star"></span><span class="fa-solid fa-star filled-star"></span><span class="fa-solid fa-star filled-star"></span><span class="fa-solid fa-star-half-stroke"></span>';
             }
             if (rank == 5.0) {
                 stars = '<span class="fa-solid fa-star filled-star"></span><span class="fa-solid fa-star filled-star"></span><span class="fa-solid fa-star filled-star"></span><span class="fa-solid fa-star filled-star"></span><span class="fa-solid fa-star filled-star"></span>';
             }
 
-            let ingredients = document.createElement("span");
-            for (let i = 0; i < ingreds.length; i++) {
-                ingredients.innerHTML += `<span> ${ingreds[i]} </span>`;
+            let skins = "";
+            for (let i = 0; i < skin_types.length; i++) {
+                skins += skin_types[i] + ", ";
             }
             // ingredients.innerHTML += '<span>${currentElement}</span>');
 
             return `<div class="product-box">
-                <p class="episode-desc">${name}</p>
-                <p class="episode-desc">Brand: ${brand}</p>
-                <p class="episode-desc">Score: ${score}</p>
-                <p class="episode-desc">Rating: ${stars}</p>
-                <p class="episode-desc">Price: $${price}</p>
-                <p class="episode-desc ingreds">Top 5 Matched Ingredients: ${ingredients}</p>
-                <p class="episode-desc">Like this product?<a class="fa-solid fa-thumbs-up"></a><a class="fa-solid fa-thumbs-down"></a></p>
-            </div>`
+ <p class="episode-desc">${name}</p>
+ <p class="episode-desc">Brand: ${brand}</p>
+ <p class="episode-desc">Score: ${score}</p>
+ <p class="episode-desc">Rating: ${stars}</p>
+ <p class="episode-desc">Price: $${price}</p>
+ <p class="episode-desc ingreds">Works for these skin types: ${skins}</p>
+ <p class="episode-desc">Like this product?<button onClick = ”${addLiked(name)}”><a class="fa-solid fa-thumbs-up"></a></button><button onClick = ”${addDisliked(name)}”><a class="fa-solid fa-thumbs-down"></a></button></p>
+ </div>`
         }
 
         function filterText() {
@@ -316,7 +316,7 @@
                 dis_tags.push(t.substring(0, t.length - 1));
             }
 
-            fetch("/products2?" + new URLSearchParams(
+            fetch("/products?" + new URLSearchParams(
                 {
                     names: tags,
                     disliked: dis_tags,
@@ -328,7 +328,7 @@
                 .then((data) => data.forEach(row => {
                     console.log(row);
                     let tempDiv = document.createElement("div")
-                    tempDiv.innerHTML = answerBoxTemplate(row.name, row.score, row.rank, row.price, row.brand, row.ingreds)
+                    tempDiv.innerHTML = answerBoxTemplate(row.name, row.score, row.rank, row.price, row.brand, row.skin_types)
                     if (row.label === "Moisturizer")
                         document.getElementById("moist").appendChild(tempDiv)
                     else if (row.label === "Cleanser")
@@ -341,7 +341,94 @@
 
         }
 
+        likedResults = document.createElement("div");
+        dislikedResults = document.createElement("div");
+
+        function addLiked(tag) {
+            const tagElement = document.createElement('div');
+            tagElement.classList.add('liked-result');
+            tagElement.textContent = tag;
+            likedResults.appendChild(tagElement);
+
+            console.log(likedResults.innerHTML);
+        }
+
+        function addDisliked(tag) {
+            const tagElement = document.createElement('div');
+            tagElement.classList.add('disliked-result');
+            tagElement.textContent = tag;
+            dislikedResults.appendChild(tagElement);
+
+            console.log(dislikedResults.innerHTML);
+        }
+
         function regenerate() {
+            document.getElementById("moist-box").innerHTML = "<p class='episode-title'>Moisturizer</p>"
+            document.getElementById("cleans-box").innerHTML = "<p class='episode-title'>Cleanser</p>"
+            document.getElementById("sun-box").innerHTML = "<p class='episode-title'>Sun Protection</p>"
+            document.getElementById("treat-box").innerHTML = "<p class='episode-title'>Treatment</p>"
+
+            var skin_types = document.getElementsByName("skin_type")
+            var skin_type = ''
+            for (i = 0; i < skin_types.length; i++) {
+                if (skin_types[i].checked) {
+                    skin_type = skin_types[i].value
+                    break
+                }
+            }
+
+            // const selectedTags = document.getElementById('selected-tags');
+            tags = [];
+            console.log(selectedTags.innerHTML);
+            for (let i = 0; i < selectedTags.children.length; i++) {
+                t = selectedTags.children[i].textContent;
+                tags.push(t.substring(0, t.length - 1));
+            }
+
+            dis_tags = [];
+            for (let i = 0; i < selectedTagsDis.children.length; i++) {
+                t = selectedTagsDis.children[i].textContent;
+                dis_tags.push(t.substring(0, t.length - 1));
+            }
+
+            rel = "";
+            for (let i = 0; i < likedResults.children.length; i++) {
+                t = likedResults.children[i].textContent;
+                rel += "," + t.substring(0, t.length - 1);
+            }
+            console.log(rel)
+
+            irrel = "";
+            for (let i = 0; i < dislikedResults.children.length; i++) {
+                t = dislikedResults.children[i].textContent;
+                irrel += "," + t.substring(0, t.length - 1);
+            }
+            console.log(irrel)
+
+            fetch("/regenerate?" + new URLSearchParams(
+                {
+                    names: tags,
+                    disliked: dis_tags,
+                    skin: skin_type,
+                    min_price: document.getElementById("min-price").value,
+                    max_price: document.getElementById("max-price").value,
+                    relevant: rel,
+                    irrelevant: irrel
+                }).toString())
+                .then((response) => response.json())
+                .then((data) => data.forEach(row => {
+                    console.log(row);
+                    let tempDiv = document.createElement("div")
+                    tempDiv.innerHTML = answerBoxTemplate(row.name, row.score, row.rank, row.price, row.brand, row.skin_types)
+                    if (row.label === "Moisturizer")
+                        document.getElementById("moist").appendChild(tempDiv)
+                    else if (row.label === "Cleanser")
+                        document.getElementById("cleans").appendChild(tempDiv)
+                    else if (row.label === "Sun protect")
+                        document.getElementById("sun").appendChild(tempDiv)
+                    else if (row.label === "Treatment")
+                        document.getElementById("treat").appendChild(tempDiv)
+                }));
 
         }
     </script>

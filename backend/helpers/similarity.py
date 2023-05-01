@@ -46,6 +46,7 @@ def top5update(category, skin_type, query, bad_ingreds, max_price=100, min_price
     total_products = []
     # print(price_prods)
     # print(type(price_prods))
+    # q = np.where((data==query).all(axis=1))[0][0]
     for i, ind in enumerate(price_prods):
         name = products[i]
         score = scores[i]
@@ -61,71 +62,83 @@ def top5update(category, skin_type, query, bad_ingreds, max_price=100, min_price
         # print(type(score))
         # print(type(rank))
         # print(type(price))
-        total_products.append((name, score, rank, price, brand))
+        # print(data)
+        # qingred = set(data.at[ind, 'Ingredients'].tolist())
+        # print(qingred)
+        # prodingred = set(data.at[q, "Ingredients"].tolist())
+        # print(prodingred)
+        # ingreds5 = list(qingred.intersection(prodingred))[:5]
+        skin_types = []
+        if data.at[i, 'Oily'] == 1: skin_types.append('Oily')
+        if data.at[i, 'Dry'] == 1: skin_types.append('Dry')
+        if data.at[i, 'Combination'] == 1: skin_types.append('Combination')
+        if data.at[i, 'Normal'] == 1: skin_types.append('Normal')
+        if data.at[i, 'Sensitive'] == 1: skin_types.append('Sensitive')
+        total_products.append((name, score, rank, price, brand, skin_types))
     total_products.sort(key=lambda x: x[1], reverse=True)
     return total_products[:5]
 
-def top5updateplus(category, query, bad_ingreds, max_price, min_price, relevant=[], irrelevant=[]):
-    # category: string indicating which category of products needed
-    # max_price: double
-    # min_price: double
-    # query is a list of vectors from the product ingredient matrix row corresponding to each query
-    # relevant: list of vectors from product ingredient matrix of relevant products
-    # irrelevant: list of vectors from product ingredient matrix of relevant products
-    category_prods = category_filter(category)
-    safe_prods = list(allergen_filter(category_prods, list(bad_ingreds)))
-    price_prods = list(price_filter(safe_prods, max_price, min_price))
-    # print(query)
-    # print(len(query))
-    # print(len(query[0]))
-    # print(np.sum(query[0]))
-    # print(category)
-    # print(query)
-    # print(bad_ingreds)
-    # print(max_price)
-    # print(min_price)
-    # rocchios method
-    # query =
-    # if relevant != [] or irrelevant!=[]:
-    rel = relevant
-    irrel = irrelevant
-    # print("query")
-    # print(type(query))
-    try:
-        q1 = list(map(lambda x: rocchio(x, prod_ingred_mat, rel, irrel), query))
-    except:
-        q1 = query
-    # print(q1)
-    # print(len(q1))
-    # print(len(q1[0]))
-    # print(np.sum(q1[0]))
-    scores = np.array(cosine_sim(q1, prod_ingred_mat, price_prods))
-    # print(scores)
-    ranks = np.array(data["Rank"].iloc[price_prods])
-    # print(scores)
-    # print(scores)
-    scores = (0.8*scores) + (0.2*ranks) 
-    total_products = []
-    # print(price_prods)
-    # print(type(price_prods))
-    for i, ind in enumerate(price_prods):
-        name = products[i]
-        score = scores[i]
-        # print(scores)
-        if np.isnan(scores[i]):
-            score = 0.0
-        else:
-            score = float(scores[i])
-        rank = float(ranks[i])
-        price = data.at[ind, 'Price']
-        brand = data.at[ind, 'Brand']
-        ingreds5 = list(set(data.at[ind, 'Ingredients']).intersection(set(ingreds))[:5])
-        # print(type(score))
-        # print(type(rank))
-        # print(type(price))
-        total_products.append((name, score, rank, price, brand, ingreds5))
-    total_products.sort(key=lambda x: x[1], reverse=True)
-    return total_products[:5]
+# def top5updateplus(category, query, bad_ingreds, max_price, min_price, relevant=[], irrelevant=[]):
+#     # category: string indicating which category of products needed
+#     # max_price: double
+#     # min_price: double
+#     # query is a list of vectors from the product ingredient matrix row corresponding to each query
+#     # relevant: list of vectors from product ingredient matrix of relevant products
+#     # irrelevant: list of vectors from product ingredient matrix of relevant products
+#     category_prods = category_filter(category)
+#     safe_prods = list(allergen_filter(category_prods, list(bad_ingreds)))
+#     price_prods = list(price_filter(safe_prods, max_price, min_price))
+#     # print(query)
+#     # print(len(query))
+#     # print(len(query[0]))
+#     # print(np.sum(query[0]))
+#     # print(category)
+#     # print(query)
+#     # print(bad_ingreds)
+#     # print(max_price)
+#     # print(min_price)
+#     # rocchios method
+#     # query =
+#     # if relevant != [] or irrelevant!=[]:
+#     rel = relevant
+#     irrel = irrelevant
+#     # print("query")
+#     # print(type(query))
+#     try:
+#         q1 = list(map(lambda x: rocchio(x, prod_ingred_mat, rel, irrel), query))
+#     except:
+#         q1 = query
+#     # print(q1)
+#     # print(len(q1))
+#     # print(len(q1[0]))
+#     # print(np.sum(q1[0]))
+#     scores = np.array(cosine_sim(q1, prod_ingred_mat, price_prods))
+#     # print(scores)
+#     ranks = np.array(data["Rank"].iloc[price_prods])
+#     # print(scores)
+#     # print(scores)
+#     scores = (0.8*scores) + (0.2*ranks) 
+#     total_products = []
+#     # print(price_prods)
+#     # print(type(price_prods))
+#     for i, ind in enumerate(price_prods):
+#         name = products[i]
+#         score = scores[i]
+#         # print(scores)
+#         if np.isnan(scores[i]):
+#             score = 0.0
+#         else:
+#             score = float(scores[i])
+#         rank = float(ranks[i])
+#         price = data.at[ind, 'Price']
+#         brand = data.at[ind, 'Brand']
+#         ingreds5 = list(set(data.at[ind, 'Ingredients']).intersection(set(ingreds)))[:5]
+#         # print(type(score))
+#         # print(type(rank))
+#         # print(type(price))
+#         total_products.append((name, score, rank, price, brand, ingreds5))
+#     total_products.sort(key=lambda x: x[1], reverse=True)
+#     return total_products[:5]
 
 
 def cosine_sim(query, matr, products):

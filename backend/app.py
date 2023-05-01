@@ -33,60 +33,31 @@ app = Flask(__name__)
 CORS(app)
 
 
-def search_results(liked, disliked, skin_type, min_price, max_price):
+def search_results(liked, disliked, skin_type, min_price, max_price, relevant=[], irrelevant=[]):
     # print(np.sum(prod_ingred_mat))
     query = get_ingred_vectors(products, liked, prod_to_idx, prod_ingred_mat)
+    print(relevant)
+    rel = get_ingred_vectors(products, relevant, prod_to_idx, prod_ingred_mat)
+    irrel = get_ingred_vectors(products, irrelevant, prod_to_idx, prod_ingred_mat)
     # print(query)
     bad_ingreds = ingreds_of_prods(ingreds, disliked, prod_to_idx)
     print(skin_type)
     routine = {}
     routine["Cleanser"] = top5update(
-        "Cleanser", skin_type, query, bad_ingreds, max_price, min_price)
+        "Cleanser", skin_type, query, bad_ingreds, max_price, min_price, rel, irrel)
     routine["Treatment"] = top5update(
-        "Treatment", skin_type, query, bad_ingreds, max_price, min_price)
-    # routine["Face Mask"] = top5update(
-    #     "Face Mask", query, bad_ingreds, max_price, min_price)
-    # routine["Eye cream"] = top5update(
-    #     "Eye cream", query, bad_ingreds, max_price, min_price) 
+        "Treatment", skin_type, query, bad_ingreds, max_price, min_price, rel, irrel)
     routine["Moisturizer"] = top5update(
-        "Moisturizer", skin_type, query, bad_ingreds, max_price, min_price)
+        "Moisturizer", skin_type, query, bad_ingreds, max_price, min_price, rel, irrel)
     routine["Sun protect"] = top5update(
-        "Sun protect", skin_type, query, bad_ingreds, max_price, min_price)
+        "Sun protect", skin_type, query, bad_ingreds, max_price, min_price, rel, irrel)
 
-    keys = ["name", "score", "rank", "price", "brand", "label"]
-    data = [[result[0], result[1], result[2], result[3], result[4], key]
+    print("routine", routine['Cleanser'])
+    keys = ["name", "score", "rank", "price", "brand", "skin_types", "label"]
+    data = [[result[0], result[1], result[2], result[3], result[4], result[5], key]
             for key in routine for result in routine[key]]
 
-    print("routine", data)
-
-    return json.dumps([dict(zip(keys, i)) for i in data])
-
-
-def search_results2(liked, disliked, skin_type, min_price, max_price):
-    # print(np.sum(prod_ingred_mat))
-    query = get_ingred_vectors(products, liked, prod_to_idx, prod_ingred_mat)
-    # print(query)
-    bad_ingreds = ingreds_of_prods(ingreds, disliked, prod_to_idx)
-
-    routine = {}
-    routine["Cleanser"] = top5updateplus(
-        "Cleanser", query, bad_ingreds, max_price, min_price)
-    routine["Treatment"] = top5updateplus(
-        "Treatment", query, bad_ingreds, max_price, min_price)
-    # routine["Face Mask"] = top5update(
-    #     "Face Mask", query, bad_ingreds, max_price, min_price)
-    # routine["Eye cream"] = top5update(
-    #     "Eye cream", query, bad_ingreds, max_price, min_price) 
-    routine["Moisturizer"] = top5updateplus(
-        "Moisturizer", query, bad_ingreds, max_price, min_price)
-    routine["Sun protect"] = top5updateplus(
-        "Sun protect", query, bad_ingreds, max_price, min_price)
-
-    keys = ["name", "score", "rank", "price", "brand", "ingreds", "label"]
-    data = [[result[0], result[1], result[2], result[3], result[4], key]
-            for key in routine for result in routine[key]]
-
-    print("routine", data)
+    # print("routine", data)
 
     return json.dumps([dict(zip(keys, i)) for i in data])
 
@@ -120,13 +91,18 @@ def products_search():
     #     print(type(i))
     return search_results(liked, disliked, skin_type, min_price, max_price)
 
-@app.route("/products2")
-def products_search():
-    names = request.args.get("names").split(",")
+@app.route("/regenerate")
+def rocchio_search():
+    liked = request.args.get("names").split(",")
     disliked = request.args.get("disliked").split(",")
-    skin = request.args.get("skin") 
-    min_price = int(request.args.get("min_price"))
-    max_price = int(request.args.get("max_price"))
-    return search_results2(names, disliked, skin, min_price, max_price)
+    skin_type = request.args.get("skin")
+    min_price = request.args.get("min_price")
+    min_price = int(min_price) if min_price.isdigit() else 0
+    max_price = request.args.get("max_price")
+    max_price = int(max_price) if max_price.isdigit() else 9999999
+    relevant = request.args.get("relevant").split(",")
+    irrelevant = request.args.get("irrelevant").split(",")
+    return search_results(liked, disliked, skin_type, min_price, max_price, relevant, irrelevant)
 
-# app.run(debug=True)
+
+app.run(debug=True)

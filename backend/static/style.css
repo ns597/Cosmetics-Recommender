@@ -390,7 +390,7 @@ form {
     /* overflow: auto;
     white-space: nowrap; */
     overflow-x: scroll;
-    overflow-y: hidden;
+    overflow-y: scroll;
     margin-top: 5%;
     padding-bottom: 7%;
     white-space: nowrap;
