@@ -310,9 +310,10 @@ form {
     display: flex;
     flex-direction: row;
     /* padding: 10px; */
-    width: 75%;
-    height: 100%;
+    /* width: 75%; */
+    /* height: 100%; */
     padding: 2%;
+    /* text-align: center; */
     /* background-color: #f2f2e5; */
 }
 
@@ -320,13 +321,13 @@ form {
     /* position: relative; */
     /* width: 200px; */
     margin-top: 5%;
-    /* background-color: #f2f2e5; */
+    background-color: #f2f2e5;
 }
 
 .column {
     float: left;
     /* width: 25%; */
-    background-color: #f2f2e5;
+    /* background-color: #f2f2e5; */
     padding: 0 10px;
 }
 
@@ -416,8 +417,8 @@ form {
 
 .text {
     background-color: #f2f2e5;
-    margin-top: 5%;
-    margin-bottom: 5%;
+    margin-top: 4%;
+    margin-bottom: 3%;
     padding: 5%;
     border-radius: 25px;
     margin-left: 30%;
