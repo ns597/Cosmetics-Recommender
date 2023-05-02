@@ -84,9 +84,17 @@
         </div>
         <div id="query-box">
 
+            <p class="text">Our system creates the best skin care routine based on your liked products, optional
+                disliked products, skin type preferences, and optional price preferences! The results are outputting
+                based on the product ingredients, prices, and average user ratings. Please rate the products below and
+                press regenerate if you are not satisfied with your
+                results!</p>
+            <button class="regen" id="submit_btn" onClick="regenerate()">Regenerate Results</button>
+
+
         </div>
-        <div class="row answer-container scrollmenu">
-            <div class="column" id="moist">
+        <div class="row answer-container">
+            <div class=" column" id="moist">
                 <div class="card answer-box" id="moist-box">
                     <p class='episode-title'>Moisturizer</p>
                 </div>
@@ -108,7 +116,6 @@
             </div>
         </div>
 
-        <button class="regen" id="submit_btn" onClick="regenerate()">Regenerate Results</button>
 
         <div id="test-box"></div>
 
@@ -279,11 +286,10 @@
             return `<div class="product-box">
  <p class="episode-desc">${name}</p>
  <p class="episode-desc">Brand: ${brand}</p>
- <p class="episode-desc">Score: ${score}</p>
- <p class="episode-desc">Rating: ${stars}</p>
+ <p class="episode-desc"><br></br>Average User Rating: ${stars}</p>
  <p class="episode-desc">Price: $${price}</p>
  <p class="episode-desc ingreds">Works for these skin types: ${skins}</p>
- <p class="episode-desc">Like this product?<button onClick = ”${addLiked(name)}”><a class="fa-solid fa-thumbs-up"></a></button><button onClick = ”${addDisliked(name)}”><a class="fa-solid fa-thumbs-down"></a></button></p>
+ <p class="episode-desc">Like this product?<button onClick = ”${addLiked(name)}”><a class="fa-solid fa-thumbs-up"></a></button> or <button onClick = ”${addDisliked(name)}”><a class="fa-solid fa-thumbs-down"></a></button></p>
  </div>`
         }
 
@@ -341,8 +347,8 @@
 
         }
 
-        likedResults = document.createElement("div");
-        dislikedResults = document.createElement("div");
+        let likedResults = document.createElement("div");
+        let dislikedResults = document.createElement("div");
 
         function addLiked(tag) {
             const tagElement = document.createElement('div');
@@ -394,14 +400,14 @@
             rel = "";
             for (let i = 0; i < likedResults.children.length; i++) {
                 t = likedResults.children[i].textContent;
-                rel += "," + t.substring(0, t.length - 1);
+                rel += " , " + t.substring(0, t.length - 1);
             }
             console.log(rel)
 
             irrel = "";
             for (let i = 0; i < dislikedResults.children.length; i++) {
                 t = dislikedResults.children[i].textContent;
-                irrel += "," + t.substring(0, t.length - 1);
+                irrel += " , " + t.substring(0, t.length - 1);
             }
             console.log(irrel)
 
