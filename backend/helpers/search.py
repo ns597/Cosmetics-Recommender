@@ -37,14 +37,16 @@ def process_csv(filepath):
     # create unique ingredients list
     ingreds_unique = list(set(np.hstack(ingreds)))
     # print(ingreds_unique)
-    ingreds_unique_names = list(map(lambda x: alpha_ingreds[x], ingreds_unique))
+    ingreds_unique_names = list(
+        map(lambda x: alpha_ingreds[x], ingreds_unique))
     # print(ingreds_unique_names)
     # print(ingreds_unique)
     # print(ingreds)
     ingred_to_idx, idx_to_ingred = ingredients_reverse_index(ingreds_unique)
 
     # create product - ingredient matrix
-    prod_ingred_mat = product_ingredient_mat(products, inv_idx, ingreds_unique_names)
+    prod_ingred_mat = product_ingredient_mat(
+        products, inv_idx, ingreds_unique_names)
 
     return df, ingreds, products, prod_to_idx, prod_to_cat, inv_idx, category_inv_idx, ingred_to_idx, idx_to_ingred, prod_ingred_mat
 
@@ -56,12 +58,12 @@ def clean_ingreds_prods(df):
     idx_to_prod = []
 
     for i, row in df.iterrows():
-      prod_name = row['Brand'] + " " + row['Name']
-      idx_to_prod.append(prod_name)
-      prod_to_idx[prod_name] = i
-      prod_to_cat[prod_name] = row['Label']
-      for ingred in row['Ingredients'].split(','):
-        ingreds_per_prod[i].append(ingred)
+        prod_name = row['Brand'] + " " + row['Name']
+        idx_to_prod.append(prod_name)
+        prod_to_idx[prod_name] = i
+        prod_to_cat[prod_name] = row['Label']
+        for ingred in row['Ingredients'].split(','):
+            ingreds_per_prod[i].append(ingred)
     # print(df)
     # print(ingreds_per_prod)
     return ingreds_per_prod, idx_to_prod, prod_to_idx, prod_to_cat
@@ -151,14 +153,19 @@ def product_ingredient_mat(products, inverted_index, unique_ingreds):
 def get_ingred_vectors(products, liked, prod_to_idx, prod_ingred_mat):
     # returns a list of ingredient vectors for each product
     # liked_ingreds[i][j] is 1 if the i-th liked product contains ingredient j, 0 o/w
+    print("Liked: ")
+    print(liked)
     liked_ingreds = []
+    # liked = liked[1:]
     # print(products)
     for product in liked:
         # print(products.index(product))
-        idx = prod_to_idx[product]
-        # print(prod_ingred_mat[idx])
-        # print(sum(prod_ingred_mat[idx]))
-        liked_ingreds = liked_ingreds + [prod_ingred_mat[idx]]
+        product = product.strip()
+        if product in prod_to_idx:
+            idx = prod_to_idx[product]
+            liked_ingreds = liked_ingreds + [prod_ingred_mat[idx]]
+        else:
+            liked_ingreds = liked_ingreds
     # print("query is ")
     # print(len(liked_ingreds))
     return liked_ingreds
