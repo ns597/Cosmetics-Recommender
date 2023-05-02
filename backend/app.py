@@ -39,20 +39,22 @@ def search_results(liked, disliked, skin_type, min_price, max_price, relevant=[]
     print(relevant)
     rel = get_ingred_vectors(products, relevant, prod_to_idx, prod_ingred_mat)
     irrel = get_ingred_vectors(products, irrelevant, prod_to_idx, prod_ingred_mat)
+    print(rel)
     # print(query)
     bad_ingreds = ingreds_of_prods(ingreds, disliked, prod_to_idx)
-    print(skin_type)
+    # print(skin_type)
+    skip = rel+irrel
     routine = {}
     routine["Cleanser"] = top5update(
-        "Cleanser", skin_type, query, bad_ingreds, max_price, min_price, rel, irrel)
+        "Cleanser", skin_type, query, bad_ingreds, max_price, min_price, rel, irrel, skip)
     routine["Treatment"] = top5update(
-        "Treatment", skin_type, query, bad_ingreds, max_price, min_price, rel, irrel)
+        "Treatment", skin_type, query, bad_ingreds, max_price, min_price, rel, irrel, skip)
     routine["Moisturizer"] = top5update(
-        "Moisturizer", skin_type, query, bad_ingreds, max_price, min_price, rel, irrel)
+        "Moisturizer", skin_type, query, bad_ingreds, max_price, min_price, rel, irrel, skip)
     routine["Sun protect"] = top5update(
-        "Sun protect", skin_type, query, bad_ingreds, max_price, min_price, rel, irrel)
+        "Sun protect", skin_type, query, bad_ingreds, max_price, min_price, rel, irrel, skip)
 
-    print("routine", routine['Cleanser'])
+    # print("routine", routine['Cleanser'])
     keys = ["name", "score", "rank", "price", "brand", "skin_types", "label"]
     data = [[result[0], result[1], result[2], result[3], result[4], result[5], key]
             for key in routine for result in routine[key]]
@@ -100,8 +102,10 @@ def rocchio_search():
     min_price = int(min_price) if min_price.isdigit() else 0
     max_price = request.args.get("max_price")
     max_price = int(max_price) if max_price.isdigit() else 9999999
-    relevant = request.args.get("relevant").split(",")
-    irrelevant = request.args.get("irrelevant").split(",")
+    relevant = request.args.get("relevant")
+    print(relevant)
+    irrelevant = request.args.get("irrelevant")
+    print(irrelevant)
     return search_results(liked, disliked, skin_type, min_price, max_price, relevant, irrelevant)
 
 

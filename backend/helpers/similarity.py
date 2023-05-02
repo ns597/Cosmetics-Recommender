@@ -16,27 +16,28 @@ data, ingreds, products, prod_to_idx, prod_to_cat, inv_idx, category_inv_idx, in
 def get_matrices():
     return data, ingreds, products, prod_to_idx, prod_to_cat, inv_idx, category_inv_idx, ingred_to_idx, prod_ingred_mat
 
-def top5update(category, skin_type, query, bad_ingreds, max_price=100, min_price=0, relevant=[], irrelevant=[]):
+def top5update(category, skin_type, query, bad_ingreds, max_price=100, min_price=0, relevant=[], irrelevant=[], skip=[]):
     # category: string indicating which category of products needed
     # max_price: double
     # min_price: double
     # query is a list of vectors from the product ingredient matrix row corresponding to each query
     # relevant: list of vectors from product ingredient matrix of relevant products
     # irrelevant: list of vectors from product ingredient matrix of relevant products
+    skips=[]
+    for word in skip:
+        skips = skips+[word.strip()]
+    # print(skip)
     category_prods = category_filter(category)
     skin_prods = skin_type_filter(category_prods, skin_type)
     safe_prods = list(allergen_filter(skin_prods, list(bad_ingreds)))
     price_prods = list(price_filter(safe_prods, max_price, min_price))
+    # print(category_prods)
     rel = relevant
     irrel = irrelevant
     try:
         q1 = list(map(lambda x: rocchio(x, prod_ingred_mat, rel, irrel), query))
     except:
         q1 = query
-    # print(q1)
-    # print(len(q1))
-    # print(len(q1[0]))
-    # print(np.sum(q1[0]))
     scores = np.array(cosine_sim(q1, prod_ingred_mat, price_prods))
     # print(scores)
     ranks = np.array(data["Rank"].iloc[price_prods])
@@ -47,8 +48,12 @@ def top5update(category, skin_type, query, bad_ingreds, max_price=100, min_price
     # print(price_prods)
     # print(type(price_prods))
     # q = np.where((data==query).all(axis=1))[0][0]
+    # print(price_prods)
+    # print("INDEXES")
     for i, ind in enumerate(price_prods):
-        name = data.at[i, "Name"]
+        # print(i)
+        # print(ind)
+        name = data.at[ind, "Name"]
         score = scores[i]
         # print(scores)
         if np.isnan(scores[i]):
@@ -56,18 +61,9 @@ def top5update(category, skin_type, query, bad_ingreds, max_price=100, min_price
         else:
             score = float(scores[i])
         rank = float(ranks[i])
-        price = data.at[i, 'Price']
+        price = data.at[ind, 'Price']
         price = float(price)
-        brand = data.at[i, 'Brand']
-        # print(type(score))
-        # print(type(rank))
-        # print(type(price))
-        # print(data)
-        # qingred = set(data.at[ind, 'Ingredients'].tolist())
-        # print(qingred)
-        # prodingred = set(data.at[q, "Ingredients"].tolist())
-        # print(prodingred)
-        # ingreds5 = list(qingred.intersection(prodingred))[:5]
+        brand = data.at[ind, 'Brand']
         skin_types = []
         if data.at[i, 'Oily'] == 1: skin_types.append('Oily')
         if data.at[i, 'Dry'] == 1: skin_types.append('Dry')
@@ -76,71 +72,18 @@ def top5update(category, skin_type, query, bad_ingreds, max_price=100, min_price
         if data.at[i, 'Sensitive'] == 1: skin_types.append('Sensitive')
         total_products.append((name, score, rank, price, brand, skin_types))
     total_products.sort(key=lambda x: x[1], reverse=True)
+    for i in total_products:
+        if i[0] in skips:
+            total_products.remove(i)
     return total_products[:5]
 
-# def top5updateplus(category, query, bad_ingreds, max_price, min_price, relevant=[], irrelevant=[]):
-#     # category: string indicating which category of products needed
-#     # max_price: double
-#     # min_price: double
-#     # query is a list of vectors from the product ingredient matrix row corresponding to each query
-#     # relevant: list of vectors from product ingredient matrix of relevant products
-#     # irrelevant: list of vectors from product ingredient matrix of relevant products
-#     category_prods = category_filter(category)
-#     safe_prods = list(allergen_filter(category_prods, list(bad_ingreds)))
-#     price_prods = list(price_filter(safe_prods, max_price, min_price))
-#     # print(query)
-#     # print(len(query))
-#     # print(len(query[0]))
-#     # print(np.sum(query[0]))
-#     # print(category)
-#     # print(query)
-#     # print(bad_ingreds)
-#     # print(max_price)
-#     # print(min_price)
-#     # rocchios method
-#     # query =
-#     # if relevant != [] or irrelevant!=[]:
-#     rel = relevant
-#     irrel = irrelevant
-#     # print("query")
-#     # print(type(query))
-#     try:
-#         q1 = list(map(lambda x: rocchio(x, prod_ingred_mat, rel, irrel), query))
-#     except:
-#         q1 = query
-#     # print(q1)
-#     # print(len(q1))
-#     # print(len(q1[0]))
-#     # print(np.sum(q1[0]))
-#     scores = np.array(cosine_sim(q1, prod_ingred_mat, price_prods))
-#     # print(scores)
-#     ranks = np.array(data["Rank"].iloc[price_prods])
-#     # print(scores)
-#     # print(scores)
-#     scores = (0.8*scores) + (0.2*ranks) 
-#     total_products = []
-#     # print(price_prods)
-#     # print(type(price_prods))
-#     for i, ind in enumerate(price_prods):
-#         name = products[i]
-#         score = scores[i]
-#         # print(scores)
-#         if np.isnan(scores[i]):
-#             score = 0.0
-#         else:
-#             score = float(scores[i])
-#         rank = float(ranks[i])
-#         price = data.at[ind, 'Price']
-#         brand = data.at[ind, 'Brand']
-#         ingreds5 = list(set(data.at[ind, 'Ingredients']).intersection(set(ingreds)))[:5]
-#         # print(type(score))
-#         # print(type(rank))
-#         # print(type(price))
-#         total_products.append((name, score, rank, price, brand, ingreds5))
-#     total_products.sort(key=lambda x: x[1], reverse=True)
-#     return total_products[:5]
-
-
+def cos_sim(a, b):
+        norm_a = np.linalg.norm(a)
+        norm_b = np.linalg.norm(b)
+        if norm_a == 0 or norm_b == 0 or np.isnan(norm_a) or np.isnan(norm_b):
+            return 0.0
+        else:
+            return np.dot(a, b) / (norm_a * norm_b)
 def cosine_sim(query, matr, products):
     # Expected Inputs:
     # query: vector (List) that matches the product's array from the Ingredient-Product Matrix (Ex: [1,0, .... 1])
@@ -148,24 +91,9 @@ def cosine_sim(query, matr, products):
     # Output: list of scores where product_scores[i] is the score of products[i]
     product_scores = []
     # def cos_sim(a, b): return np.dot(a, b) / (np.linalg.norm(a) * np.linalg.norm(b))
-    
-    def cos_sim(a, b):
-        norm_a = np.linalg.norm(a)
-        norm_b = np.linalg.norm(b)
-        if norm_a == 0 or norm_b == 0 or np.isnan(norm_a) or np.isnan(norm_b):
-            return 0.0
-        else:
-            return np.dot(a, b) / (norm_a * norm_b)
-    
     for i in range(len(products)):
-        # score = cos_sim(matr[i], query)
-        # print(matr[i])
-        # print(sum(matr[i]))
-        # print(len(query))
         score = 0
         for j in query: 
-            # print(j)
-            # print(np.sum(j))
             s = cos_sim(matr[i], j)
             score = score+s
         # print(sum(score))

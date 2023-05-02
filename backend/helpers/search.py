@@ -151,14 +151,19 @@ def product_ingredient_mat(products, inverted_index, unique_ingreds):
 def get_ingred_vectors(products, liked, prod_to_idx, prod_ingred_mat):
     # returns a list of ingredient vectors for each product
     # liked_ingreds[i][j] is 1 if the i-th liked product contains ingredient j, 0 o/w
+    print("Liked: ")
+    print(liked)
     liked_ingreds = []
+    liked = liked[1:]
     # print(products)
     for product in liked:
         # print(products.index(product))
-        idx = prod_to_idx[product]
-        # print(prod_ingred_mat[idx])
-        # print(sum(prod_ingred_mat[idx]))
-        liked_ingreds = liked_ingreds + [prod_ingred_mat[idx]]
+        product = product.strip()
+        if product in prod_to_idx:
+            idx = prod_to_idx[product]
+            liked_ingreds = liked_ingreds + [prod_ingred_mat[idx]]
+        else:
+            liked_ingreds =liked_ingreds
     # print("query is ")
     # print(len(liked_ingreds))
     return liked_ingreds

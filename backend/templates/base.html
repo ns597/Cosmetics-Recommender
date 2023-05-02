@@ -85,7 +85,7 @@
         <div id="query-box">
 
         </div>
-        <div class="row answer-container scrollmenu">
+        <div class="row answer-container">
             <div class="column" id="moist">
                 <div class="card answer-box" id="moist-box">
                     <p class='episode-title'>Moisturizer</p>
@@ -159,7 +159,7 @@
             tagElement.appendChild(deleteButton);
             selectedTags.appendChild(tagElement);
 
-            console.log(selectedTags.innerHTML);
+            // console.log(selectedTags.innerHTML);
 
             document.getElementById("filter-text-val").value = '';
             searchResults.style.display = 'none';
@@ -207,7 +207,7 @@
             tagElement.appendChild(deleteButton);
             selectedTagsDis.appendChild(tagElement);
 
-            console.log(selectedTagsDis.innerHTML);
+            // console.log(selectedTagsDis.innerHTML);
 
             document.getElementById("disliked-val").value = '';
             searchResultsDis.style.display = 'none';
@@ -280,10 +280,10 @@
  <p class="episode-desc">${name}</p>
  <p class="episode-desc">Brand: ${brand}</p>
  <p class="episode-desc">Score: ${score}</p>
- <p class="episode-desc">Rating: ${stars}</p>
+ <p class="episode-desc">Average User Rating: ${stars}</p>
  <p class="episode-desc">Price: $${price}</p>
  <p class="episode-desc ingreds">Works for these skin types: ${skins}</p>
- <p class="episode-desc">Like this product?<button onClick = ”${addLiked(name)}”><a class="fa-solid fa-thumbs-up"></a></button><button onClick = ”${addDisliked(name)}”><a class="fa-solid fa-thumbs-down"></a></button></p>
+ <p class="episode-desc">Like this product?<button id=rel-${name} onClick = "() => addLiked('${name}')"><a class="fa-solid fa-thumbs-up"></a></button> or <button id=irrel-${name} onClick = "() => addDisliked('${name}')"><a class="fa-solid fa-thumbs-down"></a></button></p>
  </div>`
         }
 
@@ -304,7 +304,7 @@
 
             // const selectedTags = document.getElementById('selected-tags');
             tags = [];
-            console.log(selectedTags.innerHTML);
+            // console.log(selectedTags.innerHTML);
             for (let i = 0; i < selectedTags.children.length; i++) {
                 t = selectedTags.children[i].textContent;
                 tags.push(t.substring(0, t.length - 1));
@@ -341,25 +341,32 @@
 
         }
 
-        likedResults = document.createElement("div");
-        dislikedResults = document.createElement("div");
+        // likedResults = document.createElement("div");
+        // dislikedResults = document.createElement("div");
+
+        likedResults = []
+        dislikedResults = []
 
         function addLiked(tag) {
-            const tagElement = document.createElement('div');
-            tagElement.classList.add('liked-result');
-            tagElement.textContent = tag;
-            likedResults.appendChild(tagElement);
+            console.log("addliked", tag)
+            likedResults.push(tag)
+            // const tagElement = document.createElement('div');
+            // tagElement.classList.add('liked-result');
+            // tagElement.textContent = tag;
+            // likedResults.appendChild(tagElement);
 
-            console.log(likedResults.innerHTML);
+            // console.log(likedResults.innerHTML);
         }
 
         function addDisliked(tag) {
-            const tagElement = document.createElement('div');
-            tagElement.classList.add('disliked-result');
-            tagElement.textContent = tag;
-            dislikedResults.appendChild(tagElement);
+            console.log("add disliked", tag)
+            dislikedResults.push(tag)
+            // const tagElement = document.createElement('div');
+            // tagElement.classList.add('disliked-result');
+            // tagElement.textContent = tag;
+            // dislikedResults.appendChild(tagElement);
 
-            console.log(dislikedResults.innerHTML);
+            // console.log(dislikedResults.innerHTML);
         }
 
         function regenerate() {
@@ -391,19 +398,19 @@
                 dis_tags.push(t.substring(0, t.length - 1));
             }
 
-            rel = "";
-            for (let i = 0; i < likedResults.children.length; i++) {
-                t = likedResults.children[i].textContent;
-                rel += "," + t.substring(0, t.length - 1);
-            }
-            console.log(rel)
+            // rel = "";
+            // for (let i = 0; i < likedResults.length; i++) {
+            //     t = likedResults[i];
+            //     rel += " , " + t.substring(0, t.length);
+            // }
+            console.log(likedResults)
 
-            irrel = "";
-            for (let i = 0; i < dislikedResults.children.length; i++) {
-                t = dislikedResults.children[i].textContent;
-                irrel += "," + t.substring(0, t.length - 1);
-            }
-            console.log(irrel)
+            // irrel = "";
+            // for (let i = 0; i < dislikedResults.length; i++) {
+            //     t = dislikedResults[i];
+            //     irrel += " , " + t.substring(0, t.length);
+            // }
+            console.log(dislikedResults)
 
             fetch("/regenerate?" + new URLSearchParams(
                 {
@@ -412,8 +419,8 @@
                     skin: skin_type,
                     min_price: document.getElementById("min-price").value,
                     max_price: document.getElementById("max-price").value,
-                    relevant: rel,
-                    irrelevant: irrel
+                    relevant: likedResults,
+                    irrelevant: dislikedResults
                 }).toString())
                 .then((response) => response.json())
                 .then((data) => data.forEach(row => {
