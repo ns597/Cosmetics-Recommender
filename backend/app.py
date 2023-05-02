@@ -36,23 +36,26 @@ CORS(app)
 def search_results(liked, disliked, skin_type, min_price, max_price, relevant=[], irrelevant=[]):
     # print(np.sum(prod_ingred_mat))
     query = get_ingred_vectors(products, liked, prod_to_idx, prod_ingred_mat)
-    print(relevant)
+    print("query:", query)
+    print("relevant:", relevant)
     rel = get_ingred_vectors(products, relevant, prod_to_idx, prod_ingred_mat)
-    irrel = get_ingred_vectors(products, irrelevant, prod_to_idx, prod_ingred_mat)
-    print(rel)
+    irrel = get_ingred_vectors(
+        products, irrelevant, prod_to_idx, prod_ingred_mat)
+    print("rel:", rel)
+    print("irrel:", irrel)
     # print(query)
     bad_ingreds = ingreds_of_prods(ingreds, disliked, prod_to_idx)
     # print(skin_type)
-    skip = rel+irrel
+    # skip = rel+irrel
     routine = {}
     routine["Cleanser"] = top5update(
-        "Cleanser", skin_type, query, bad_ingreds, max_price, min_price, rel, irrel, skip)
+        "Cleanser", skin_type, query, bad_ingreds, max_price, min_price, rel, irrel)
     routine["Treatment"] = top5update(
-        "Treatment", skin_type, query, bad_ingreds, max_price, min_price, rel, irrel, skip)
+        "Treatment", skin_type, query, bad_ingreds, max_price, min_price, rel, irrel)
     routine["Moisturizer"] = top5update(
-        "Moisturizer", skin_type, query, bad_ingreds, max_price, min_price, rel, irrel, skip)
+        "Moisturizer", skin_type, query, bad_ingreds, max_price, min_price, rel, irrel)
     routine["Sun protect"] = top5update(
-        "Sun protect", skin_type, query, bad_ingreds, max_price, min_price, rel, irrel, skip)
+        "Sun protect", skin_type, query, bad_ingreds, max_price, min_price, rel, irrel)
 
     # print("routine", routine['Cleanser'])
     keys = ["name", "score", "rank", "price", "brand", "skin_types", "label"]
@@ -62,6 +65,7 @@ def search_results(liked, disliked, skin_type, min_price, max_price, relevant=[]
     # print("routine", data)
 
     return json.dumps([dict(zip(keys, i)) for i in data])
+
 
 @app.route("/")
 def home():
@@ -93,6 +97,7 @@ def products_search():
     #     print(type(i))
     return search_results(liked, disliked, skin_type, min_price, max_price)
 
+
 @app.route("/regenerate")
 def rocchio_search():
     liked = request.args.get("names").split(",")
@@ -102,11 +107,11 @@ def rocchio_search():
     min_price = int(min_price) if min_price.isdigit() else 0
     max_price = request.args.get("max_price")
     max_price = int(max_price) if max_price.isdigit() else 9999999
-    relevant = request.args.get("relevant")
+    relevant = request.args.get("relevant").split(",")
     print(relevant)
-    irrelevant = request.args.get("irrelevant")
+    irrelevant = request.args.get("irrelevant").split(",")
     print(irrelevant)
     return search_results(liked, disliked, skin_type, min_price, max_price, relevant, irrelevant)
 
 
-# app.run(debug=True)
+app.run(debug=True)

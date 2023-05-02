@@ -108,7 +108,7 @@
             </div>
         </div>
 
-        <button class="regen" id="submit_btn" onClick="regenerate()">Regenerate Results</button>
+        <button class="regen" id="submit_btn" onclick="regenerate()">Regenerate Results</button>
 
         <div id="test-box"></div>
 
@@ -277,21 +277,57 @@
             // ingredients.innerHTML += '<span>${currentElement}</span>');
 
             return `<div class="product-box">
- <p class="episode-desc">${name}</p>
- <p class="episode-desc">Brand: ${brand}</p>
- <p class="episode-desc">Score: ${score}</p>
- <p class="episode-desc">Average User Rating: ${stars}</p>
- <p class="episode-desc">Price: $${price}</p>
- <p class="episode-desc ingreds">Works for these skin types: ${skins}</p>
- <p class="episode-desc">Like this product?<button id=rel-${name} onClick = "() => addLiked('${name}')"><a class="fa-solid fa-thumbs-up"></a></button> or <button id=irrel-${name} onClick = "() => addDisliked('${name}')"><a class="fa-solid fa-thumbs-down"></a></button></p>
- </div>`
+                <p class="episode-desc" id="${brand} ${name}">${name}</p>
+                <p class="episode-desc" >Brand: ${brand}</p>
+                <p class="episode-desc">Score: ${score}</p>
+                <p class="episode-desc">Average User Rating: ${stars}</p>
+                <p class="episode-desc">Price: $${price}</p>
+                <p class="episode-desc ingreds">Works for these skin types: ${skins}</p>
+                <p class="episode-desc">Like this product?<button id="rel-${name}" class="like-button" onclick="addLiked('${brand} ${name}')" = ><a class="fa-solid fa-thumbs-up"></a></button> or <button id="irrel-${name}" class="dislike-button" onclick="addDisliked('${brand} ${name}')"><a class="fa-solid fa-thumbs-down"></a></button></p>
+            </div>`;
         }
 
+        likedResults = []
+        dislikedResults = []
+
+        function addLiked(name) {
+            console.log('Liked:', name);
+            // const fullName = document.getElementById(name).textContent
+            likedResults.push(name);
+        }
+
+        function addDisliked(name) {
+            console.log('Disliked:', name);
+            // fullName = document.getElementById(name).textContent
+            dislikedResults.push(name);
+        }
+
+        // // add event listeners after the DOM is loaded
+        // document.addEventListener('DOMContentLoaded', function () {
+        //     // select all like buttons and add click event listener
+        //     document.querySelectorAll('.like-button').forEach(function (button) {
+        //         button.addEventListener('click', function () {
+        //             const name = button.id.split('-')[1];
+        //             console.log('Liked:', name);
+        //             likedResults.push(name);
+        //         });
+        //     });
+
+        //     // select all dislike buttons and add click event listener
+        //     document.querySelectorAll('.dislike-button').forEach(function (button) {
+        //         button.addEventListener('click', function () {
+        //             const name = button.id.split('-')[1];
+        //             console.log('Disliked:', name);
+        //             dislikedResults.push(name);
+        //         });
+        //     });
+        // });
+
         function filterText() {
-            document.getElementById("moist-box").innerHTML = "<p class='episode-title'>Moisturizer</p>"
-            document.getElementById("cleans-box").innerHTML = "<p class='episode-title'>Cleanser</p>"
-            document.getElementById("sun-box").innerHTML = "<p class='episode-title'>Sun Protection</p>"
-            document.getElementById("treat-box").innerHTML = "<p class='episode-title'>Treatment</p>"
+            document.getElementById("moist").innerHTML = "<p class='episode-title'>Moisturizer</p>"
+            document.getElementById("cleans").innerHTML = "<p class='episode-title'>Cleanser</p>"
+            document.getElementById("sun").innerHTML = "<p class='episode-title'>Sun Protection</p>"
+            document.getElementById("treat").innerHTML = "<p class='episode-title'>Treatment</p>"
 
             var skin_types = document.getElementsByName("skin_type")
             var skin_type = ''
@@ -326,7 +362,7 @@
                 }).toString())
                 .then((response) => response.json())
                 .then((data) => data.forEach(row => {
-                    console.log(row);
+                    // console.log(row);
                     let tempDiv = document.createElement("div")
                     tempDiv.innerHTML = answerBoxTemplate(row.name, row.score, row.rank, row.price, row.brand, row.skin_types)
                     if (row.label === "Moisturizer")
@@ -341,39 +377,12 @@
 
         }
 
-        // likedResults = document.createElement("div");
-        // dislikedResults = document.createElement("div");
-
-        likedResults = []
-        dislikedResults = []
-
-        function addLiked(tag) {
-            console.log("addliked", tag)
-            likedResults.push(tag)
-            // const tagElement = document.createElement('div');
-            // tagElement.classList.add('liked-result');
-            // tagElement.textContent = tag;
-            // likedResults.appendChild(tagElement);
-
-            // console.log(likedResults.innerHTML);
-        }
-
-        function addDisliked(tag) {
-            console.log("add disliked", tag)
-            dislikedResults.push(tag)
-            // const tagElement = document.createElement('div');
-            // tagElement.classList.add('disliked-result');
-            // tagElement.textContent = tag;
-            // dislikedResults.appendChild(tagElement);
-
-            // console.log(dislikedResults.innerHTML);
-        }
 
         function regenerate() {
-            document.getElementById("moist-box").innerHTML = "<p class='episode-title'>Moisturizer</p>"
-            document.getElementById("cleans-box").innerHTML = "<p class='episode-title'>Cleanser</p>"
-            document.getElementById("sun-box").innerHTML = "<p class='episode-title'>Sun Protection</p>"
-            document.getElementById("treat-box").innerHTML = "<p class='episode-title'>Treatment</p>"
+            document.getElementById("moist").innerHTML = "<p class='episode-title'>Moisturizer</p>"
+            document.getElementById("cleans").innerHTML = "<p class='episode-title'>Cleanser</p>"
+            document.getElementById("sun").innerHTML = "<p class='episode-title'>Sun Protection</p>"
+            document.getElementById("treat").innerHTML = "<p class='episode-title'>Treatment</p>"
 
             var skin_types = document.getElementsByName("skin_type")
             var skin_type = ''
@@ -398,18 +407,7 @@
                 dis_tags.push(t.substring(0, t.length - 1));
             }
 
-            // rel = "";
-            // for (let i = 0; i < likedResults.length; i++) {
-            //     t = likedResults[i];
-            //     rel += " , " + t.substring(0, t.length);
-            // }
             console.log(likedResults)
-
-            // irrel = "";
-            // for (let i = 0; i < dislikedResults.length; i++) {
-            //     t = dislikedResults[i];
-            //     irrel += " , " + t.substring(0, t.length);
-            // }
             console.log(dislikedResults)
 
             fetch("/regenerate?" + new URLSearchParams(
@@ -424,7 +422,7 @@
                 }).toString())
                 .then((response) => response.json())
                 .then((data) => data.forEach(row => {
-                    console.log(row);
+                    // console.log(row);
                     let tempDiv = document.createElement("div")
                     tempDiv.innerHTML = answerBoxTemplate(row.name, row.score, row.rank, row.price, row.brand, row.skin_types)
                     if (row.label === "Moisturizer")

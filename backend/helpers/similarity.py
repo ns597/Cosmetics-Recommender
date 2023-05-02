@@ -16,6 +16,7 @@ data, ingreds, products, prod_to_idx, prod_to_cat, inv_idx, category_inv_idx, in
 def get_matrices():
     return data, ingreds, products, prod_to_idx, prod_to_cat, inv_idx, category_inv_idx, ingred_to_idx, prod_ingred_mat
 
+
 def top5update(category, skin_type, query, bad_ingreds, max_price=100, min_price=0, relevant=[], irrelevant=[], skip=[]):
     # category: string indicating which category of products needed
     # max_price: double
@@ -23,9 +24,11 @@ def top5update(category, skin_type, query, bad_ingreds, max_price=100, min_price
     # query is a list of vectors from the product ingredient matrix row corresponding to each query
     # relevant: list of vectors from product ingredient matrix of relevant products
     # irrelevant: list of vectors from product ingredient matrix of relevant products
-    skips=[]
-    for word in skip:
-        skips = skips+[word.strip()]
+
+    # skips=[]
+    # for word in skip:
+    #     skips = skips+[word.strip()]
+
     # print(skip)
     category_prods = category_filter(category)
     skin_prods = skin_type_filter(category_prods, skin_type)
@@ -34,16 +37,21 @@ def top5update(category, skin_type, query, bad_ingreds, max_price=100, min_price
     # print(category_prods)
     rel = relevant
     irrel = irrelevant
-    try:
+    if (len(rel) != 0 or len(irrel) != 0):
         q1 = list(map(lambda x: rocchio(x, prod_ingred_mat, rel, irrel), query))
-    except:
+        q1 = q1[0]
+        # print("rocchio shape", q1[0])
+        print("rocchio shape", len(q1), len(q1[0]))
+    else:
         q1 = query
+        print("q1 shape", len(q1), len(q1[0]))
+
     scores = np.array(cosine_sim(q1, prod_ingred_mat, price_prods))
     # print(scores)
     ranks = np.array(data["Rank"].iloc[price_prods])
     # print(scores)
     # print(scores)
-    scores = (0.8*scores) + (0.2*ranks) 
+    scores = (0.8*scores) + (0.2*ranks)
     total_products = []
     # print(price_prods)
     # print(type(price_prods))
@@ -65,25 +73,33 @@ def top5update(category, skin_type, query, bad_ingreds, max_price=100, min_price
         price = float(price)
         brand = data.at[ind, 'Brand']
         skin_types = []
-        if data.at[i, 'Oily'] == 1: skin_types.append('Oily')
-        if data.at[i, 'Dry'] == 1: skin_types.append('Dry')
-        if data.at[i, 'Combination'] == 1: skin_types.append('Combination')
-        if data.at[i, 'Normal'] == 1: skin_types.append('Normal')
-        if data.at[i, 'Sensitive'] == 1: skin_types.append('Sensitive')
+        if data.at[i, 'Oily'] == 1:
+            skin_types.append('Oily')
+        if data.at[i, 'Dry'] == 1:
+            skin_types.append('Dry')
+        if data.at[i, 'Combination'] == 1:
+            skin_types.append('Combination')
+        if data.at[i, 'Normal'] == 1:
+            skin_types.append('Normal')
+        if data.at[i, 'Sensitive'] == 1:
+            skin_types.append('Sensitive')
         total_products.append((name, score, rank, price, brand, skin_types))
     total_products.sort(key=lambda x: x[1], reverse=True)
-    for i in total_products:
-        if i[0] in skips:
-            total_products.remove(i)
+    # for i in total_products:
+    #     if i[0] in skips:
+    #         total_products.remove(i)
     return total_products[:5]
 
+
 def cos_sim(a, b):
-        norm_a = np.linalg.norm(a)
-        norm_b = np.linalg.norm(b)
-        if norm_a == 0 or norm_b == 0 or np.isnan(norm_a) or np.isnan(norm_b):
-            return 0.0
-        else:
-            return np.dot(a, b) / (norm_a * norm_b)
+    norm_a = np.linalg.norm(a)
+    norm_b = np.linalg.norm(b)
+    if norm_a == 0 or norm_b == 0 or np.isnan(norm_a) or np.isnan(norm_b):
+        return 0.0
+    else:
+        return np.dot(a, b) / (norm_a * norm_b)
+
+
 def cosine_sim(query, matr, products):
     # Expected Inputs:
     # query: vector (List) that matches the product's array from the Ingredient-Product Matrix (Ex: [1,0, .... 1])
@@ -93,7 +109,7 @@ def cosine_sim(query, matr, products):
     # def cos_sim(a, b): return np.dot(a, b) / (np.linalg.norm(a) * np.linalg.norm(b))
     for i in range(len(products)):
         score = 0
-        for j in query: 
+        for j in query:
             s = cos_sim(matr[i], j)
             score = score+s
         # print(sum(score))
@@ -122,15 +138,16 @@ def rocchio(query, matr, rel, irrel, a=0.3, b=0.3, c=0.8):
     # print(type(dR))
     # print(type(dNR))
     # print(type(dNR))
-    if n==0 and m==0:
+    if n == 0 and m == 0:
         total = a*query
-    elif n==0:
-        total = (np.array(query) * a)  - (np.array(dNR) * c * (1/m))
-    elif m==0:
-        total = (np.array(query) * a) + (np.array(dR) * b * (1/n))  
+    elif n == 0:
+        total = (np.array(query) * a) - (np.array(dNR) * c * (1/m))
+    elif m == 0:
+        total = (np.array(query) * a) + (np.array(dR) * b * (1/n))
     else:
-        total = (np.array(query) * a) + (np.array(dR) * b * (1/n))  - (np.array(dNR) * c * (1/m))
-    # total = query 
+        total = (np.array(query) * a) + (np.array(dR) *
+                                         b * (1/n)) - (np.array(dNR) * c * (1/m))
+    # total = query
     # print(query)
     return np.clip(total, 0, None)
 
@@ -144,25 +161,26 @@ def category_filter(category):
     return set(indices)
 
 
-def price_filter(prods, maxp, minp):    
-    indices = prods.copy() 
+def price_filter(prods, maxp, minp):
+    indices = prods.copy()
     for i in prods:
         if int(data.at[i, "Price"]) > maxp or int(data.at[i, "Price"]) < minp:
-            indices.remove(i) 
-    return indices 
+            indices.remove(i)
+    return indices
 
-def skin_type_filter(prods, skin_type):    
-    indices = prods.copy() 
+
+def skin_type_filter(prods, skin_type):
+    indices = prods.copy()
     for i in prods:
-        if data.at[i, skin_type]!=1:
-            indices.remove(i) 
-    return indices 
+        if data.at[i, skin_type] != 1:
+            indices.remove(i)
+    return indices
 
- 
+
 def allergen_filter(prods, bad_ingreds):
     allergens = set(bool_and(bad_ingreds))
-    indices = prods.copy() 
-    for p in prods: 
+    indices = prods.copy()
+    for p in prods:
         if len(allergens.intersection(set(ingreds[p]))) > 0:
             indices.remove(p)
     # print(indices)
@@ -204,6 +222,7 @@ def levenshtein_distance(s1, s2):
 
     return m[len(s1)][len(s2)]
 
+
 def word_similarity_score(product, query):
     score = 0
     q_words = query.split(" ")
@@ -213,6 +232,8 @@ def word_similarity_score(product, query):
     return score
 
 # returns top 5 most similar product names
+
+
 def word_distance(query):
     distances = [levenshtein_distance(
         name.lower(), query.lower()) for name in products]
@@ -285,7 +306,7 @@ def bool_and(ingreds):
     return result
 
 
-#CODE BELOW USED FOR TESTING ONLY
+# CODE BELOW USED FOR TESTING ONLY
 # CATEGORY = "Moisturizer"
 # QUERY = [prod_ingred_mat[1], prod_ingred_mat[2], prod_ingred_mat[3]]
 # RELEVANT = [prod_ingred_mat[4], prod_ingred_mat[5], prod_ingred_mat[6]]
