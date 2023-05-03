@@ -58,7 +58,7 @@ def top5update(category, skin_type, query, bad_ingreds, max_price=100, min_price
     # q = np.where((data==query).all(axis=1))[0][0]
     # print(price_prods)
     # print("INDEXES")
-    query_ingred = set(get_ingred_vectors(query, [query], prod_to_idx, prod_ingred_mat))
+    query_ingred = set(get_ingred_vectors(query, query, prod_to_idx, prod_ingred_mat))
     for i, ind in enumerate(price_prods):
         # print(i)
         # print(ind)
