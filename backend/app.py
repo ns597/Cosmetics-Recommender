@@ -58,8 +58,8 @@ def search_results(liked, disliked, skin_type, min_price, max_price, relevant=[]
         "Sun protect", skin_type, query, bad_ingreds, max_price, min_price, rel, irrel)
 
     # print("routine", routine['Cleanser'])
-    keys = ["name", "score", "rank", "price", "brand", "skin_types", "label"]
-    data = [[result[0], result[1], result[2], result[3], result[4], result[5], key]
+    keys = ["name", "score", "rank", "price", "brand", "ingreds", "skin_types", "label"]
+    data = [[result[0], result[1], result[2], result[3], result[4], result[5], result[6], key]
             for key in routine for result in routine[key]]
 
     # print("routine", data)
@@ -114,4 +114,4 @@ def rocchio_search():
     return search_results(liked, disliked, skin_type, min_price, max_price, relevant, irrelevant)
 
 
-app.run(debug=True)
+# app.run(debug=True)
