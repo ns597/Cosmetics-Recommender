@@ -81,7 +81,7 @@ def top5update(category, skin_type, query, bad_ingreds, max_price=100, min_price
         brand = data.at[ind, 'Brand']
         index_prod = prod_to_idx[brand + " " + name]
         prod_inrged = set(ingreds[index_prod])
-        ingred5 = list(query_ingred.intersection(prod_inrged))[:3]
+        ingred5 = list(query_ingred.union(prod_inrged))[:3]
         skin_types = []
         if data.at[i, 'Oily'] == 1:
             skin_types.append('Oily')
