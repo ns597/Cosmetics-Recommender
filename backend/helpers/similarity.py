@@ -82,7 +82,7 @@ def top5update(category, skin_type, query, bad_ingreds, max_price=100, min_price
         # print("no trouble until here")
         ingred_str = data.at[ind, "Ingredients"]
         ingred_list = ingred_str.split(",")
-        ingred5 = list(map(lambda x: x.strip(), ingred_list))[:5]
+        ingred5 = list(map(lambda x: x.strip(), ingred_list))[:3]
         # index_prod = prod_to_idx[name]
         # prod_inrged = set(ingreds[index_prod])
         # ingred5 = list(query_ingred.intersection(prod_inrged))[:3]
