@@ -48,7 +48,7 @@ def process_csv(filepath):
     prod_ingred_mat = product_ingredient_mat(
         products, inv_idx, ingreds_unique_names)
 
-    return df, ingreds, products, prod_to_idx, prod_to_cat, inv_idx, category_inv_idx, ingred_to_idx, idx_to_ingred, prod_ingred_mat
+    return df, ingreds_unique_names, products, prod_to_idx, prod_to_cat, inv_idx, category_inv_idx, ingred_to_idx, idx_to_ingred, prod_ingred_mat
 
 
 def clean_ingreds_prods(df):

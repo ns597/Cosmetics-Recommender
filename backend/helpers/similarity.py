@@ -9,7 +9,7 @@ cur_path = os.path.dirname(__file__)
 path = os.path.join(cur_path, '..', 'csv', 'cosmetics_clean.csv')
 data, ingreds, products, prod_to_idx, prod_to_cat, inv_idx, category_inv_idx, ingred_to_idx, idx_to_ingred, prod_ingred_mat = process_csv(
     path)
-
+# print(ingreds)
 
 # print(inv_idx)
 
@@ -24,12 +24,6 @@ def top5update(category, skin_type, query, bad_ingreds, max_price=100, min_price
     # query is a list of vectors from the product ingredient matrix row corresponding to each query
     # relevant: list of vectors from product ingredient matrix of relevant products
     # irrelevant: list of vectors from product ingredient matrix of relevant products
-    # skips=[]
-    # for word in skip:
-    #     skips = skips+[word.strip()]
-
-    # print(skip)
-    print("start")
     category_prods = category_filter(category)
     skin_prods = skin_type_filter(category_prods, skin_type)
     safe_prods = list(allergen_filter(skin_prods, list(bad_ingreds)))
@@ -41,10 +35,10 @@ def top5update(category, skin_type, query, bad_ingreds, max_price=100, min_price
         q1 = list(map(lambda x: rocchio(x, prod_ingred_mat, rel, irrel), query))
         q1 = q1[0]
         # print("rocchio shape", q1[0])
-        print("rocchio shape", len(q1), len(q1[0]))
+        # print("rocchio shape", len(q1), len(q1[0]))
     else:
         q1 = query
-        print("q1 shape", len(q1), len(q1[0]))
+        # print("q1 shape", len(q1), len(q1[0]))
 
     scores = np.array(cosine_sim(q1, prod_ingred_mat, price_prods))
     # print(scores)
@@ -62,8 +56,10 @@ def top5update(category, skin_type, query, bad_ingreds, max_price=100, min_price
     for i in range(len(query)):
         for j in range(len(query[i])):
             if query[i][j] == 1:
-                ing = idx_to_ingred[j]
+                ing = ingreds[j]
                 query_ingred.add(ing)
+    # print(query_ingred)
+    # qi = np.where(prod_ingred_mat==query[0])[0][0]
     # query_ingred = set(get_ingred_vectors(query[i], query[i], prod_to_idx, prod_ingred_mat))
     for i, ind in enumerate(price_prods):
         # print(i)
@@ -83,9 +79,11 @@ def top5update(category, skin_type, query, bad_ingreds, max_price=100, min_price
         ingred_str = data.at[ind, "Ingredients"]
         ingred_list = ingred_str.split(",")
         ingred5 = list(map(lambda x: x.strip(), ingred_list))[:3]
-        # index_prod = prod_to_idx[name]
-        # prod_inrged = set(ingreds[index_prod])
-        # ingred5 = list(query_ingred.intersection(prod_inrged))[:3]
+        # print(query_ingred)
+        # print(ingred5)
+        # print(ingred5)
+        # print(query_ingred)
+        # ingred5 = list(query_ingred.intersection(set(ingred5)))[:3]
         skin_types = []
         if data.at[i, 'Oily'] == 1:
             skin_types.append('Oily')
