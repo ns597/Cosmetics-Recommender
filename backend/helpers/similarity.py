@@ -24,12 +24,12 @@ def top5update(category, skin_type, query, bad_ingreds, max_price=100, min_price
     # query is a list of vectors from the product ingredient matrix row corresponding to each query
     # relevant: list of vectors from product ingredient matrix of relevant products
     # irrelevant: list of vectors from product ingredient matrix of relevant products
-
     # skips=[]
     # for word in skip:
     #     skips = skips+[word.strip()]
 
     # print(skip)
+    print("start")
     category_prods = category_filter(category)
     skin_prods = skin_type_filter(category_prods, skin_type)
     safe_prods = list(allergen_filter(skin_prods, list(bad_ingreds)))
@@ -79,9 +79,13 @@ def top5update(category, skin_type, query, bad_ingreds, max_price=100, min_price
         price = data.at[ind, 'Price']
         price = float(price)
         brand = data.at[ind, 'Brand']
-        index_prod = prod_to_idx[brand + " " + name]
-        prod_inrged = set(ingreds[index_prod])
-        ingred5 = list(query_ingred.union(prod_inrged))[:3]
+        # print("no trouble until here")
+        ingred_str = data.at[ind, "Ingredients"]
+        ingred_list = ingred_str.split(",")
+        ingred5 = list(map(lambda x: x.strip(), ingred_list))[:5]
+        # index_prod = prod_to_idx[name]
+        # prod_inrged = set(ingreds[index_prod])
+        # ingred5 = list(query_ingred.intersection(prod_inrged))[:3]
         skin_types = []
         if data.at[i, 'Oily'] == 1:
             skin_types.append('Oily')
@@ -98,6 +102,7 @@ def top5update(category, skin_type, query, bad_ingreds, max_price=100, min_price
     # for i in total_products:
     #     if i[0] in skips:
     #         total_products.remove(i)
+    print(total_products[:5])
     return total_products[:5]
 
 
