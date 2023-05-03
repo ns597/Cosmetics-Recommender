@@ -315,6 +315,8 @@ form {
     padding: 2%;
     /* text-align: center; */
     /* background-color: #f2f2e5; */
+    margin-left: 2%;
+    margin-right: 2%;
 }
 
 .answer-box {
@@ -423,4 +425,16 @@ form {
     border-radius: 25px;
     margin-left: 30%;
     margin-right: 30%;
+}
+
+.like-button {
+    color: #d1d3a2;
+    background-color: #f2f2e5;
+    border-color: #f2f2e5;
+}
+
+.dislike-button {
+    color: rgb(192, 15, 15);
+    background-color: #f2f2e5;
+    border-color: #f2f2e5;
 }

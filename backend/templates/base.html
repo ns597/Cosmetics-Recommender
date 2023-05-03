@@ -240,7 +240,7 @@
                 });
         }
 
-        function answerBoxTemplate(name, score, rank, price, brand, skin_types) {
+        function answerBoxTemplate(name, score, rank, price, brand, ingreds, skin_types) {
             rank = Math.round(rank * 2) / 2
             let stars = '<span></span>';
             if (rank == 0.0) {
@@ -282,13 +282,18 @@
                 skins += skin_types[i] + ", ";
             }
             // ingredients.innerHTML += '<span>${currentElement}</span>');
+            let ingredients = "";
+            for (let i = 0; i < ingreds.length; i++) {
+                ingredients += ingreds[i] + ", ";
+            }
 
             return `<div class="product-box">
                 <p class="episode-desc" id="${brand} ${name}">${name}</p>
                 <p class="episode-desc" >Brand: ${brand}</p>
                 <p class="episode-desc">Average User Rating: ${stars}</p>
                 <p class="episode-desc">Price: $${price}</p>
-                <p class="episode-desc ingreds">Works for these skin types: ${skins}</p>
+                <p class="episode-desc">Works for these skin types: ${skins}</p>
+                <p class="episode-desc">3 Common Ingredients: ${ingredients}</p>
                 <p class="episode-desc">Like this product?<button id="rel-${name}" class="like-button" onclick="addLiked('${brand} ${name}')" = ><a class="fa-solid fa-thumbs-up"></a></button> or <button id="irrel-${name}" class="dislike-button" onclick="addDisliked('${brand} ${name}')"><a class="fa-solid fa-thumbs-down"></a></button></p>
             </div>`;
         }
@@ -370,7 +375,7 @@
                 .then((data) => data.forEach(row => {
                     // console.log(row);
                     let tempDiv = document.createElement("div")
-                    tempDiv.innerHTML = answerBoxTemplate(row.name, row.score, row.rank, row.price, row.brand, row.skin_types)
+                    tempDiv.innerHTML = answerBoxTemplate(row.name, row.score, row.rank, row.price, row.brand, row.ingreds, row.skin_types)
                     if (row.label === "Moisturizer")
                         document.getElementById("moist").appendChild(tempDiv)
                     else if (row.label === "Cleanser")
@@ -430,7 +435,7 @@
                 .then((data) => data.forEach(row => {
                     // console.log(row);
                     let tempDiv = document.createElement("div")
-                    tempDiv.innerHTML = answerBoxTemplate(row.name, row.score, row.rank, row.price, row.brand, row.skin_types)
+                    tempDiv.innerHTML = answerBoxTemplate(row.name, row.score, row.rank, row.price, row.brand, row.ingreds, row.skin_types)
                     if (row.label === "Moisturizer")
                         document.getElementById("moist").appendChild(tempDiv)
                     else if (row.label === "Cleanser")

@@ -58,6 +58,7 @@ def top5update(category, skin_type, query, bad_ingreds, max_price=100, min_price
     # q = np.where((data==query).all(axis=1))[0][0]
     # print(price_prods)
     # print("INDEXES")
+    query_ingred = get_ingred_vectors(query, [query], prod_to_idx, prod_ingred_mat)
     for i, ind in enumerate(price_prods):
         # print(i)
         # print(ind)
@@ -72,6 +73,9 @@ def top5update(category, skin_type, query, bad_ingreds, max_price=100, min_price
         price = data.at[ind, 'Price']
         price = float(price)
         brand = data.at[ind, 'Brand']
+        prod_inrged = get_ingred_vectors(name, [name], prod_to_idx, prod_ingred_mat)
+        ingred5 = []
+        ingred5 += list(query_ingred.intersection(prod_inrged))[:3]
         skin_types = []
         if data.at[i, 'Oily'] == 1:
             skin_types.append('Oily')
@@ -83,7 +87,7 @@ def top5update(category, skin_type, query, bad_ingreds, max_price=100, min_price
             skin_types.append('Normal')
         if data.at[i, 'Sensitive'] == 1:
             skin_types.append('Sensitive')
-        total_products.append((name, score, rank, price, brand, skin_types))
+        total_products.append((name, score, rank, price, brand, ingred5, skin_types))
     total_products.sort(key=lambda x: x[1], reverse=True)
     # for i in total_products:
     #     if i[0] in skips:
