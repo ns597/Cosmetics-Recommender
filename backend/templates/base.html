@@ -18,7 +18,7 @@
             </header>
 
             <div class="body-text">
-                <h3>Please input your Liked and Disliked Products:</h3><p style="color:green">At least one liked product required</p><br />
+                <h3>Please input your Liked and Disliked Products:</h3><p style="color:gray">At least one liked product required</p><br />
                 <!-- <div class = "flex-container"> -->
                 <div class="resulting-search">
                     <!-- <div class = "flex-child liked"> -->
@@ -359,12 +359,24 @@
         // });
 
         function filterText() {
-            document.getElementById("moisturizer").innerHTML = "<p class='episode-title answer-box'>Moisturizer</p>"
-            document.getElementById("cleanser").innerHTML = "<p class='episode-title answer-box'>Cleanser</p>"
-            document.getElementById("sun-protection").innerHTML = "<p class='episode-title answer-box'>Sun Protection</p>"
-            document.getElementById("treatment").innerHTML = "<p class='episode-title answer-box'>Treatment</p>"
-            document.getElementById("eye-cream").innerHTML = "<p class='episode-title answer-box'>Eye Cream</p>"
-            document.getElementById("face-mask").innerHTML = "<p class='episode-title answer-box'>Face Mask</p>"
+            document.getElementById("moisturizer").innerHTML = "<div class='answer-box'><p class='episode-title'>Moisturizer</p> \
+            <p>4. Apply moisturizer after cleansing and eye cream to hydrate and protect your skin. This should be done twice a day, once in the morning and once at night.</p></div>"
+            
+            document.getElementById("cleanser").innerHTML = "<div class='answer-box'><p class='episode-title'>Cleanser</p> \
+            <p>1. Use a cleanser to remove dirt, oil, and makeup from your face. This should be done twice a day, once in the morning and once at night.</p></div>"
+
+            document.getElementById("sun-protection").innerHTML = "<div class='answer-box'><p class='episode-title answer-box'>Sun Protection</p> \
+            <p>6. Apply sunscreen as the last step in your morning skincare routine to protect your skin from harmful UV rays.</p></div>"
+
+            document.getElementById("treatment").innerHTML = "<div class='answer-box'><p class='episode-title'>Treatment</p> \
+            <p>5. Apply any targeted treatments, such as serums or spot treatments, after moisturizing to address specific skin concerns.</p></div>"
+
+            document.getElementById("eye-cream").innerHTML = "<div class='answer-box'><p class='episode-title'>Eye Cream</p> \
+            <p>3. Apply eye cream after cleansing and before moisturizing to hydrate the delicate skin around the eyes and address concerns such as dark circles, puffiness, and fine lines.</p></div>"
+
+            document.getElementById("face-mask").innerHTML = "<div class='answer-box'><p class='episode-title'>Face Mask</p> \
+            <p>2. Use a face mask once or twice a week after cleansing to provide a deeper clean and address specific skin concerns.</p></div>"
+
 
             var skin_types = document.getElementsByName("skin_type")
             var skin_type = ''
