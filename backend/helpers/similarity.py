@@ -215,7 +215,6 @@ def jaccard_similarity(ingred, product):
     union = a.union(b)
     return (len(intersection) / len(union))
 
-
 def levenshtein_distance(s1, s2):
     # Initialize a 2D matrix to store the edit distances
     m = [[0] * (len(s2) + 1) for _ in range(len(s1) + 1)]
@@ -238,19 +237,24 @@ def levenshtein_distance(s1, s2):
 
 def word_similarity_score(product, query):
     score = 0
-    q_words = query.split(" ")
-    for word in product.split(" "):
-        if word in q_words:
-            score += 1
+    for word in query.split(" "):
+        if word in product:
+            score += len(word)
     return score
 
 # returns top 5 most similar product names
 
 
 def word_distance(query):
-    distances = [levenshtein_distance(
+    if len(query) == 0: return []
+    distances = [word_similarity_score(
         name.lower(), query.lower()) for name in products]
-    sorted_names = [name for _, name in sorted(zip(distances, products))]
+    print(distances)
+    if sum(distances) == 0:
+        print("no matches detected: using edit distance") 
+        distances = [levenshtein_distance( 
+        name.lower(), query.lower()) for name in products]
+    sorted_names = [name for _, name in sorted(zip(distances, products), reverse = True)]
     return sorted_names[:5]
 
 

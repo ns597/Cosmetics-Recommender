@@ -5,12 +5,12 @@ from collections import defaultdict
 
 def process_csv(filepath):
     # load in data
-    df = pd.read_csv(filepath)
+    df = pd.read_csv(filepath, encoding = "utf-8")
 
     # list of ingredient lists, list of products
     # prod_to_idx maps product names to their index
     ingreds, products, prod_to_idx, prod_to_cat = clean_ingreds_prods(df)
-    # print(ingreds)
+    # print(ingreds) 
     # print("INGREDIENT LIST")
 
     # TODO: fix ingredients list (organize alphabetically)

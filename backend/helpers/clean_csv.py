@@ -5,10 +5,16 @@ from collections import defaultdict
 
 df = pd.read_csv("./backend/csv/cosmetics.csv")
 
+no_ingreds = [
+    '*ingredients from organic farming. **clinical grade essential oils blend.',
+    'no info',
+    '#NAME?'
+]
+
 # first, drop all rows without ingredient list
 rows_to_drop = []
 for i, row in df.iterrows():
-    if row['Name'] == '#NAME?' or row['Ingredients'] == "#NAME?" or row['Ingredients'].lower() == 'no info' or "visit" in row['Ingredients'].lower():
+    if row['Name'] == '#NAME?' or row['Ingredients'].lower() in no_ingreds or "visit" in row['Ingredients'].lower() or "this ingredient list is subject to change" in row['Ingredients'].lower():
         rows_to_drop.append(i)
 for row in rows_to_drop:
     df.drop(row, inplace=True)
@@ -24,7 +30,9 @@ for i, row in df.iterrows():
 
     ingreds_per_prod = []
 
-    for ingred in row['Ingredients'].split(','):
+    row_clean = row['Ingredients'].replace('Rds Product Name:', ',')
+
+    for ingred in row_clean.split(','):
         ingred = ingred.lower()
         # remove "... {Active Ingredients, May Contain, etc}:"
         if ":" in ingred:
@@ -32,7 +40,7 @@ for i, row in df.iterrows():
             ingred = ingred[index+len(":"):]
 
         # remove "Please be aware that ingredient lists may change... up to date list of ingredients."
-        if "Please be aware" in ingred:
+        if "please be aware" in ingred:
             ingred = ingred[:ingred.index("please be aware")]
 
         # remove "x.xx%"
@@ -48,6 +56,11 @@ for i, row in df.iterrows():
         ingred = ingred.replace(')', '')
         # remove trailing whitespace
         ingred = ingred.strip()
+
+        ingred = ingred.replace("el estee lauderactive ingredients: ", "")
+        ingred = ingred.replace("el estee lauderingredients: ", "")
+        ingred = ingred.replace('cl cliniqueactive ingredient: ', "")
+
         ingreds_per_prod.append(ingred)
 
     # update ingredients in dataframe
