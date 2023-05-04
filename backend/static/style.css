@@ -174,8 +174,10 @@ body {
 
 .skin_type_container {
     text-align: left;
-    padding-bottom: 10%;
-    margin-left: 22%;
+    margin-right: 8%;
+    margin-left: 8%;
+    margin-bottom: 10%;
+    /* margin-left: 22%; */
 }
 
 /* h1 {
@@ -324,6 +326,8 @@ form {
     /* width: 200px; */
     margin-top: 5%;
     background-color: #f2f2e5;
+    border-radius: 15px;
+    padding: 2%
 }
 
 .column {
@@ -377,7 +381,7 @@ form {
     position: relative;
 }
 
-#moist-box {
+/* #moist-box {
     background-color: #f2f2e5;
     border-radius: 15px;
 }
@@ -395,7 +399,7 @@ form {
 #treat-box {
     background-color: #f2f2e5;
     border-radius: 15px;
-}
+} */
 
 .episode-desc {
     font-family: "Montserrat", sans-serif;

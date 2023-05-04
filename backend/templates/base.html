@@ -18,7 +18,7 @@
             </header>
 
             <div class="body-text">
-                <h3>Please input your Liked and Disliked Products:</h3><br />
+                <h3>Please input your Liked and Disliked Products:</h3><p style="color:green">At least one liked product required</p><br />
                 <!-- <div class = "flex-container"> -->
                 <div class="resulting-search">
                     <!-- <div class = "flex-child liked"> -->
@@ -46,9 +46,10 @@
  <div class="dis-search-results"></div>
  <div class="dis-selected-tags"></div><br />
  <div/> -->
-
-                <h3>Please select your Skin Type:</h3>
+            
+            <div class="flex-container" style="margin-left: 10%; margin-right: 10%;">
                 <div class="skin_type_container">
+                    <h3>Skin Type:</h3>
                     <label class="container_skin">
                         <input type="radio" class="radio_button" id="oily" name="skin_type"
                             value="Oily">Oily</input><br />
@@ -66,9 +67,21 @@
                     </label>
                     <label class="container_skin">
                         <input type="radio" id="sensitive" name="skin_type" value="Sensitive"
-                            class="radio_button">Sensitive</input><br />
+                            class="radio_button">Sensitive</input>
                     </label>
                 </div>
+                
+                
+                <div class="skin_type_container">
+                    <h3>Products in Routine:</h3>
+                    <label class="container_skin"><input type="checkbox" name="product-type" value="cleanser" style="margin-right: 20px;">Cleanser</label><br />
+                    <label class="container_skin"><input type="checkbox" name="product-type" value="face-mask" style="margin-right: 20px;">Face Mask</label><br />
+                    <label class="container_skin"><input type="checkbox" name="product-type" value="eye-cream" style="margin-right: 20px;">Eye Cream</label><br />
+                    <label class="container_skin"><input type="checkbox" name="product-type" value="moisturizer" style="margin-right: 20px;">Moisturizer</label><br />
+                    <label class="container_skin"><input type="checkbox" name="product-type" value="treatment" style="margin-right: 20px;">Treatment</label><br />
+                    <label class="container_skin"><input type="checkbox" name="product-type" value="sun-protection" style="margin-right: 20px;">Sun Protection</label>
+                  </div>
+            </div> 
 
                 <h3>Please input your Price Range:</h3><br />
                 <div class="flex-container">
@@ -86,32 +99,43 @@
 
             <p class="text">Our system creates the best skin care routine based on your liked products, optional
                 disliked products, skin type preferences, and optional price preferences! The results are outputting
-                based on the product ingredients, prices, and average user ratings. Please rate the products below and
-                press regenerate if you are not satisfied with your
+                based on the product ingredients, prices, and average user ratings. <br />
+                <br />
+                Please rate the products below and press regenerate if you are not satisfied with your
                 results!</p>
-            <button class="regen" id="submit_btn" onClick="regenerate()">Regenerate Results</button>
+            <button class="regen" id="submit_btn" onClick="filterText()">Regenerate Results</button>
 
 
         </div>
         <div class="row answer-container">
-            <div class="column" id="moist">
-                <div class="card answer-box" id="moist-box">
-                    <p class='episode-title'>Moisturizer</p>
+            <div class="column" id="cleanser">
+                <div class="card answer-box">
+                    <!-- <p class='episode-title'>Cleanser</p> -->
                 </div>
             </div>
-            <div class="column" id="cleans">
-                <div class="card answer-box" id="cleans-box">
-                    <p class='episode-title'>Cleanser</p>
+            <div class="column" id="face-mask">
+                <div class="card answer-box">
+                    <!-- <p class='episode-title'>Treatment</p> -->
                 </div>
             </div>
-            <div class="column" id="sun">
-                <div class="card answer-box" id="sun-box">
-                    <p class='episode-title'>Sun Protection</p>
+            <div class="column" id="eye-cream">
+                <div class="card answer-box">
+                    <!-- <p class='episode-title'>Treatment</p> -->
                 </div>
             </div>
-            <div class="column" id="treat">
-                <div class="card answer-box" id="treat-box">
-                    <p class='episode-title'>Treatment</p>
+            <div class="column" id="moisturizer">
+                <div class="card answer-box">
+                    <!-- <p class='episode-title'>Moisturizer</p> -->
+                </div>
+            </div>
+            <div class="column" id="treatment">
+                <div class="card answer-box">
+                    <!-- <p class='episode-title'>Treatment</p> -->
+                </div>
+            </div>
+            <div class="column" id="sun-protection">
+                <div class="card answer-box">
+                    <!-- <p class='episode-title'>Sun Protection</p> -->
                 </div>
             </div>
         </div>
@@ -131,7 +155,7 @@
             searchResults.innerHTML = '';
             searchResults.style.display = 'block';
 
-            await fetch("/search?" + new URLSearchParams(
+            await fetch("/search?" + new URLSearchParams( 
                 { name: document.getElementById("filter-text-val").value }).toString())
                 .then((response) => response.json())
                 .then((data) => data.forEach(result => {
@@ -335,10 +359,12 @@
         // });
 
         function filterText() {
-            document.getElementById("moist").innerHTML = "<p class='episode-title'>Moisturizer</p>"
-            document.getElementById("cleans").innerHTML = "<p class='episode-title'>Cleanser</p>"
-            document.getElementById("sun").innerHTML = "<p class='episode-title'>Sun Protection</p>"
-            document.getElementById("treat").innerHTML = "<p class='episode-title'>Treatment</p>"
+            document.getElementById("moisturizer").innerHTML = "<p class='episode-title answer-box'>Moisturizer</p>"
+            document.getElementById("cleanser").innerHTML = "<p class='episode-title answer-box'>Cleanser</p>"
+            document.getElementById("sun-protection").innerHTML = "<p class='episode-title answer-box'>Sun Protection</p>"
+            document.getElementById("treatment").innerHTML = "<p class='episode-title answer-box'>Treatment</p>"
+            document.getElementById("eye-cream").innerHTML = "<p class='episode-title answer-box'>Eye Cream</p>"
+            document.getElementById("face-mask").innerHTML = "<p class='episode-title answer-box'>Face Mask</p>"
 
             var skin_types = document.getElementsByName("skin_type")
             var skin_type = ''
@@ -363,13 +389,28 @@
                 dis_tags.push(t.substring(0, t.length - 1));
             }
 
+            var product_types = [];
+            var checkboxes = document.getElementsByName('product-type');
+            for (var i = 0; i < checkboxes.length; i++) {
+                if (checkboxes[i].checked) {
+                    document.getElementById(checkboxes[i].value).style.display = 'block';
+                    product_types.push(checkboxes[i].value);
+                }
+                else {
+                    document.getElementById(checkboxes[i].value).style.display = 'none';
+                }
+            }
+
             fetch("/products?" + new URLSearchParams(
                 {
                     names: tags,
                     disliked: dis_tags,
                     skin: skin_type,
+                    routine: product_types,
                     min_price: document.getElementById("min-price").value,
                     max_price: document.getElementById("max-price").value,
+                    relevant: likedResults,
+                    irrelevant: dislikedResults
                 }).toString())
                 .then((response) => response.json())
                 .then((data) => data.forEach(row => {
@@ -377,23 +418,27 @@
                     let tempDiv = document.createElement("div")
                     tempDiv.innerHTML = answerBoxTemplate(row.name, row.score, row.rank, row.price, row.brand, row.ingreds, row.skin_types)
                     if (row.label === "Moisturizer")
-                        document.getElementById("moist").appendChild(tempDiv)
+                        document.getElementById("moisturizer").appendChild(tempDiv)
                     else if (row.label === "Cleanser")
-                        document.getElementById("cleans").appendChild(tempDiv)
+                        document.getElementById("cleanser").appendChild(tempDiv)
                     else if (row.label === "Sun protect")
-                        document.getElementById("sun").appendChild(tempDiv)
+                        document.getElementById("sun-protection").appendChild(tempDiv)
                     else if (row.label === "Treatment")
-                        document.getElementById("treat").appendChild(tempDiv)
+                        document.getElementById("treatment").appendChild(tempDiv)
+                    else if (row.label === "Eye Cream")
+                        document.getElementById("eye-cream").appendChild(tempDiv)
+                    else if (row.label === "Face Mask")
+                        document.getElementById("face-mask").appendChild(tempDiv)
                 }));
 
         }
 
 
         function regenerate() {
-            document.getElementById("moist").innerHTML = "<p class='episode-title'>Moisturizer</p>"
-            document.getElementById("cleans").innerHTML = "<p class='episode-title'>Cleanser</p>"
-            document.getElementById("sun").innerHTML = "<p class='episode-title'>Sun Protection</p>"
-            document.getElementById("treat").innerHTML = "<p class='episode-title'>Treatment</p>"
+            document.getElementById("moisturizer").innerHTML = "<p class='episode-title answer-box'>Moisturizer</p>"
+            document.getElementById("cleanser").innerHTML = "<p class='episode-title'>Cleanser</p>"
+            document.getElementById("sun-protection").innerHTML = "<p class='episode-title'>Sun Protection</p>"
+            document.getElementById("treatment").innerHTML = "<p class='episode-title'>Treatment</p>"
 
             var skin_types = document.getElementsByName("skin_type")
             var skin_type = ''
@@ -437,13 +482,17 @@
                     let tempDiv = document.createElement("div")
                     tempDiv.innerHTML = answerBoxTemplate(row.name, row.score, row.rank, row.price, row.brand, row.ingreds, row.skin_types)
                     if (row.label === "Moisturizer")
-                        document.getElementById("moist").appendChild(tempDiv)
+                        document.getElementById("moisturizer").appendChild(tempDiv)
                     else if (row.label === "Cleanser")
-                        document.getElementById("cleans").appendChild(tempDiv)
+                        document.getElementById("cleanser").appendChild(tempDiv)
                     else if (row.label === "Sun protect")
-                        document.getElementById("sun").appendChild(tempDiv)
+                        document.getElementById("sun-protection").appendChild(tempDiv)
                     else if (row.label === "Treatment")
-                        document.getElementById("treat").appendChild(tempDiv)
+                        document.getElementById("treatment").appendChild(tempDiv)
+                    else if (row.label === "Eye Cream")
+                        document.getElementById("eye-cream").appendChild(tempDiv)
+                    else if (row.label === "Face Mask")
+                        document.getElementById("face-mask").appendChild(tempDiv)
                 }));
 
         }

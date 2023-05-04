@@ -210,7 +210,7 @@ def name_to_query(products):
 def jaccard_similarity(ingred, product):
     a = set(ingred.split(","))
     # print(list(a)[0])
-    b = product
+    b = product  
     intersection = a.intersection(b)
     union = a.union(b)
     return (len(intersection) / len(union))
@@ -224,7 +224,7 @@ def levenshtein_distance(s1, s2):
     for j in range(len(s2) + 1):
         m[0][j] = j
 
-    # Compute the edit distances
+    # Compute the edit distances 
     for i in range(1, len(s1) + 1):
         for j in range(1, len(s2) + 1):
             if s1[i - 1] == s2[j - 1]:
@@ -249,9 +249,8 @@ def word_distance(query):
     if len(query) == 0: return []
     distances = [word_similarity_score(
         name.lower(), query.lower()) for name in products]
-    print(distances)
     if sum(distances) == 0:
-        print("no matches detected: using edit distance") 
+        # print("no matches detected: using edit distance") 
         distances = [levenshtein_distance( 
         name.lower(), query.lower()) for name in products]
     sorted_names = [name for _, name in sorted(zip(distances, products), reverse = True)]
