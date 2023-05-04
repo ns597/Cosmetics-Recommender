@@ -102,29 +102,16 @@ def products_search():
     min_price = int(min_price) if min_price.isdigit() else 0
     max_price = request.args.get("max_price")
     max_price = int(max_price) if max_price.isdigit() else 9999999
+    relevant = request.args.get("relevant").split(",")
+    print(relevant)
+    irrelevant = request.args.get("irrelevant").split(",")
+    print(irrelevant)
     # return sql_search(liked, disliked, skin_type, min_price, max_price)
     # print(liked)
     # _,s, r, p, _(search_results(liked, disliked, skin_type, min_price, max_price))
     # v = search_results(liked, disliked, skin_type, min_price, max_price)
     # for i in v:
     #     print(type(i))
-    return search_results(liked, disliked, skin_type, product_types, min_price, max_price)
-
-
-@app.route("/regenerate")
-def rocchio_search():
-    liked = request.args.get("names").split(",")
-    disliked = request.args.get("disliked").split(",")
-    skin_type = request.args.get("skin")
-    min_price = request.args.get("min_price")
-    min_price = int(min_price) if min_price.isdigit() else 0
-    max_price = request.args.get("max_price")
-    max_price = int(max_price) if max_price.isdigit() else 9999999
-    relevant = request.args.get("relevant").split(",")
-    print(relevant)
-    irrelevant = request.args.get("irrelevant").split(",")
-    print(irrelevant)
-    return search_results(liked, disliked, skin_type, min_price, max_price, relevant, irrelevant)
-
+    return search_results(liked, disliked, skin_type, product_types, min_price, max_price, relevant, irrelevant)
 
 app.run(debug=True)
